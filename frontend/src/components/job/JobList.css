@@ -1,7 +1,7 @@
 .job-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: var(--space-6);
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
 }
 
 .job-list-loading {
@@ -60,5 +60,11 @@
 @media (min-width: 769px) and (max-width: 1024px) {
   .job-list {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1400px) {
+  .job-list {
+    grid-template-columns: repeat(3, 1fr);
   }
 }

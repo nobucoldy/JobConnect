@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import { jobService } from '../../services/jobService';
 import JobCard from '../../components/job/JobCard';
 import { FiPackage, FiBook, FiMonitor, FiMoreHorizontal } from 'react-icons/fi';
@@ -7,13 +8,21 @@ import { PiBroom } from 'react-icons/pi';
 import './Home.css';
 
 const Home = () => {
+  const { isAdmin } = useAuth();
   const [recentJobs, setRecentJobs] = useState([]);
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    fetchRecentJobs();
-    fetchCategories();
-  }, []);
+    if (!isAdmin) {
+      fetchRecentJobs();
+      fetchCategories();
+    }
+  }, [isAdmin]);
+
+  // Nếu là admin, chuyển hướng đến trang admin
+  if (isAdmin) {
+    return <Navigate to="/admin" replace />;
+  }
 
   const fetchRecentJobs = async () => {
     try {
@@ -27,11 +36,11 @@ const Home = () => {
   const fetchCategories = async () => {
     // Định nghĩa các category với icon
     const categoryConfig = [
-      { icon: FiPackage, name: 'Giao hàng', category: 'Delivery' },
-      { icon: PiBroom, name: 'Dọn dẹp', category: 'Cleaning' },
-      { icon: FiBook, name: 'Gia sư', category: 'Tutoring' },
-      { icon: FiMonitor, name: 'Hỗ trợ kỹ thuật', category: 'Tech Support' },
-      { icon: FiMoreHorizontal, name: 'Khác', category: 'Other' },
+      { icon: FiPackage, name: 'Giao hàng', category: 'Giao hàng' },
+      { icon: PiBroom, name: 'Dọn dẹp', category: 'Dọn dẹp' },
+      { icon: FiBook, name: 'Gia sư', category: 'Gia sư' },
+      { icon: FiMonitor, name: 'Hỗ trợ kỹ thuật', category: 'Hỗ trợ kỹ thuật' },
+      { icon: FiMoreHorizontal, name: 'Khác', category: 'Khác' },
     ];
 
     setCategories(categoryConfig);

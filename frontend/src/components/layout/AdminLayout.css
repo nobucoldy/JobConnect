@@ -43,6 +43,14 @@
   font-weight: 500;
   transition: all 0.2s ease;
   border-left: 3px solid transparent;
+  font-size: 15px;
+}
+
+.admin-nav-link svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2;
+  flex-shrink: 0;
 }
 
 .admin-nav-link:hover {

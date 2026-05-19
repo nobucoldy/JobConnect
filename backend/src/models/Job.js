@@ -17,7 +17,7 @@ const jobSchema = new mongoose.Schema({
   category: {
     type: String,
     required: [true, 'Category is required'],
-    enum: ['Delivery', 'Cleaning', 'Tutoring', 'Tech Support', 'Other']
+    enum: ['Giao hàng', 'Dọn dẹp', 'Gia sư', 'Hỗ trợ kỹ thuật', 'Khác']
   },
   location: {
     type: String,
@@ -30,6 +30,11 @@ const jobSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'Salary is required'],
     min: [10000, 'Salary must be at least 10,000 VND']
+  },
+  salaryUnit: {
+    type: String,
+    enum: ['giờ', 'buổi', 'ngày', 'tuần', 'tháng', 'dự án'],
+    default: 'ngày'
   },
   poster: {
     type: mongoose.Schema.Types.ObjectId,

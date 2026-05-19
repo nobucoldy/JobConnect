@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { jobService } from '../../services/jobService';
 import { applicationService } from '../../services/applicationService';
 import { reviewService } from '../../services/reviewService';
+import { adminService } from '../../services/adminService';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import Button from '../../components/common/Button';
@@ -13,14 +14,14 @@ import ApplicationModal from '../../components/application/ApplicationModal';
 import ApplicationList from '../../components/application/ApplicationList';
 import ReviewForm from '../../components/review/ReviewForm';
 import ReviewList from '../../components/review/ReviewList';
-import { FiPackage, FiBook, FiMonitor, FiMoreHorizontal } from 'react-icons/fi';
+import { FiPackage, FiBook, FiMonitor, FiMoreHorizontal, FiDollarSign, FiMapPin, FiCalendar, FiStar, FiMail, FiPhone, FiUsers, FiEdit2, FiTrash2, FiCheckCircle } from 'react-icons/fi';
 import { PiBroom } from 'react-icons/pi';
 import './JobDetail.css';
 
 const JobDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isAdmin } = useAuth();
   const toast = useToast();
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -43,10 +44,10 @@ const JobDetail = () => {
   }, [id]);
 
   useEffect(() => {
-    if (isAuthenticated && job && !isOwner) {
+    if (isAuthenticated && job && user && user._id !== job.poster?._id) {
       checkIfApplied();
     }
-  }, [isAuthenticated, job]);
+  }, [isAuthenticated, job, user]);
 
   useEffect(() => {
     if (isAuthenticated && job && reviews.length > 0) {
@@ -119,9 +120,16 @@ const JobDetail = () => {
   const handleDelete = async () => {
     setActionLoading(true);
     try {
-      await jobService.deleteJob(id);
-      toast.success('Đã xóa công việc thành công');
-      navigate('/my-jobs');
+      // Nếu là admin, sử dụng API admin để xóa
+      if (isAdmin) {
+        await adminService.deleteJob(id);
+        toast.success('Đã xóa công việc thành công');
+        navigate('/admin/jobs');
+      } else {
+        await jobService.deleteJob(id);
+        toast.success('Đã xóa công việc thành công');
+        navigate('/my-jobs');
+      }
     } catch (err) {
       toast.error(err.response?.data?.message || 'Không thể xóa công việc');
     } finally {
@@ -144,14 +152,13 @@ const JobDetail = () => {
 
   const getCategoryIcon = (category) => {
     const icons = {
-      'Delivery': FiPackage,
-      'Cleaning': PiBroom,
-      'Tutoring': FiBook,
-      'Tech Support': FiMonitor,
-      'Other': FiMoreHorizontal
+      'Giao hàng': FiPackage,
+      'Dọn dẹp': PiBroom,
+      'Gia sư': FiBook,
+      'Hỗ trợ kỹ thuật': FiMonitor,
+      'Khác': FiMoreHorizontal
     };
-    const IconComponent = icons[category] || FiMoreHorizontal;
-    return <IconComponent />;
+    return icons[category] || FiMoreHorizontal;
   };
 
   const getStatusBadgeVariant = (status) => {
@@ -176,6 +183,27 @@ const JobDetail = () => {
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('vi-VN').format(amount);
+  };
+
+  const maskEmail = (email) => {
+    if (!email) return '';
+    const [username, domain] = email.split('@');
+    if (username.length <= 4) {
+      return `${username.charAt(0)}***@${domain}`;
+    }
+    const visiblePart = username.substring(0, 4);
+    return `${visiblePart}****@${domain}`;
+  };
+
+  const maskPhone = (phone) => {
+    if (!phone) return '';
+    const cleaned = phone.replace(/\D/g, '');
+    if (cleaned.length <= 6) {
+      return cleaned.substring(0, 3) + '****';
+    }
+    const start = cleaned.substring(0, 3);
+    const end = cleaned.substring(cleaned.length - 3);
+    return `${start}****${end}`;
   };
 
   if (loading) {
@@ -205,107 +233,67 @@ const JobDetail = () => {
   const isOwner = isAuthenticated && user?._id === job.poster?._id;
   const isAssignedWorker = isAuthenticated && user?._id === job.assignedWorker?._id;
   const canEdit = isOwner && job.status === 'OPEN';
-  const canDelete = isOwner && job.status === 'OPEN';
+  const canDelete = (isOwner && job.status === 'OPEN') || isAdmin; // Admin có thể xóa bất kỳ job nào
   const canMarkComplete = isOwner && job.status === 'ASSIGNED';
   const canReview = isAuthenticated && job.status === 'COMPLETED' && (isOwner || isAssignedWorker) && !hasReviewed;
 
   return (
     <div className="job-detail-page">
       <div className="job-detail-container">
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={() => navigate('/jobs')}
+        <button
+          onClick={() => navigate(-1)}
           className="back-button"
         >
-          ← Quay lại
-        </Button>
+          ← Quay lại danh sách
+        </button>
 
-        <div className="job-detail-card">
-          <div className="job-detail-header">
-            <div className="job-category-icon">{getCategoryIcon(job.category)}</div>
-            <div className="job-header-content">
-              <div className="job-header-top">
-                <h1 className="job-title">{job.title}</h1>
-                <Badge variant={getStatusBadgeVariant(job.status)}>
-                  {job.status}
-                </Badge>
+        <div className="job-detail-main">
+          {/* Left column - Job details */}
+          <div className="job-detail-left">
+            <div className="job-category-badge">
+              {React.createElement(getCategoryIcon(job.category))}
+              <span>{job.category}</span>
+            </div>
+            <h1 className="job-title">{job.title}</h1>
+
+            <div className="job-meta-info">
+              <div className="meta-item">
+                <FiDollarSign />
+                <span>{formatCurrency(job.salary)} / {job.salaryUnit || 'ngày'}</span>
               </div>
-              <div className="job-meta">
-                <span className="job-category">{job.category}</span>
-                <span className="job-location">📍 {job.location}</span>
+              <div className="meta-item">
+                <FiMapPin />
+                <span>{job.location}</span>
+              </div>
+              <div className="meta-item">
+                <FiCalendar />
+                <span>{formatDate(job.startDate)}</span>
               </div>
             </div>
-          </div>
 
-          <div className="job-detail-body">
             <div className="job-section">
               <h2 className="section-title">Mô tả công việc</h2>
               <p className="job-description">{job.description}</p>
-            </div>
-
-            <div className="job-section">
-              <h2 className="section-title">Thông tin chi tiết</h2>
-              <div className="job-info-grid">
-                <div className="info-item">
-                  <span className="info-label">Mức lương</span>
-                  <span className="info-value salary">{formatCurrency(job.salary)} đ</span>
-                </div>
-                <div className="info-item">
-                  <span className="info-label">Ngày bắt đầu</span>
-                  <span className="info-value">{formatDate(job.startDate)}</span>
-                </div>
-                <div className="info-item">
-                  <span className="info-label">Ngày kết thúc</span>
-                  <span className="info-value">{formatDate(job.endDate)}</span>
-                </div>
-                <div className="info-item">
-                  <span className="info-label">Ngày đăng</span>
-                  <span className="info-value">{formatDate(job.createdAt)}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="job-section">
-              <h2 className="section-title">Người đăng</h2>
-              <div className="poster-info">
-                <div className="poster-avatar">
-                  {job.poster?.name?.charAt(0).toUpperCase()}
-                </div>
-                <div className="poster-details">
-                  <div className="poster-name">{job.poster?.name}</div>
-                  <div className="poster-rating">
-                    ⭐ {job.poster?.averageRating?.toFixed(1) || 'Chưa có đánh giá'}
-                    {job.poster?.totalReviews > 0 && ` (${job.poster.totalReviews} đánh giá)`}
-                  </div>
-                  <div className="poster-contact">📧 {job.poster?.email}</div>
-                  {job.poster?.phone && (
-                    <div className="poster-contact">📱 {job.poster.phone}</div>
-                  )}
-                </div>
-              </div>
             </div>
 
             {job.assignedWorker && (
               <div className="job-section">
                 <h2 className="section-title">Người nhận việc</h2>
                 <div className="poster-info">
-                  <div className="poster-avatar">
+                  <div className="poster-avatar-placeholder">
                     {job.assignedWorker?.name?.charAt(0).toUpperCase()}
                   </div>
-                  <div className="poster-details">
-                    <div className="poster-name">{job.assignedWorker?.name}</div>
-                    <div className="poster-rating">
-                      ⭐ {job.assignedWorker?.averageRating?.toFixed(1) || 'Chưa có đánh giá'}
-                      {job.assignedWorker?.totalReviews > 0 && ` (${job.assignedWorker.totalReviews} đánh giá)`}
-                    </div>
+                  <div className="poster-name">{job.assignedWorker?.name}</div>
+                  <div className="poster-rating">
+                    <FiStar />
+                    {job.assignedWorker?.averageRating?.toFixed(1) || 'N/A'}
+                    {job.assignedWorker?.totalReviews > 0 && ` (${job.assignedWorker.totalReviews} đánh giá)`}
                   </div>
                 </div>
               </div>
             )}
-          </div>
 
-          <div className="job-detail-actions">
+            <div className="job-detail-actions">
             {!isAuthenticated && (
               <div className="action-message">
                 <p>Đăng nhập để ứng tuyển hoặc quản lý công việc</p>
@@ -313,11 +301,23 @@ const JobDetail = () => {
               </div>
             )}
 
-            {isAuthenticated && !isOwner && job.status === 'OPEN' && (
+            {isAdmin && (
+              <div className="owner-actions">
+                <Button
+                  variant="danger"
+                  onClick={() => setShowDeleteConfirm(true)}
+                  disabled={actionLoading}
+                >
+                  <FiTrash2 /> Xóa công việc
+                </Button>
+              </div>
+            )}
+
+            {isAuthenticated && !isOwner && !isAdmin && job.status === 'OPEN' && (
               <div className="action-message">
                 {hasApplied ? (
                   <>
-                    <Badge variant="success">✅ Đã ứng tuyển</Badge>
+                    <Badge variant="success">Đã ứng tuyển</Badge>
                     <p className="action-note">Bạn đã ứng tuyển vào công việc này. Vui lòng chờ người đăng xét duyệt.</p>
                   </>
                 ) : (
@@ -334,7 +334,7 @@ const JobDetail = () => {
                   variant="info"
                   onClick={() => setShowApplicationList(true)}
                 >
-                  👥 Xem ứng viên
+                  <FiUsers /> Xem ứng viên
                 </Button>
                 {canEdit && (
                   <Button
@@ -342,7 +342,7 @@ const JobDetail = () => {
                     onClick={() => navigate(`/jobs/edit/${job._id}`)}
                     disabled={actionLoading}
                   >
-                    ✏️ Chỉnh sửa
+                    <FiEdit2 /> Chỉnh sửa
                   </Button>
                 )}
                 {canMarkComplete && (
@@ -351,7 +351,7 @@ const JobDetail = () => {
                     onClick={() => setShowCompleteConfirm(true)}
                     disabled={actionLoading}
                   >
-                    ✅ Đánh dấu hoàn thành
+                    <FiCheckCircle /> Đánh dấu hoàn thành
                   </Button>
                 )}
                 {canDelete && (
@@ -360,7 +360,7 @@ const JobDetail = () => {
                     onClick={() => setShowDeleteConfirm(true)}
                     disabled={actionLoading}
                   >
-                    🗑️ Xóa công việc
+                    <FiTrash2 /> Xóa công việc
                   </Button>
                 )}
               </div>
@@ -374,21 +374,42 @@ const JobDetail = () => {
                   fullWidth
                   onClick={() => setShowReviewForm(true)}
                 >
-                  ⭐ Viết đánh giá
+                  <FiStar /> Viết đánh giá
                 </Button>
               </div>
             )}
 
             {hasReviewed && job.status === 'COMPLETED' && (
               <div className="action-message">
-                <Badge variant="success">✅ Đã đánh giá</Badge>
+                <Badge variant="success">Đã đánh giá</Badge>
               </div>
             )}
+            </div>
+          </div>
+
+          {/* Right column - Poster info */}
+          <div className="job-detail-right">
+            <div className="poster-section-title">NGƯỜI ĐĂNG TIN</div>
+            <div className="poster-info">
+              <div className="poster-avatar-placeholder">
+                {job.poster?.name?.charAt(0).toUpperCase()}
+              </div>
+              <div className="poster-name">{job.poster?.name}</div>
+              <div className="poster-rating">
+                <FiStar />
+                {job.poster?.averageRating?.toFixed(1) || '0.0'} ({job.poster?.totalReviews || 0} đánh giá)
+              </div>
+              <div className="poster-action">
+                <Button variant="outline" size="sm">
+                  Xem hồ sơ công ty
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
 
         {job.status === 'COMPLETED' && (
-          <div className="job-detail-card reviews-section">
+          <div className="reviews-section">
             <h2 className="section-title">Đánh giá</h2>
             <ReviewList reviews={reviews} loading={reviewsLoading} />
           </div>

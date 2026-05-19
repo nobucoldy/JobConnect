@@ -59,7 +59,7 @@
   align-items: center;
 }
 
-.filter-select {
+.filter-select, .filter-input {
   padding: var(--space-2) var(--space-4);
   border: 2px solid var(--gray-300);
   border-radius: var(--radius-md);
@@ -67,15 +67,26 @@
   font-weight: 500;
   color: var(--gray-700);
   background: white;
-  cursor: pointer;
   transition: all 0.2s;
 }
 
-.filter-select:hover {
+.filter-select {
+  cursor: pointer;
+}
+
+.filter-input {
+  min-width: 170px;
+}
+
+.filter-input::placeholder {
+  color: var(--gray-500);
+}
+
+.filter-select:hover, .filter-input:hover {
   border-color: var(--primary-blue);
 }
 
-.filter-select:focus {
+.filter-select:focus, .filter-input:focus {
   outline: none;
   border-color: var(--primary-blue);
   box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
@@ -96,21 +107,6 @@
   font-weight: 600;
   color: var(--gray-700);
   margin-bottom: var(--space-2);
-}
-
-.filter-select, .filter-input {
-  width: 100%;
-  padding: var(--space-3);
-  font-size: 16px;
-  border: 2px solid var(--gray-300);
-  border-radius: var(--radius-md);
-  font-family: var(--font-primary);
-  transition: border-color 0.2s ease;
-}
-
-.filter-select:focus, .filter-input:focus {
-  outline: none;
-  border-color: var(--primary-blue);
 }
 
 .jobs-count {

@@ -16,6 +16,7 @@ const JobForm = () => {
     category: '',
     location: '',
     salary: '',
+    salaryUnit: 'ngày',
     startDate: '',
     endDate: ''
   });
@@ -42,6 +43,7 @@ const JobForm = () => {
         category: job.category,
         location: job.location,
         salary: job.salary,
+        salaryUnit: job.salaryUnit || 'ngày',
         startDate: job.startDate ? job.startDate.split('T')[0] : '',
         endDate: job.endDate ? job.endDate.split('T')[0] : ''
       });
@@ -204,15 +206,17 @@ const JobForm = () => {
                 className={`form-select ${errors.category ? 'error' : ''}`}
               >
                 <option value="">Chọn danh mục</option>
-                <option value="Delivery">Delivery</option>
-                <option value="Cleaning">Cleaning</option>
-                <option value="Tutoring">Tutoring</option>
-                <option value="Tech Support">Tech Support</option>
-                <option value="Other">Other</option>
+                <option value="Giao hàng">Giao hàng</option>
+                <option value="Dọn dẹp">Dọn dẹp</option>
+                <option value="Gia sư">Gia sư</option>
+                <option value="Hỗ trợ kỹ thuật">Hỗ trợ kỹ thuật</option>
+                <option value="Khác">Khác</option>
               </select>
               {errors.category && <span className="error-text">{errors.category}</span>}
             </div>
+          </div>
 
+          <div className="form-row">
             <Input
               label="Mức lương (VNĐ)"
               type="number"
@@ -223,6 +227,26 @@ const JobForm = () => {
               required
               placeholder="200000"
             />
+
+            <div className="form-group">
+              <label htmlFor="salaryUnit" className="form-label">
+                Đơn vị tính <span className="required">*</span>
+              </label>
+              <select
+                id="salaryUnit"
+                name="salaryUnit"
+                value={formData.salaryUnit}
+                onChange={handleChange}
+                className="form-select"
+              >
+                <option value="giờ">Giờ</option>
+                <option value="buổi">Buổi</option>
+                <option value="ngày">Ngày</option>
+                <option value="tuần">Tuần</option>
+                <option value="tháng">Tháng</option>
+                <option value="dự án">Dự án</option>
+              </select>
+            </div>
           </div>
 
           <Input

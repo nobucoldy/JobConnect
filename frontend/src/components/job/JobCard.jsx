@@ -6,11 +6,11 @@ import './JobCard.css';
 
 const getCategoryIcon = (category) => {
   const icons = {
-    'Delivery': FiPackage,
-    'Cleaning': PiBroom,
-    'Tutoring': FiBook,
-    'Tech Support': FiMonitor,
-    'Other': FiMoreHorizontal
+    'Giao hàng': FiPackage,
+    'Dọn dẹp': PiBroom,
+    'Gia sư': FiBook,
+    'Hỗ trợ kỹ thuật': FiMonitor,
+    'Khác': FiMoreHorizontal
   };
   return icons[category] || FiMoreHorizontal;
 };
@@ -41,19 +41,11 @@ const JobCard = ({ job }) => {
           <span className="category-name">{job.category}</span>
         </div>
         <div className="job-salary">
-          {job.salary.toLocaleString('vi-VN')} VNĐ
+          {job.salary.toLocaleString('vi-VN')} / {job.salaryUnit || 'ngày'}
         </div>
       </div>
 
-      <h3 className="job-title" style={{
-        fontSize: '22px',
-        fontWeight: 800,
-        color: '#1a1a1a',
-        marginBottom: '16px',
-        marginTop: '12px',
-        textTransform: 'capitalize',
-        textAlign: 'left'
-      }}>
+      <h3 className="job-title">
         {job.title || 'Untitled Job'}
       </h3>
 

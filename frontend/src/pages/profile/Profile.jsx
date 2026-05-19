@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { userService } from '../../services/userService';
-import { FiMapPin, FiCalendar, FiMail, FiPhone, FiStar } from 'react-icons/fi';
+import { jobService } from '../../services/jobService';
+import { applicationService } from '../../services/applicationService';
+import { FiMail, FiPhone, FiStar, FiBriefcase, FiFileText } from 'react-icons/fi';
 import './Profile.css';
 
 const Profile = () => {
@@ -12,6 +14,9 @@ const Profile = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [postedJobs, setPostedJobs] = useState([]);
+  const [appliedJobs, setAppliedJobs] = useState([]);
+  const [activeTab, setActiveTab] = useState('posted'); // 'posted', 'applied'
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -33,6 +38,31 @@ const Profile = () => {
 
     fetchProfile();
   }, [currentUser, navigate]);
+
+  useEffect(() => {
+    const fetchPostedJobs = async () => {
+      try {
+        const response = await jobService.getMyJobs();
+        setPostedJobs(response.data.data);
+      } catch (err) {
+        console.error('Failed to fetch posted jobs:', err);
+      }
+    };
+
+    const fetchAppliedJobs = async () => {
+      try {
+        const response = await applicationService.getMyApplications();
+        setAppliedJobs(response.data.data);
+      } catch (err) {
+        console.error('Failed to fetch applied jobs:', err);
+      }
+    };
+
+    if (currentUser) {
+      fetchPostedJobs();
+      fetchAppliedJobs();
+    }
+  }, [currentUser]);
 
   if (loading) {
     return (
@@ -61,14 +91,6 @@ const Profile = () => {
 
   const { user } = profile;
 
-  // Format join date
-  const formatJoinDate = (dateString) => {
-    const date = new Date(dateString);
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `Tham gia từ T${month}/${year}`;
-  };
-
   return (
     <div className="profile-page">
       <div className="profile-container">
@@ -90,12 +112,12 @@ const Profile = () => {
               </div>
               <div className="profile-meta">
                 <div className="profile-meta-item">
-                  <FiMapPin />
-                  <span>Quận 1, TP. Hồ Chí Minh</span>
+                  <FiMail />
+                  <span>{user.email}</span>
                 </div>
                 <div className="profile-meta-item">
-                  <FiCalendar />
-                  <span>{formatJoinDate(user.createdAt)}</span>
+                  <FiPhone />
+                  <span>{user.phone || 'Chưa cập nhật'}</span>
                 </div>
               </div>
             </div>
@@ -105,29 +127,91 @@ const Profile = () => {
           </Link>
         </div>
 
-        <div className="profile-contact">
-          <h2 className="profile-contact-title">Thông tin liên hệ</h2>
-          <div className="profile-contact-list">
-            <div className="profile-contact-item">
-              <div className="contact-icon">
-                <FiMail />
-              </div>
-              <div className="contact-info">
-                <span className="contact-label">Email</span>
-                <span className="contact-value">{user.email}</span>
-              </div>
-            </div>
-            <div className="profile-contact-item">
-              <div className="contact-icon">
-                <FiPhone />
-              </div>
-              <div className="contact-info">
-                <span className="contact-label">Số điện thoại</span>
-                <span className="contact-value">{user.phone || '090 ••• ••••'}</span>
-              </div>
-            </div>
-          </div>
+        <div className="profile-tabs">
+          <button
+            className={`profile-tab ${activeTab === 'posted' ? 'active' : ''}`}
+            onClick={() => setActiveTab('posted')}
+          >
+            <FiBriefcase />
+            Việc đã đăng ({postedJobs.length})
+          </button>
+          <button
+            className={`profile-tab ${activeTab === 'applied' ? 'active' : ''}`}
+            onClick={() => setActiveTab('applied')}
+          >
+            <FiFileText />
+            Việc đã ứng tuyển ({appliedJobs.length})
+          </button>
         </div>
+
+        {activeTab === 'posted' && (
+          <div className="profile-jobs">
+            <h2 className="profile-jobs-title">Việc đã đăng</h2>
+            {postedJobs.length === 0 ? (
+              <div className="profile-jobs-empty">
+                <p>Bạn chưa đăng công việc nào</p>
+                <Link to="/jobs/create" className="btn-primary">Đăng việc mới</Link>
+              </div>
+            ) : (
+              <div className="profile-jobs-list">
+                {postedJobs.map(job => (
+                  <Link key={job._id} to={`/jobs/${job._id}`} className="profile-job-card">
+                    <div className="job-card-header">
+                      <h3 className="job-card-title">{job.title}</h3>
+                      <span className={`job-card-status status-${job.status.toLowerCase()}`}>
+                        {job.status}
+                      </span>
+                    </div>
+                    <div className="job-card-meta">
+                      <span>{job.category}</span>
+                      <span>•</span>
+                      <span>{job.location}</span>
+                      <span>•</span>
+                      <span>{new Intl.NumberFormat('vi-VN').format(job.salary)} / {job.salaryUnit || 'ngày'}</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'applied' && (
+          <div className="profile-jobs">
+            <h2 className="profile-jobs-title">Việc đã ứng tuyển</h2>
+            {appliedJobs.length === 0 ? (
+              <div className="profile-jobs-empty">
+                <p>Bạn chưa ứng tuyển công việc nào</p>
+                <Link to="/jobs" className="btn-primary">Tìm việc</Link>
+              </div>
+            ) : (
+              <div className="profile-jobs-list">
+                {appliedJobs.map(application => (
+                  <Link key={application._id} to={`/jobs/${application.job._id}`} className="profile-job-card">
+                    <div className="job-card-header">
+                      <h3 className="job-card-title">{application.job.title}</h3>
+                      <span className={`job-card-status status-${application.status.toLowerCase()}`}>
+                        {application.status}
+                      </span>
+                    </div>
+                    <div className="job-card-meta">
+                      <span>{application.job.category}</span>
+                      <span>•</span>
+                      <span>{application.job.location}</span>
+                      <span>•</span>
+                      <span>{new Intl.NumberFormat('vi-VN').format(application.job.salary)} / {application.job.salaryUnit || 'ngày'}</span>
+                    </div>
+                    <div className="job-card-footer">
+                      <span className="job-card-date">
+                        Ứng tuyển: {new Date(application.createdAt).toLocaleDateString('vi-VN')}
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

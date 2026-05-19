@@ -3,7 +3,9 @@ const router = express.Router();
 const {
   getAllUsers,
   getAllJobsAdmin,
-  getStatistics
+  getStatistics,
+  createUser,
+  deleteJob
 } = require('../controllers/adminController');
 const { protect, authorize } = require('../middlewares/auth');
 
@@ -11,7 +13,9 @@ const { protect, authorize } = require('../middlewares/auth');
 router.use(protect, authorize('admin'));
 
 router.get('/users', getAllUsers);
+router.post('/users', createUser);
 router.get('/jobs', getAllJobsAdmin);
+router.delete('/jobs/:id', deleteJob);
 router.get('/statistics', getStatistics);
 
 module.exports = router;

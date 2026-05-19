@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 import ProtectedRoute from './components/common/ProtectedRoute';
+import AdminRedirect from './components/common/AdminRedirect';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import Navbar from './components/layout/Navbar';
 import './styles/variables.css';
@@ -34,13 +35,25 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/jobs" element={<JobListPage />} />
-            <Route path="/jobs/:id" element={<JobDetail />} />
+            <Route
+              path="/jobs"
+              element={
+                <AdminRedirect>
+                  <JobListPage />
+                </AdminRedirect>
+              }
+            />
+            <Route
+              path="/jobs/:id"
+              element={<JobDetail />}
+            />
             <Route
               path="/jobs/create"
               element={
                 <ProtectedRoute>
-                  <JobForm />
+                  <AdminRedirect>
+                    <JobForm />
+                  </AdminRedirect>
                 </ProtectedRoute>
               }
             />
@@ -48,7 +61,9 @@ function App() {
               path="/jobs/edit/:id"
               element={
                 <ProtectedRoute>
-                  <JobForm />
+                  <AdminRedirect>
+                    <JobForm />
+                  </AdminRedirect>
                 </ProtectedRoute>
               }
             />
@@ -56,7 +71,9 @@ function App() {
               path="/profile"
               element={
                 <ProtectedRoute>
-                  <Profile />
+                  <AdminRedirect>
+                    <Profile />
+                  </AdminRedirect>
                 </ProtectedRoute>
               }
             />
@@ -64,7 +81,9 @@ function App() {
               path="/profile/edit"
               element={
                 <ProtectedRoute>
-                  <EditProfile />
+                  <AdminRedirect>
+                    <EditProfile />
+                  </AdminRedirect>
                 </ProtectedRoute>
               }
             />

@@ -146,3 +146,77 @@ exports.getStatistics = async (req, res) => {
     });
   }
 };
+
+/**
+ * Create new user (admin only)
+ * POST /api/admin/users
+ */
+exports.createUser = async (req, res) => {
+  try {
+    const { email, password, name, phone, role } = req.body;
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email already exists'
+      });
+    }
+
+    // Create user
+    const user = await User.create({
+      email,
+      password,
+      name,
+      phone,
+      role: role || 'user'
+    });
+
+    res.status(201).json({
+      success: true,
+      data: user
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+/**
+ * Delete job (admin only)
+ * DELETE /api/admin/jobs/:id
+ */
+exports.deleteJob = async (req, res) => {
+  try {
+    const job = await Job.findById(req.params.id);
+
+    if (!job) {
+      return res.status(404).json({
+        success: false,
+        message: 'Job not found'
+      });
+    }
+
+    // Delete related applications
+    await Application.deleteMany({ job: job._id });
+
+    // Delete related reviews
+    await Review.deleteMany({ job: job._id });
+
+    // Delete job
+    await job.deleteOne();
+
+    res.status(200).json({
+      success: true,
+      message: 'Job deleted successfully'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};

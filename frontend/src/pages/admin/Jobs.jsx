@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { adminService } from '../../services/adminService';
-import Badge from '../../components/common/Badge';
+import { FiEye, FiTrash2 } from 'react-icons/fi';
 import './Jobs.css';
 
 const Jobs = () => {
+  const navigate = useNavigate();
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [deleteLoading, setDeleteLoading] = useState(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 20,
@@ -70,6 +73,23 @@ const Jobs = () => {
     window.scrollTo(0, 0);
   };
 
+  const handleViewJob = (jobId) => {
+    navigate(`/jobs/${jobId}`);
+  };
+
+  const handleDeleteJob = async (jobId) => {
+    setDeleteLoading(jobId);
+    try {
+      await adminService.deleteJob(jobId);
+      setShowDeleteConfirm(null);
+      fetchJobs();
+    } catch (err) {
+      alert(err.response?.data?.message || 'Không thể xóa công việc');
+    } finally {
+      setDeleteLoading(null);
+    }
+  };
+
   if (loading && jobs.length === 0) {
     return (
       <div className="admin-jobs-loading">
@@ -79,10 +99,20 @@ const Jobs = () => {
     );
   }
 
+  const getStatusLabel = (status) => {
+    const labels = {
+      'OPEN': 'Đang mở',
+      'ASSIGNED': 'Đã giao',
+      'COMPLETED': 'Hoàn thành',
+      'CANCELLED': 'Đã hủy'
+    };
+    return labels[status] || status;
+  };
+
   return (
     <div className="admin-jobs">
       <div className="admin-jobs-header">
-        <h1 className="admin-jobs-title">Jobs Management</h1>
+        <h1 className="admin-jobs-title">Quản lý công việc</h1>
         <div className="admin-jobs-filters">
           <select
             value={statusFilter}
@@ -92,11 +122,11 @@ const Jobs = () => {
             }}
             className="filter-select"
           >
-            <option value="">All Status</option>
-            <option value="OPEN">Open</option>
-            <option value="ASSIGNED">Assigned</option>
-            <option value="COMPLETED">Completed</option>
-            <option value="CANCELLED">Cancelled</option>
+            <option value="">Tất cả trạng thái</option>
+            <option value="OPEN">Đang mở</option>
+            <option value="ASSIGNED">Đã giao</option>
+            <option value="COMPLETED">Hoàn thành</option>
+            <option value="CANCELLED">Đã hủy</option>
           </select>
         </div>
       </div>
@@ -120,14 +150,14 @@ const Jobs = () => {
             <table className="jobs-table">
               <thead>
                 <tr>
-                  <th>Title</th>
-                  <th>Category</th>
-                  <th>Poster</th>
-                  <th>Worker</th>
-                  <th>Status</th>
-                  <th>Salary</th>
-                  <th>Created</th>
-                  <th>Actions</th>
+                  <th>Tiêu đề</th>
+                  <th>Danh mục</th>
+                  <th>Người đăng</th>
+                  <th>Người nhận</th>
+                  <th>Trạng thái</th>
+                  <th>Lương</th>
+                  <th>Ngày tạo</th>
+                  <th>Hành động</th>
                 </tr>
               </thead>
               <tbody>
@@ -158,21 +188,32 @@ const Jobs = () => {
                       )}
                     </td>
                     <td>
-                      <Badge variant={getStatusBadgeVariant(job.status)}>
-                        {job.status}
-                      </Badge>
+                      <span className={`status-badge status-${job.status.toLowerCase()}`}>
+                        {getStatusLabel(job.status)}
+                      </span>
                     </td>
                     <td className="salary-cell">
-                      {formatCurrency(job.salary)} đ
+                      {formatCurrency(job.salary)} / {job.salaryUnit || 'ngày'}
                     </td>
                     <td>{formatDate(job.createdAt)}</td>
                     <td>
-                      <Link
-                        to={`/jobs/${job._id}`}
-                        className="btn-view-job"
-                      >
-                        View
-                      </Link>
+                      <div className="job-actions">
+                        <button
+                          onClick={() => handleViewJob(job._id)}
+                          className="btn-view-job"
+                          title="Xem chi tiết"
+                        >
+                          <FiEye />
+                        </button>
+                        <button
+                          onClick={() => setShowDeleteConfirm(job._id)}
+                          className="btn-delete-job"
+                          title="Xóa công việc"
+                          disabled={deleteLoading === job._id}
+                        >
+                          <FiTrash2 />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -187,21 +228,48 @@ const Jobs = () => {
                 disabled={pagination.page === 1}
                 className="pagination-btn"
               >
-                ← Previous
+                ← Trước
               </button>
               <span className="pagination-info">
-                Page {pagination.page} of {pagination.pages} ({pagination.total} total)
+                Trang {pagination.page} / {pagination.pages} ({pagination.total} công việc)
               </span>
               <button
                 onClick={() => handlePageChange(pagination.page + 1)}
                 disabled={pagination.page === pagination.pages}
                 className="pagination-btn"
               >
-                Next →
+                Sau →
               </button>
             </div>
           )}
         </>
+      )}
+
+      {showDeleteConfirm && (
+        <div className="modal-overlay" onClick={() => setShowDeleteConfirm(null)}>
+          <div className="modal-content modal-confirm" onClick={(e) => e.stopPropagation()}>
+            <h2 className="modal-title">Xác nhận xóa</h2>
+            <p className="modal-message">
+              Bạn có chắc chắn muốn xóa công việc này? Hành động này không thể hoàn tác và sẽ xóa tất cả đơn ứng tuyển và đánh giá liên quan.
+            </p>
+            <div className="modal-actions">
+              <button
+                onClick={() => setShowDeleteConfirm(null)}
+                className="btn-cancel"
+                disabled={deleteLoading}
+              >
+                Hủy
+              </button>
+              <button
+                onClick={() => handleDeleteJob(showDeleteConfirm)}
+                className="btn-delete"
+                disabled={deleteLoading}
+              >
+                {deleteLoading ? 'Đang xóa...' : 'Xóa'}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

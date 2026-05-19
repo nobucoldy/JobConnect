@@ -21,21 +21,17 @@ const Navbar = () => {
         </Link>
 
         <div className="navbar-links">
-          <Link to="/" className="navbar-link">Trang chủ</Link>
-          <Link to="/jobs" className="navbar-link">Tìm việc</Link>
-
-          {isAuthenticated ? (
+          {!isAdmin && (
             <>
-              <Link to="/jobs/create" className="navbar-link">Đăng việc</Link>
-              <Link to="/profile" className="navbar-link">Hồ sơ</Link>
-              {isAdmin && (
-                <Link to="/admin" className="navbar-link navbar-link-admin">
-                  Admin
-                </Link>
+              <Link to="/" className="navbar-link">Trang chủ</Link>
+              <Link to="/jobs" className="navbar-link">Tìm việc</Link>
+              {isAuthenticated && (
+                <>
+                  <Link to="/jobs/create" className="navbar-link">Đăng việc</Link>
+                  <Link to="/profile" className="navbar-link">Hồ sơ</Link>
+                </>
               )}
             </>
-          ) : (
-            <Link to="/login" className="navbar-link">Đăng nhập</Link>
           )}
         </div>
 
@@ -48,9 +44,14 @@ const Navbar = () => {
               </Button>
             </div>
           ) : (
-            <Button size="sm" onClick={() => navigate('/register')}>
-              Đăng ký ngay
-            </Button>
+            <div className="navbar-auth-buttons">
+              <Button variant="secondary" size="sm" onClick={() => navigate('/login')}>
+                Đăng nhập
+              </Button>
+              <Button size="sm" onClick={() => navigate('/register')}>
+                Đăng ký
+              </Button>
+            </div>
           )}
         </div>
       </div>

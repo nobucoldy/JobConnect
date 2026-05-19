@@ -53,6 +53,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+  text-align: left;
 }
 
 .profile-name {
@@ -60,6 +61,7 @@
   font-weight: 700;
   color: var(--gray-900);
   margin: 0;
+  text-align: left;
 }
 
 .profile-rating {
@@ -124,11 +126,192 @@
   background-color: var(--primary-blue-dark);
 }
 
+.profile-tabs {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+  border-bottom: 2px solid var(--gray-200);
+}
+
+.profile-tab {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--gray-600);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: -2px;
+}
+
+.profile-tab:hover {
+  color: var(--primary-blue);
+}
+
+.profile-tab.active {
+  color: var(--primary-blue);
+  border-bottom-color: var(--primary-blue);
+}
+
+.profile-tab svg {
+  width: 18px;
+  height: 18px;
+}
+
 .profile-contact {
   background: white;
   border-radius: var(--radius-xl);
   padding: var(--space-8);
-  max-width: 400px;
+  max-width: 600px;
+}
+
+.profile-jobs {
+  background: white;
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+}
+
+.profile-jobs-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin: 0 0 var(--space-6) 0;
+  text-align: left;
+}
+
+.profile-jobs-empty {
+  text-align: center;
+  padding: var(--space-10);
+  color: var(--gray-600);
+}
+
+.profile-jobs-empty p {
+  margin-bottom: var(--space-4);
+  font-size: 16px;
+}
+
+.btn-primary {
+  display: inline-block;
+  padding: var(--space-3) var(--space-5);
+  background-color: var(--primary-blue);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-blue-dark);
+}
+
+.profile-jobs-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.profile-job-card {
+  display: block;
+  padding: var(--space-5);
+  background: var(--gray-50);
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.profile-job-card:hover {
+  border-color: var(--primary-blue);
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.1);
+}
+
+.job-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.job-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin: 0;
+  text-align: left;
+}
+
+.job-card-status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.status-open {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+
+.status-assigned {
+  background: #E3F2FD;
+  color: #1565C0;
+}
+
+.status-completed {
+  background: #F3E5F5;
+  color: #6A1B9A;
+}
+
+.status-cancelled {
+  background: #FFEBEE;
+  color: #C62828;
+}
+
+.status-pending {
+  background: #FFF3E0;
+  color: #E65100;
+}
+
+.status-accepted {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+
+.status-rejected {
+  background: #FFEBEE;
+  color: #C62828;
+}
+
+.job-card-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 14px;
+  color: var(--gray-600);
+  flex-wrap: wrap;
+}
+
+.job-card-footer {
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--gray-200);
+}
+
+.job-card-date {
+  font-size: 13px;
+  color: var(--gray-500);
 }
 
 .profile-contact-title {
@@ -236,8 +419,18 @@
     width: 100%;
   }
 
-  .profile-contact {
+  .profile-contact,
+  .profile-jobs {
     max-width: 100%;
     padding: var(--space-5);
+  }
+
+  .profile-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .profile-tab {
+    white-space: nowrap;
   }
 }

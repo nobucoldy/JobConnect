@@ -53,6 +53,20 @@
   padding: 40px;
 }
 
+.admin-jobs-loading .spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .btn-retry {
   padding: 10px 20px;
   background-color: #007bff;
@@ -141,20 +155,87 @@
   white-space: nowrap;
 }
 
-.btn-view-job {
-  display: inline-block;
-  padding: 6px 16px;
-  background-color: #007bff;
-  color: white;
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.status-badge.status-open {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+
+.status-badge.status-assigned {
+  background: #E3F2FD;
+  color: #1565C0;
+}
+
+.status-badge.status-completed {
+  background: #F3E5F5;
+  color: #6A1B9A;
+}
+
+.status-badge.status-cancelled {
+  background: #FFEBEE;
+  color: #C62828;
+}
+
+.job-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-view-job,
+.btn-delete-job {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border: none;
   border-radius: 6px;
   font-size: 13px;
   font-weight: 600;
-  text-decoration: none;
-  transition: background-color 0.2s ease;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-view-job {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-view-job svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
 }
 
 .btn-view-job:hover {
   background-color: #0056b3;
+}
+
+.btn-delete-job {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-delete-job svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
+}
+
+.btn-delete-job:hover:not(:disabled) {
+  background-color: #c82333;
+}
+
+.btn-delete-job:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .pagination {
@@ -192,6 +273,88 @@
   font-size: 14px;
   color: #666;
   font-weight: 500;
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-confirm {
+  max-width: 400px;
+}
+
+.modal-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 16px 0;
+}
+
+.modal-message {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.btn-cancel,
+.btn-delete {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-cancel {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.btn-cancel:hover:not(:disabled) {
+  background-color: #e0e0e0;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-delete:hover:not(:disabled) {
+  background-color: #c82333;
+}
+
+.btn-cancel:disabled,
+.btn-delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 @media (max-width: 768px) {

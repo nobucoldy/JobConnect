@@ -41,6 +41,13 @@ exports.getAllJobs = async (req, res, next) => {
       query.location = { $regex: req.query.location, $options: 'i' };
     }
 
+    if (req.query.search) {
+      query.$or = [
+        { title: { $regex: req.query.search, $options: 'i' } },
+        { location: { $regex: req.query.search, $options: 'i' } }
+      ];
+    }
+
     // Execute query
     const jobs = await Job.find(query)
       .populate('poster', 'name averageRating')

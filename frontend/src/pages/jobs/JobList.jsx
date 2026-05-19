@@ -13,12 +13,12 @@ const JobListPage = () => {
   const [initialized, setInitialized] = useState(false);
   const [filters, setFilters] = useState({
     category: '',
-    location: '',
+    search: '',
     status: 'OPEN'
   });
   const [pagination, setPagination] = useState({
     page: 1,
-    limit: 9,
+    limit: 8,
     total: 0,
     pages: 0
   });
@@ -99,17 +99,21 @@ const JobListPage = () => {
               className="filter-select"
             >
               <option value="">Tất cả danh mục</option>
-              <option value="Delivery">Giao hàng</option>
-              <option value="Cleaning">Dọn dẹp</option>
-              <option value="Tutoring">Gia sư</option>
-              <option value="Tech Support">Hỗ trợ kỹ thuật</option>
-              <option value="Other">Khác</option>
+              <option value="Giao hàng">Giao hàng</option>
+              <option value="Dọn dẹp">Dọn dẹp</option>
+              <option value="Gia sư">Gia sư</option>
+              <option value="Hỗ trợ kỹ thuật">Hỗ trợ kỹ thuật</option>
+              <option value="Khác">Khác</option>
             </select>
 
-            <select className="filter-select">
-              <option>Mới nhất</option>
-              <option>Lương cao nhất</option>
-            </select>
+            <input
+              type="text"
+              name="search"
+              value={filters.search}
+              onChange={handleFilterChange}
+              placeholder="Tìm kiếm theo địa chỉ..."
+              className="filter-input"
+            />
           </div>
         </div>
 

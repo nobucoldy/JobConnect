@@ -126,7 +126,7 @@ const ApplicationCard = ({ application, onUpdate, isPoster = false }) => {
             onClick={() => setShowAcceptConfirm(true)}
             disabled={loading}
           >
-            ✅ Chấp nhận
+            Chấp nhận
           </Button>
           <Button
             variant="danger"
