@@ -1,0 +1,79 @@
+.review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.review-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.review-form-label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+.review-form-textarea {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+}
+
+.review-form-textarea:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.review-form-error {
+  padding: 12px;
+  background-color: #fee;
+  color: #c33;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.review-form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: #545b62;
+}

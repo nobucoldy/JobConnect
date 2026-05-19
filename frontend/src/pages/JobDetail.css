@@ -243,6 +243,45 @@
   margin-bottom: var(--spacing-6);
 }
 
+.reviews-section {
+  margin-top: var(--spacing-4);
+}
+
+.review-action {
+  text-align: center;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-4);
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-6);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--neutral-900);
+  margin: 0 0 var(--spacing-5) 0;
+}
+
 @media (max-width: 768px) {
   .job-detail-page {
     padding: var(--spacing-4) var(--spacing-3);
@@ -280,5 +319,10 @@
 
   .owner-actions button {
     width: 100%;
+  }
+
+  .modal-content {
+    padding: var(--spacing-4);
+    max-height: 95vh;
   }
 }

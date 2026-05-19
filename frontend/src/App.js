@@ -15,6 +15,8 @@ import JobDetail from './pages/JobDetail';
 import JobForm from './pages/JobForm';
 import MyJobs from './pages/MyJobs';
 import MyApplications from './pages/MyApplications';
+import Profile from './pages/Profile';
+import EditProfile from './pages/EditProfile';
 
 function App() {
   return (
@@ -57,6 +59,15 @@ function App() {
               element={
                 <ProtectedRoute>
                   <MyApplications />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/profile/:userId" element={<Profile />} />
+            <Route
+              path="/profile/edit"
+              element={
+                <ProtectedRoute>
+                  <EditProfile />
                 </ProtectedRoute>
               }
             />

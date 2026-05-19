@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { jobService } from '../services/jobService';
 import { applicationService } from '../services/applicationService';
+import { reviewService } from '../services/reviewService';
 import { useAuth } from '../context/AuthContext';
 import Button from '../components/common/Button';
 import Badge from '../components/common/Badge';
 import ApplicationModal from '../components/application/ApplicationModal';
 import ApplicationList from '../components/application/ApplicationList';
+import ReviewForm from '../components/review/ReviewForm';
+import ReviewList from '../components/review/ReviewList';
 import './JobDetail.css';
 
 const JobDetail = () => {
@@ -20,9 +23,15 @@ const JobDetail = () => {
   const [hasApplied, setHasApplied] = useState(false);
   const [showApplicationModal, setShowApplicationModal] = useState(false);
   const [showApplicationList, setShowApplicationList] = useState(false);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [reviews, setReviews] = useState([]);
+  const [reviewsLoading, setReviewsLoading] = useState(false);
+  const [hasReviewed, setHasReviewed] = useState(false);
+  const [reviewLoading, setReviewLoading] = useState(false);
 
   useEffect(() => {
     fetchJobDetail();
+    fetchReviews();
   }, [id]);
 
   useEffect(() => {
@@ -30,6 +39,12 @@ const JobDetail = () => {
       checkIfApplied();
     }
   }, [isAuthenticated, job]);
+
+  useEffect(() => {
+    if (isAuthenticated && job && reviews.length > 0) {
+      checkIfReviewed();
+    }
+  }, [isAuthenticated, job, reviews]);
 
   const fetchJobDetail = async () => {
     setLoading(true);
@@ -56,9 +71,41 @@ const JobDetail = () => {
     }
   };
 
+  const fetchReviews = async () => {
+    setReviewsLoading(true);
+    try {
+      const response = await reviewService.getReviewsForJob(id);
+      setReviews(response.data.data);
+    } catch (err) {
+      console.error('Failed to load reviews:', err);
+    } finally {
+      setReviewsLoading(false);
+    }
+  };
+
+  const checkIfReviewed = () => {
+    const userReview = reviews.find(review => review.reviewer?._id === user?._id);
+    setHasReviewed(!!userReview);
+  };
+
   const handleApplySuccess = () => {
     setHasApplied(true);
     fetchJobDetail();
+  };
+
+  const handleReviewSubmit = async (reviewData) => {
+    setReviewLoading(true);
+    try {
+      await reviewService.createReview(reviewData);
+      alert('Đánh giá thành công!');
+      setShowReviewForm(false);
+      fetchReviews();
+      fetchJobDetail(); // Refresh to update user ratings
+    } catch (err) {
+      alert(err.response?.data?.message || 'Không thể gửi đánh giá');
+    } finally {
+      setReviewLoading(false);
+    }
   };
 
   const handleDelete = async () => {
@@ -150,9 +197,11 @@ const JobDetail = () => {
   }
 
   const isOwner = isAuthenticated && user?._id === job.poster?._id;
+  const isAssignedWorker = isAuthenticated && user?._id === job.assignedWorker?._id;
   const canEdit = isOwner && job.status === 'OPEN';
   const canDelete = isOwner && job.status === 'OPEN';
   const canMarkComplete = isOwner && job.status === 'ASSIGNED';
+  const canReview = isAuthenticated && job.status === 'COMPLETED' && (isOwner || isAssignedWorker) && !hasReviewed;
 
   return (
     <div className="job-detail-page">
@@ -310,8 +359,48 @@ const JobDetail = () => {
                 )}
               </div>
             )}
+
+            {canReview && (
+              <div className="review-action">
+                <Button
+                  variant="primary"
+                  size="lg"
+                  fullWidth
+                  onClick={() => setShowReviewForm(true)}
+                >
+                  ⭐ Viết đánh giá
+                </Button>
+              </div>
+            )}
+
+            {hasReviewed && job.status === 'COMPLETED' && (
+              <div className="action-message">
+                <Badge variant="success">✅ Đã đánh giá</Badge>
+              </div>
+            )}
           </div>
         </div>
+
+        {job.status === 'COMPLETED' && (
+          <div className="job-detail-card reviews-section">
+            <h2 className="section-title">Đánh giá</h2>
+            <ReviewList reviews={reviews} loading={reviewsLoading} />
+          </div>
+        )}
+
+        {showReviewForm && (
+          <div className="modal-overlay" onClick={() => setShowReviewForm(false)}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <h2 className="modal-title">Viết đánh giá</h2>
+              <ReviewForm
+                jobId={job._id}
+                onSubmit={handleReviewSubmit}
+                onCancel={() => setShowReviewForm(false)}
+                loading={reviewLoading}
+              />
+            </div>
+          </div>
+        )}
 
         {showApplicationModal && (
           <ApplicationModal
