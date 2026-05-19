@@ -1,0 +1,158 @@
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: var(--spacing-4);
+}
+
+.modal-content {
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-5);
+  border-bottom: 2px solid var(--neutral-100);
+}
+
+.modal-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--neutral-900);
+  margin: 0;
+}
+
+.modal-close {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  font-size: 32px;
+  color: var(--neutral-600);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  background: var(--neutral-100);
+  color: var(--neutral-900);
+}
+
+.modal-body {
+  padding: var(--spacing-5);
+}
+
+.job-info-summary {
+  padding: var(--spacing-4);
+  background: var(--neutral-50);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-5);
+}
+
+.job-info-summary h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--neutral-900);
+  margin-bottom: var(--spacing-2);
+}
+
+.job-info-summary .job-meta {
+  font-size: 14px;
+  color: var(--neutral-600);
+}
+
+.form-group {
+  margin-bottom: var(--spacing-5);
+}
+
+.form-group label {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--neutral-700);
+  margin-bottom: var(--spacing-2);
+}
+
+.required {
+  color: var(--danger-red);
+}
+
+.form-textarea {
+  width: 100%;
+  padding: var(--spacing-3);
+  font-size: 16px;
+  font-family: var(--font-primary);
+  border: 2px solid var(--neutral-300);
+  border-radius: var(--radius-md);
+  transition: border-color 0.2s ease;
+  resize: vertical;
+}
+
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+}
+
+.form-textarea:disabled {
+  background: var(--neutral-100);
+  cursor: not-allowed;
+}
+
+.char-count {
+  text-align: right;
+  font-size: 14px;
+  margin-top: var(--spacing-2);
+}
+
+.error-message {
+  padding: var(--spacing-3);
+  background: #fee;
+  border: 1px solid var(--danger-red);
+  border-radius: var(--radius-md);
+  color: var(--danger-red);
+  font-size: 14px;
+  margin-bottom: var(--spacing-4);
+}
+
+.modal-actions {
+  display: flex;
+  gap: var(--spacing-3);
+  justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    max-height: 95vh;
+  }
+
+  .modal-header h2 {
+    font-size: 20px;
+  }
+
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .modal-actions button {
+    width: 100%;
+  }
+}

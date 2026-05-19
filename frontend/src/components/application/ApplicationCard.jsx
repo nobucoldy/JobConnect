@@ -1,0 +1,161 @@
+import React, { useState } from 'react';
+import { applicationService } from '../../services/applicationService';
+import Button from '../common/Button';
+import Badge from '../common/Badge';
+import './ApplicationCard.css';
+
+const ApplicationCard = ({ application, onUpdate, isPoster = false }) => {
+  const [loading, setLoading] = useState(false);
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('vi-VN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  const getStatusBadgeVariant = (status) => {
+    const variants = {
+      'PENDING': 'warning',
+      'ACCEPTED': 'success',
+      'REJECTED': 'danger'
+    };
+    return variants[status] || 'default';
+  };
+
+  const handleAccept = async () => {
+    if (!window.confirm('Bạn có chắc chắn muốn chấp nhận ứng viên này? Công việc sẽ được giao cho họ và các ứng tuyển khác sẽ bị từ chối.')) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await applicationService.acceptApplication(application._id);
+      alert('Đã chấp nhận ứng viên!');
+      onUpdate();
+    } catch (err) {
+      alert(err.response?.data?.message || 'Có lỗi xảy ra');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleReject = async () => {
+    if (!window.confirm('Bạn có chắc chắn muốn từ chối ứng viên này?')) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await applicationService.rejectApplication(application._id);
+      alert('Đã từ chối ứng viên!');
+      onUpdate();
+    } catch (err) {
+      alert(err.response?.data?.message || 'Có lỗi xảy ra');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleWithdraw = async () => {
+    if (!window.confirm('Bạn có chắc chắn muốn rút lại ứng tuyển này?')) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await applicationService.withdrawApplication(application._id);
+      alert('Đã rút lại ứng tuyển!');
+      onUpdate();
+    } catch (err) {
+      alert(err.response?.data?.message || 'Có lỗi xảy ra');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="application-card">
+      <div className="application-header">
+        <div className="applicant-info">
+          <div className="applicant-avatar">
+            {application.worker?.name?.charAt(0).toUpperCase()}
+          </div>
+          <div className="applicant-details">
+            <div className="applicant-name">{application.worker?.name}</div>
+            <div className="applicant-rating">
+              ⭐ {application.worker?.averageRating?.toFixed(1) || 'Chưa có đánh giá'}
+              {application.worker?.totalReviews > 0 && ` (${application.worker.totalReviews} đánh giá)`}
+            </div>
+            {isPoster && (
+              <>
+                <div className="applicant-contact">📧 {application.worker?.email}</div>
+                {application.worker?.phone && (
+                  <div className="applicant-contact">📱 {application.worker?.phone}</div>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+        <Badge variant={getStatusBadgeVariant(application.status)}>
+          {application.status}
+        </Badge>
+      </div>
+
+      <div className="application-body">
+        {application.coverLetter && (
+          <div className="cover-letter">
+            <div className="cover-letter-label">Thư xin việc:</div>
+            <p>{application.coverLetter}</p>
+          </div>
+        )}
+
+        <div className="application-meta">
+          <span className="applied-date">
+            Ứng tuyển: {formatDate(application.createdAt)}
+          </span>
+        </div>
+      </div>
+
+      {isPoster && application.status === 'PENDING' && (
+        <div className="application-actions">
+          <Button
+            variant="success"
+            size="sm"
+            onClick={handleAccept}
+            disabled={loading}
+          >
+            ✅ Chấp nhận
+          </Button>
+          <Button
+            variant="danger"
+            size="sm"
+            onClick={handleReject}
+            disabled={loading}
+          >
+            ❌ Từ chối
+          </Button>
+        </div>
+      )}
+
+      {!isPoster && application.status === 'PENDING' && (
+        <div className="application-actions">
+          <Button
+            variant="danger"
+            size="sm"
+            onClick={handleWithdraw}
+            disabled={loading}
+          >
+            Rút lại ứng tuyển
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ApplicationCard;

@@ -1,0 +1,132 @@
+.application-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-5);
+  transition: box-shadow 0.2s ease;
+}
+
+.application-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.application-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-4);
+  gap: var(--spacing-3);
+}
+
+.applicant-info {
+  display: flex;
+  gap: var(--spacing-3);
+  flex: 1;
+  min-width: 0;
+}
+
+.applicant-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--primary-blue);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.applicant-details {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.applicant-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--neutral-900);
+}
+
+.applicant-rating {
+  font-size: 14px;
+  color: var(--neutral-600);
+}
+
+.applicant-contact {
+  font-size: 14px;
+  color: var(--neutral-600);
+}
+
+.application-body {
+  margin-bottom: var(--spacing-4);
+}
+
+.cover-letter {
+  padding: var(--spacing-4);
+  background: var(--neutral-50);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-3);
+}
+
+.cover-letter-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--neutral-700);
+  margin-bottom: var(--spacing-2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cover-letter p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--neutral-700);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.application-meta {
+  display: flex;
+  gap: var(--spacing-3);
+  flex-wrap: wrap;
+}
+
+.applied-date {
+  font-size: 14px;
+  color: var(--neutral-600);
+}
+
+.application-actions {
+  display: flex;
+  gap: var(--spacing-3);
+  padding-top: var(--spacing-4);
+  border-top: 2px solid var(--neutral-100);
+}
+
+@media (max-width: 768px) {
+  .application-card {
+    padding: var(--spacing-4);
+  }
+
+  .application-header {
+    flex-direction: column;
+  }
+
+  .applicant-info {
+    width: 100%;
+  }
+
+  .application-actions {
+    flex-direction: column;
+  }
+
+  .application-actions button {
+    width: 100%;
+  }
+}

@@ -14,6 +14,7 @@ import JobListPage from './pages/JobList';
 import JobDetail from './pages/JobDetail';
 import JobForm from './pages/JobForm';
 import MyJobs from './pages/MyJobs';
+import MyApplications from './pages/MyApplications';
 
 function App() {
   return (
@@ -55,7 +56,7 @@ function App() {
               path="/applications"
               element={
                 <ProtectedRoute>
-                  <div style={{ padding: '40px' }}><h1>Applications Page</h1><p>Coming soon in Phase 6</p></div>
+                  <MyApplications />
                 </ProtectedRoute>
               }
             />

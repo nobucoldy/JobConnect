@@ -1,0 +1,126 @@
+.application-list-modal {
+  max-width: 900px;
+  max-height: 90vh;
+}
+
+.error-alert {
+  background: #fee;
+  border: 2px solid var(--danger-red);
+  color: var(--danger-red);
+  padding: var(--spacing-4);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-4);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.error-alert button {
+  background: transparent;
+  border: 1px solid var(--danger-red);
+  color: var(--danger-red);
+  padding: var(--spacing-2) var(--spacing-4);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.error-alert button:hover {
+  background: var(--danger-red);
+  color: white;
+}
+
+.filter-tabs {
+  display: flex;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-5);
+  overflow-x: auto;
+  padding-bottom: var(--spacing-2);
+}
+
+.filter-tab {
+  padding: var(--spacing-2) var(--spacing-4);
+  background: white;
+  border: 2px solid var(--neutral-300);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--neutral-700);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.filter-tab:hover {
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+}
+
+.filter-tab.active {
+  background: var(--primary-blue);
+  border-color: var(--primary-blue);
+  color: white;
+}
+
+.application-list-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.application-list-loading {
+  text-align: center;
+  padding: var(--spacing-10);
+}
+
+.application-list-loading .spinner {
+  border: 3px solid var(--neutral-200);
+  border-top: 3px solid var(--primary-blue);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto var(--spacing-4);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.application-list-empty {
+  text-align: center;
+  padding: var(--spacing-10);
+}
+
+.application-list-empty .empty-icon {
+  font-size: 64px;
+  margin-bottom: var(--spacing-4);
+}
+
+.application-list-empty h3 {
+  font-size: 24px;
+  color: var(--neutral-900);
+  margin-bottom: var(--spacing-2);
+}
+
+.application-list-empty p {
+  font-size: 16px;
+  color: var(--neutral-600);
+}
+
+@media (max-width: 768px) {
+  .application-list-modal {
+    max-height: 95vh;
+  }
+
+  .filter-tabs {
+    gap: var(--spacing-1);
+  }
+
+  .filter-tab {
+    font-size: 12px;
+    padding: var(--spacing-2) var(--spacing-3);
+  }
+}

@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { jobService } from '../services/jobService';
+import { applicationService } from '../services/applicationService';
 import { useAuth } from '../context/AuthContext';
 import Button from '../components/common/Button';
 import Badge from '../components/common/Badge';
+import ApplicationModal from '../components/application/ApplicationModal';
+import ApplicationList from '../components/application/ApplicationList';
 import './JobDetail.css';
 
 const JobDetail = () => {
@@ -14,10 +17,19 @@ const JobDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [actionLoading, setActionLoading] = useState(false);
+  const [hasApplied, setHasApplied] = useState(false);
+  const [showApplicationModal, setShowApplicationModal] = useState(false);
+  const [showApplicationList, setShowApplicationList] = useState(false);
 
   useEffect(() => {
     fetchJobDetail();
   }, [id]);
+
+  useEffect(() => {
+    if (isAuthenticated && job && !isOwner) {
+      checkIfApplied();
+    }
+  }, [isAuthenticated, job]);
 
   const fetchJobDetail = async () => {
     setLoading(true);
@@ -30,6 +42,23 @@ const JobDetail = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const checkIfApplied = async () => {
+    try {
+      const response = await applicationService.getMyApplications();
+      const applications = response.data.data;
+      const applied = applications.some(app => app.job._id === id);
+      setHasApplied(applied);
+    } catch (err) {
+      // Silently fail - not critical
+      console.error('Failed to check application status:', err);
+    }
+  };
+
+  const handleApplySuccess = () => {
+    setHasApplied(true);
+    fetchJobDetail();
   };
 
   const handleDelete = async () => {
@@ -231,13 +260,27 @@ const JobDetail = () => {
 
             {isAuthenticated && !isOwner && job.status === 'OPEN' && (
               <div className="action-message">
-                <Button size="lg" fullWidth>Ứng tuyển ngay</Button>
-                <p className="action-note">Tính năng ứng tuyển sẽ có trong Phase 6</p>
+                {hasApplied ? (
+                  <>
+                    <Badge variant="success">✅ Đã ứng tuyển</Badge>
+                    <p className="action-note">Bạn đã ứng tuyển vào công việc này. Vui lòng chờ người đăng xét duyệt.</p>
+                  </>
+                ) : (
+                  <Button size="lg" fullWidth onClick={() => setShowApplicationModal(true)}>
+                    Ứng tuyển ngay
+                  </Button>
+                )}
               </div>
             )}
 
             {isOwner && (
               <div className="owner-actions">
+                <Button
+                  variant="info"
+                  onClick={() => setShowApplicationList(true)}
+                >
+                  👥 Xem ứng viên
+                </Button>
                 {canEdit && (
                   <Button
                     variant="secondary"
@@ -269,6 +312,21 @@ const JobDetail = () => {
             )}
           </div>
         </div>
+
+        {showApplicationModal && (
+          <ApplicationModal
+            job={job}
+            onClose={() => setShowApplicationModal(false)}
+            onSuccess={handleApplySuccess}
+          />
+        )}
+
+        {showApplicationList && (
+          <ApplicationList
+            jobId={job._id}
+            onClose={() => setShowApplicationList(false)}
+          />
+        )}
       </div>
     </div>
   );
