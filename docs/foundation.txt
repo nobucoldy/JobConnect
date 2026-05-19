@@ -1,0 +1,431 @@
+# JobConnect Constitution / Project Foundation
+
+## 1. Project Overview
+
+### Project Name
+JobConnect — Nền tảng kết nối công việc ngắn hạn
+
+### Main Problem
+Khó kết nối nhanh chóng giữa người tìm việc ngắn hạn và nhà tuyển dụng, thiếu cơ chế quản lý ứng tuyển và đánh giá độ uy tín giữa hai bên.
+
+### Goal
+Xây dựng hệ thống trung gian giúp:
+- Nhà tuyển dụng đăng công việc ngắn hạn
+- Người tìm việc ứng tuyển công việc
+- Quản lý quy trình ứng tuyển
+- Tăng độ minh bạch thông qua đánh giá và lịch sử công việc
+
+---
+
+# 2. System Actors
+
+## User (Dual-Role)
+Mỗi user có thể đồng thời:
+
+**Khi là Job Poster (Employer)**:
+- Đăng công việc
+- Quản lý công việc của mình
+- Xem danh sách ứng viên
+- Chấp nhận ứng viên
+- Đánh giá worker sau khi hoàn thành công việc
+- Nhận đánh giá từ worker
+
+**Khi là Job Seeker (Worker)**:
+- Xem danh sách công việc
+- Xem chi tiết công việc
+- Ứng tuyển công việc
+- Xem lịch sử ứng tuyển
+- Đánh giá job poster sau khi hoàn thành công việc
+- Nhận đánh giá từ job poster
+
+**Profile Page (Hiển thị cả 2 vai trò)**:
+- Thông tin cơ bản
+- Rating tổng hợp (trung bình từ tất cả reviews nhận được)
+- **As Worker**: Danh sách jobs đã hoàn thành (với reviews từ job poster)
+- **As Poster**: Danh sách jobs đã đăng (với status)
+- Danh sách tất cả reviews nhận được
+
+---
+
+## Admin
+Quản trị hệ thống:
+- Xem danh sách người dùng
+- Xem danh sách công việc (với filter by status)
+- Xem thống kê tổng quan:
+  - Tổng số users
+  - Tổng số jobs theo status
+  - Tổng số applications
+  - Số reviews đã tạo
+
+---
+
+# 3. Core Business Workflow
+
+## Main Flow
+
+User A Create Job
+→ User B Apply
+→ User A Accept User B
+→ Job Completed
+→ User A Review User B (Job Poster reviews Worker)
+→ User B Review User A (Worker reviews Job Poster)
+
+---
+
+# 4. Project Scope (Foundation Thesis Scope)
+
+## Included Features
+
+### Authentication
+- Register
+- Login
+- JWT authentication
+- Password hashing
+
+---
+
+### Authorization
+- Action-based access control (không có role cố định)
+- User có thể thực hiện cả worker và employer actions
+- Admin permissions (chỉ xem thống kê)
+
+---
+
+### Job Management
+Any user can:
+- Create job (as poster)
+- Update own jobs
+- Delete own jobs
+- View all jobs
+- Search/filter jobs by category, location, salary
+- View job detail
+
+**Job Categories**:
+- Delivery (Giao hàng)
+- Cleaning (Dọn dẹp)
+- Tutoring (Gia sư)
+- Tech Support (Hỗ trợ kỹ thuật)
+- Other (Khác)
+
+---
+
+### Application Management
+Any user can:
+- Apply for jobs (as worker)
+- View applications for own jobs (as poster)
+- Accept one worker for own job
+- Reject applications for own job
+
+**Important**: User cannot apply to their own job
+
+---
+
+### Review System (Two-Way)
+After job completion, both parties can review each other:
+
+**Job Poster reviews Worker**:
+- Rating (1-5 stars)
+- Comment
+
+**Worker reviews Job Poster**:
+- Rating (1-5 stars)
+- Comment
+
+**Rules**:
+- Both reviews are independent
+- Can only review after job is COMPLETED
+- Can only review users you've worked with
+- One review per person per completed job
+
+---
+
+### Profile & History
+**User Profile Page** (hiển thị cả 2 vai trò):
+- Basic info (name, email, phone)
+- Average rating (tổng hợp từ tất cả reviews nhận được)
+- Total reviews received
+
+**As Worker Section**:
+- Jobs completed as worker
+- Applications status
+- Reviews received from job posters
+
+**As Job Poster Section**:
+- All posted jobs with status breakdown
+- Jobs in progress (ASSIGNED)
+- Completed jobs
+- Reviews received from workers
+
+**Profile Features**:
+- View own profile
+- View other user's public profile (để xem rating trước khi accept/apply)
+- Edit basic info (name, phone only)
+- Email cannot be edited (security measure)
+
+---
+
+# 5. Out Of Scope
+
+The following features are NOT included in the foundation project scope:
+
+- Online payment
+- Realtime chat
+- AI recommendation
+- GPS / map integration
+- Video call
+- Email notifications (no email system in MVP)
+- Microservices
+- Mobile application
+- File upload to server (no avatar system in MVP)
+- Social login (Google/Facebook OAuth)
+- Two-factor authentication
+- Email verification system
+- Advanced search (full-text search, elasticsearch)
+- Advanced review features (review photos, detailed criteria)
+- Profile bio/description field
+- User account suspension/moderation features
+
+---
+
+# 6. Technical Stack
+
+## Frontend
+- React
+- React Router
+- Axios
+- Context API / Zustand
+
+---
+
+## Backend
+- Node.js
+- Express.js
+- JWT
+- bcrypt
+- Express-validator (input validation)
+
+---
+
+## Database
+- MongoDB
+- Mongoose
+
+---
+
+# 7. System Architecture Principles
+
+## Frontend Responsibilities
+Frontend should:
+- Render UI
+- Manage client state
+- Validate forms
+- Call backend APIs
+
+Frontend should NOT:
+- Handle critical business validation
+- Handle authorization logic
+- Trust client-side permissions
+
+---
+
+## Backend Responsibilities
+Backend handles:
+- Authentication
+- Authorization
+- Business rules
+- Workflow validation
+- Database operations
+- Security validation
+
+---
+
+# 8. Business Rules
+
+## Job Rules
+- Any user can create jobs
+- Jobs must have valid category (from predefined categories list)
+- startDate must be less than endDate (if both provided)
+- startDate cannot be in the past
+- Only OPEN jobs can receive applications
+- One job can accept only one worker
+- Completed jobs cannot be edited
+- Job must include: title, description, category, location, salary
+- User cannot apply to their own job
+
+---
+
+## Application Rules
+- User cannot apply twice to same job
+- User cannot apply to their own job
+- User cannot apply to job past startDate
+- Only job owner can accept applications
+- **CRITICAL**: Accept application MUST use MongoDB Transaction
+- Accepted application changes job status to ASSIGNED
+
+---
+
+## Review Rules
+- Review only allowed after job completion
+- **Two-way review system**: Cả job poster và worker đều có thể đánh giá nhau
+- Job poster can review the assigned worker
+- Assigned worker can review the job poster
+- Each person can only review once per completed job
+- Must have worked together (via a COMPLETED job) to review
+- Review must belong to a real completed job
+
+---
+
+## Security Rules
+- User can only edit own jobs
+- User can only view own applications
+- User can only manage applications of their own jobs
+- User cannot apply to their own job
+- Can only review users they've worked with (completed job together)
+- Job poster can review assigned worker
+- Assigned worker can review job poster
+- Admin has read-only view permissions (no moderation actions in MVP)
+- Users can only edit their own profile
+- Email cannot be changed after registration (security measure)
+
+---
+
+# 9. Core Status Definitions
+
+## Job Status
+- OPEN
+- ASSIGNED
+- COMPLETED
+- CANCELLED
+
+---
+
+## Application Status
+- PENDING
+- ACCEPTED
+- REJECTED
+
+---
+
+# 10. Database Collections
+
+## users
+Stores:
+- account info (email, password, name, phone)
+- role (user/admin) - user có thể làm cả worker và poster
+- rating summary (average rating from all reviews, total reviews received)
+- createdAt, updatedAt
+
+---
+
+## jobs
+Stores:
+- job information (title, description, salary, location)
+- category (from predefined list)
+- poster (reference to user - người đăng job)
+- assignedWorker (reference to user - người được chọn)
+- status (OPEN/ASSIGNED/COMPLETED/CANCELLED)
+- startDate, endDate (optional)
+- createdAt, updatedAt
+
+---
+
+## applications
+Stores:
+- job (reference to job)
+- worker (reference to user)
+- application status (PENDING/ACCEPTED/REJECTED)
+- coverLetter (optional message from worker)
+- createdAt, updatedAt
+
+---
+
+## reviews
+Stores:
+- job (reference to completed job)
+- reviewer (reference to user - người đánh giá)
+- reviewee (reference to user - người được đánh giá)
+- rating (1-5 stars)
+- comment (text review)
+- reviewerRole (poster/worker - vai trò của reviewer trong job này)
+- createdAt
+
+**Note**: Mỗi completed job có thể có 2 reviews:
+- 1 review từ poster về worker
+- 1 review từ worker về poster
+
+---
+
+# 11. Non-Functional Requirements
+
+- JWT security
+- Password hashing
+- Input validation
+- RESTful API design
+- MongoDB Transaction for critical operations
+- Pagination for list endpoints
+- Responsive UI
+- Clean architecture
+- Separation of concerns
+
+---
+
+# 12. Development Principles
+
+## MVP First
+Focus only on core workflow:
+Register
+→ Login
+→ User A Create Job
+→ User B Apply
+→ User A Accept User B
+→ Complete
+→ User A Review User B
+→ User B Review User A
+
+---
+
+## Avoid Scope Creep
+Do not add:
+- Realtime systems
+- Complex AI
+- Payment systems
+before the MVP is stable.
+
+---
+
+## Layered Architecture
+
+Backend structure:
+- routes
+- controllers
+- services
+- models
+- middlewares
+
+Frontend structure:
+- pages
+- components
+- services
+- store
+
+---
+
+# 13. Long-Term Expansion Direction
+
+## Future Specialist Thesis
+Can extend:
+- Realtime chat
+- Notifications
+- File upload
+- Search/filter system
+
+---
+
+## Future Graduation Thesis
+Can extend:
+- AI recommendation
+- Distributed system
+- Microservices
+- Event-driven architecture
+- Payment integration
+- Mobile application
