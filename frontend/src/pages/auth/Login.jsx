@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import Input from '../components/common/Input';
-import Button from '../components/common/Button';
+import { useAuth } from '../../context/AuthContext';
+import Input from '../../components/common/Input';
+import Button from '../../components/common/Button';
+import { FiLogIn, FiBriefcase } from 'react-icons/fi';
 import './Register.css';
 
 const Login = () => {
@@ -39,9 +40,19 @@ const Login = () => {
 
   return (
     <div className="auth-container">
+      <div className="auth-side-panel auth-side-left">
+        <div className="side-panel-illustration">
+          <FiLogIn size={80} strokeWidth={1.5} />
+        </div>
+        <h2 className="side-panel-title">Chào mừng trở lại!</h2>
+        <p className="side-panel-description">
+          Đăng nhập để tiếp tục kết nối với hàng nghìn cơ hội việc làm.
+        </p>
+      </div>
+
       <div className="auth-card">
         <h1 className="auth-title">Đăng nhập</h1>
-        <p className="auth-subtitle">Chào mừng bạn quay trở lại!</p>
+        <p className="auth-subtitle">Nhập thông tin để tiếp tục</p>
 
         {error && <div className="error-alert">{error}</div>}
 
@@ -80,6 +91,21 @@ const Login = () => {
         <p className="auth-footer">
           Chưa có tài khoản? <Link to="/register">Đăng ký ngay</Link>
         </p>
+      </div>
+
+      <div className="auth-side-panel auth-side-right">
+        <div className="side-panel-illustration">
+          <FiBriefcase size={80} strokeWidth={1.5} />
+        </div>
+        <h2 className="side-panel-title">Việc làm tốt,<br />Tương lai tài năng.</h2>
+        <p className="side-panel-description">
+          Tham gia cộng đồng hơn 10,000+ người dùng đang tìm kiếm cơ hội việc làm.
+        </p>
+        <div className="side-panel-stats">
+          <div>10,000+ Công việc</div>
+          <div>5,000+ Người dùng</div>
+          <div>98% Hài lòng</div>
+        </div>
       </div>
     </div>
   );

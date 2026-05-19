@@ -27,8 +27,7 @@ const Navbar = () => {
           {isAuthenticated ? (
             <>
               <Link to="/jobs/create" className="navbar-link">Đăng việc</Link>
-              <Link to="/my-jobs" className="navbar-link">Công việc của tôi</Link>
-              <Link to="/applications" className="navbar-link">Ứng tuyển</Link>
+              <Link to="/profile" className="navbar-link">Hồ sơ</Link>
               {isAdmin && (
                 <Link to="/admin" className="navbar-link navbar-link-admin">
                   Admin

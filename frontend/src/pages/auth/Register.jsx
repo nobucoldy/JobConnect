@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import Input from '../components/common/Input';
-import Button from '../components/common/Button';
+import { useAuth } from '../../context/AuthContext';
+import Input from '../../components/common/Input';
+import Button from '../../components/common/Button';
+import { FiTarget, FiTrendingUp } from 'react-icons/fi';
 import './Register.css';
 
 const Register = () => {
@@ -41,6 +42,16 @@ const Register = () => {
 
   return (
     <div className="auth-container">
+      <div className="auth-side-panel auth-side-left">
+        <div className="side-panel-illustration">
+          <FiTarget size={80} strokeWidth={1.5} />
+        </div>
+        <h2 className="side-panel-title">Kết nối tài năng,<br />bứt phá sự nghiệp.</h2>
+        <p className="side-panel-description">
+          Tạo tài khoản ngay để khám phá hàng ngàn cơ hội việc làm phù hợp với bạn.
+        </p>
+      </div>
+
       <div className="auth-card">
         <h1 className="auth-title">Đăng ký tài khoản</h1>
         <p className="auth-subtitle">Tạo tài khoản mới để bắt đầu</p>
@@ -101,6 +112,21 @@ const Register = () => {
         <p className="auth-footer">
           Đã có tài khoản? <Link to="/login">Đăng nhập ngay</Link>
         </p>
+      </div>
+
+      <div className="auth-side-panel auth-side-right">
+        <div className="side-panel-illustration">
+          <FiTrendingUp size={80} strokeWidth={1.5} />
+        </div>
+        <h2 className="side-panel-title">Cơ hội việc làm<br />không giới hạn</h2>
+        <p className="side-panel-description">
+          Hàng nghìn nhà tuyển dụng đang chờ đợi để kết nối với tài năng như bạn.
+        </p>
+        <div className="side-panel-stats">
+          <div>Đa dạng ngành nghề</div>
+          <div>Phản hồi nhanh chóng</div>
+          <div>Ứng tuyển dễ dàng</div>
+        </div>
       </div>
     </div>
   );

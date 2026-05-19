@@ -1,7 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Button from '../components/common/Button';
-import EmptyState from '../components/common/EmptyState';
+import Button from '../../components/common/Button';
+import EmptyState from '../../components/common/EmptyState';
+import { FiAlertCircle } from 'react-icons/fi';
 import './NotFound.css';
 
 const NotFound = () => {
@@ -10,7 +11,7 @@ const NotFound = () => {
   return (
     <div className="not-found-page">
       <EmptyState
-        icon="🔍"
+        icon={FiAlertCircle}
         title="404 - Không tìm thấy trang"
         message="Xin lỗi, trang bạn tìm kiếm không tồn tại hoặc đã bị xóa."
         action={

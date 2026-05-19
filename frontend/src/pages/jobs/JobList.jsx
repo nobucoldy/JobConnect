@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { jobService } from '../services/jobService';
-import JobList from '../components/job/JobList';
-import Button from '../components/common/Button';
+import { useLocation } from 'react-router-dom';
+import { jobService } from '../../services/jobService';
+import JobList from '../../components/job/JobList';
+import Button from '../../components/common/Button';
 import './JobList.css';
 
 const JobListPage = () => {
+  const location = useLocation();
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [initialized, setInitialized] = useState(false);
   const [filters, setFilters] = useState({
     category: '',
     location: '',
@@ -20,9 +23,24 @@ const JobListPage = () => {
     pages: 0
   });
 
+  // Lấy category từ URL query params khi component mount
   useEffect(() => {
-    fetchJobs();
-  }, [filters, pagination.page]);
+    const searchParams = new URLSearchParams(location.search);
+    const categoryParam = searchParams.get('category');
+    if (categoryParam) {
+      setFilters(prev => ({
+        ...prev,
+        category: decodeURIComponent(categoryParam)
+      }));
+    }
+    setInitialized(true);
+  }, [location.search]);
+
+  useEffect(() => {
+    if (initialized) {
+      fetchJobs();
+    }
+  }, [filters, pagination.page, initialized]);
 
   const fetchJobs = async () => {
     setLoading(true);
@@ -68,49 +86,34 @@ const JobListPage = () => {
   return (
     <div className="job-list-page">
       <div className="job-list-container">
-        <div className="page-header">
-          <h1>Tìm việc làm</h1>
-          <p>Khám phá các công việc phù hợp với bạn</p>
-        </div>
+        <div className="jobs-toolbar">
+          <div className="jobs-count">
+            <strong>{pagination.total}</strong> việc làm
+          </div>
 
-        {error && <div className="error-alert">{error}</div>}
-
-        <div className="filters-section">
-          <div className="filter-group">
-            <label htmlFor="category">Danh mục</label>
+          <div className="toolbar-filters">
             <select
-              id="category"
               name="category"
               value={filters.category}
               onChange={handleFilterChange}
               className="filter-select"
             >
-              <option value="">Tất cả</option>
-              <option value="Delivery">Delivery</option>
-              <option value="Cleaning">Cleaning</option>
-              <option value="Tutoring">Tutoring</option>
-              <option value="Tech Support">Tech Support</option>
-              <option value="Other">Other</option>
+              <option value="">Tất cả danh mục</option>
+              <option value="Delivery">Giao hàng</option>
+              <option value="Cleaning">Dọn dẹp</option>
+              <option value="Tutoring">Gia sư</option>
+              <option value="Tech Support">Hỗ trợ kỹ thuật</option>
+              <option value="Other">Khác</option>
+            </select>
+
+            <select className="filter-select">
+              <option>Mới nhất</option>
+              <option>Lương cao nhất</option>
             </select>
           </div>
-
-          <div className="filter-group">
-            <label htmlFor="location">Địa điểm</label>
-            <input
-              type="text"
-              id="location"
-              name="location"
-              value={filters.location}
-              onChange={handleFilterChange}
-              placeholder="Tìm theo địa điểm..."
-              className="filter-input"
-            />
-          </div>
         </div>
 
-        <div className="jobs-count">
-          Tìm thấy {pagination.total} công việc
-        </div>
+        {error && <div className="error-alert">{error}</div>}
 
         <JobList jobs={jobs} loading={loading} />
 

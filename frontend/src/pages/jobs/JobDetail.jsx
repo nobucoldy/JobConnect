@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { jobService } from '../services/jobService';
-import { applicationService } from '../services/applicationService';
-import { reviewService } from '../services/reviewService';
-import { useAuth } from '../context/AuthContext';
-import { useToast } from '../context/ToastContext';
-import Button from '../components/common/Button';
-import Badge from '../components/common/Badge';
-import Spinner from '../components/common/Spinner';
-import Confirm from '../components/common/Confirm';
-import ApplicationModal from '../components/application/ApplicationModal';
-import ApplicationList from '../components/application/ApplicationList';
-import ReviewForm from '../components/review/ReviewForm';
-import ReviewList from '../components/review/ReviewList';
+import { jobService } from '../../services/jobService';
+import { applicationService } from '../../services/applicationService';
+import { reviewService } from '../../services/reviewService';
+import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../context/ToastContext';
+import Button from '../../components/common/Button';
+import Badge from '../../components/common/Badge';
+import Spinner from '../../components/common/Spinner';
+import Confirm from '../../components/common/Confirm';
+import ApplicationModal from '../../components/application/ApplicationModal';
+import ApplicationList from '../../components/application/ApplicationList';
+import ReviewForm from '../../components/review/ReviewForm';
+import ReviewList from '../../components/review/ReviewList';
+import { FiPackage, FiBook, FiMonitor, FiMoreHorizontal } from 'react-icons/fi';
+import { PiBroom } from 'react-icons/pi';
 import './JobDetail.css';
 
 const JobDetail = () => {
@@ -142,13 +144,14 @@ const JobDetail = () => {
 
   const getCategoryIcon = (category) => {
     const icons = {
-      'Delivery': '🚚',
-      'Cleaning': '🧹',
-      'Tutoring': '📚',
-      'Tech Support': '💻',
-      'Other': '📋'
+      'Delivery': FiPackage,
+      'Cleaning': PiBroom,
+      'Tutoring': FiBook,
+      'Tech Support': FiMonitor,
+      'Other': FiMoreHorizontal
     };
-    return icons[category] || '📋';
+    const IconComponent = icons[category] || FiMoreHorizontal;
+    return <IconComponent />;
   };
 
   const getStatusBadgeVariant = (status) => {

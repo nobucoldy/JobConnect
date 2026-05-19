@@ -1,5 +1,6 @@
 import React from 'react';
 import JobCard from './JobCard';
+import { FiFileText } from 'react-icons/fi';
 import './JobList.css';
 
 const JobList = ({ jobs, loading }) => {
@@ -15,7 +16,9 @@ const JobList = ({ jobs, loading }) => {
   if (!jobs || jobs.length === 0) {
     return (
       <div className="job-list-empty">
-        <div className="empty-icon">📋</div>
+        <div className="empty-icon">
+          <FiFileText size={64} strokeWidth={1.5} />
+        </div>
         <h3>Không tìm thấy công việc</h3>
         <p>Thử thay đổi bộ lọc hoặc tìm kiếm của bạn</p>
       </div>

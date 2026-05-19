@@ -5,11 +5,11 @@
 
 .error-alert {
   background: #fee;
-  border: 2px solid var(--danger-red);
-  color: var(--danger-red);
-  padding: var(--spacing-4);
+  border: 2px solid var(--danger);
+  color: var(--danger);
+  padding: var(--space-4);
   border-radius: var(--radius-md);
-  margin-bottom: var(--spacing-4);
+  margin-bottom: var(--space-4);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -17,9 +17,9 @@
 
 .error-alert button {
   background: transparent;
-  border: 1px solid var(--danger-red);
-  color: var(--danger-red);
-  padding: var(--spacing-2) var(--spacing-4);
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-md);
   cursor: pointer;
   font-weight: 600;
@@ -27,26 +27,26 @@
 }
 
 .error-alert button:hover {
-  background: var(--danger-red);
+  background: var(--danger);
   color: white;
 }
 
 .filter-tabs {
   display: flex;
-  gap: var(--spacing-2);
-  margin-bottom: var(--spacing-5);
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
   overflow-x: auto;
-  padding-bottom: var(--spacing-2);
+  padding-bottom: var(--space-2);
 }
 
 .filter-tab {
-  padding: var(--spacing-2) var(--spacing-4);
+  padding: var(--space-2) var(--space-4);
   background: white;
-  border: 2px solid var(--neutral-300);
+  border: 2px solid var(--gray-300);
   border-radius: var(--radius-md);
   font-size: 14px;
   font-weight: 600;
-  color: var(--neutral-700);
+  color: var(--gray-700);
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
@@ -66,22 +66,22 @@
 .application-list-content {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-4);
+  gap: var(--space-4);
 }
 
 .application-list-loading {
   text-align: center;
-  padding: var(--spacing-10);
+  padding: var(--space-10);
 }
 
 .application-list-loading .spinner {
-  border: 3px solid var(--neutral-200);
+  border: 3px solid var(--gray-200);
   border-top: 3px solid var(--primary-blue);
   border-radius: 50%;
   width: 50px;
   height: 50px;
   animation: spin 1s linear infinite;
-  margin: 0 auto var(--spacing-4);
+  margin: 0 auto var(--space-4);
 }
 
 @keyframes spin {
@@ -91,23 +91,23 @@
 
 .application-list-empty {
   text-align: center;
-  padding: var(--spacing-10);
+  padding: var(--space-10);
 }
 
 .application-list-empty .empty-icon {
   font-size: 64px;
-  margin-bottom: var(--spacing-4);
+  margin-bottom: var(--space-4);
 }
 
 .application-list-empty h3 {
   font-size: 24px;
-  color: var(--neutral-900);
-  margin-bottom: var(--spacing-2);
+  color: var(--gray-900);
+  margin-bottom: var(--space-2);
 }
 
 .application-list-empty p {
   font-size: 16px;
-  color: var(--neutral-600);
+  color: var(--gray-500);
 }
 
 @media (max-width: 768px) {
@@ -116,11 +116,11 @@
   }
 
   .filter-tabs {
-    gap: var(--spacing-1);
+    gap: var(--space-1);
   }
 
   .filter-tab {
     font-size: 12px;
-    padding: var(--spacing-2) var(--spacing-3);
+    padding: var(--space-2) var(--space-3);
   }
 }

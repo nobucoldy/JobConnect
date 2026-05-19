@@ -1,25 +1,25 @@
 .input-group {
-  margin-bottom: var(--spacing-4);
+  margin-bottom: var(--space-4);
 }
 
 .input-label {
   display: block;
   font-size: 14px;
   font-weight: 600;
-  color: var(--neutral-900);
-  margin-bottom: var(--spacing-2);
+  color: var(--gray-900);
+  margin-bottom: var(--space-2);
 }
 
 .required {
-  color: var(--error-red);
+  color: var(--danger);
 }
 
 .input {
   width: 100%;
-  padding: var(--spacing-3) var(--spacing-4);
+  padding: var(--space-3) var(--space-4);
   font-size: 16px;
   font-family: var(--font-primary);
-  border: 2px solid var(--neutral-300);
+  border: 2px solid var(--gray-300);
   border-radius: var(--radius-md);
   transition: border-color 0.2s ease;
   box-sizing: border-box;
@@ -31,17 +31,17 @@
 }
 
 .input:disabled {
-  background-color: var(--neutral-100);
+  background-color: var(--gray-100);
   cursor: not-allowed;
 }
 
 .input-error {
-  border-color: var(--error-red);
+  border-color: var(--danger);
 }
 
 .error-message {
   display: block;
-  margin-top: var(--spacing-1);
+  margin-top: var(--space-1);
   font-size: 12px;
-  color: var(--error-red);
+  color: var(--danger);
 }

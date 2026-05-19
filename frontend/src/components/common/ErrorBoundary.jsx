@@ -1,4 +1,5 @@
 import React from 'react';
+import { FiAlertTriangle } from 'react-icons/fi';
 import './ErrorBoundary.css';
 
 class ErrorBoundary extends React.Component {
@@ -28,7 +29,9 @@ class ErrorBoundary extends React.Component {
       return (
         <div className="error-boundary">
           <div className="error-boundary-content">
-            <div className="error-icon">⚠️</div>
+            <div className="error-icon">
+              <FiAlertTriangle size={72} strokeWidth={1.5} />
+            </div>
             <h1 className="error-title">Đã xảy ra lỗi</h1>
             <p className="error-message">
               Xin lỗi, có gì đó không ổn. Vui lòng thử lại.

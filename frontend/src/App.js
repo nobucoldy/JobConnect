@@ -9,17 +9,12 @@ import './styles/variables.css';
 import './App.css';
 
 // Import pages
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import JobListPage from './pages/JobList';
-import JobDetail from './pages/JobDetail';
-import JobForm from './pages/JobForm';
-import MyJobs from './pages/MyJobs';
-import MyApplications from './pages/MyApplications';
-import Profile from './pages/Profile';
-import EditProfile from './pages/EditProfile';
-import NotFound from './pages/NotFound';
+import { Home } from './pages/home';
+import { Login, Register } from './pages/auth';
+import { JobList as JobListPage, JobDetail, JobForm } from './pages/jobs';
+import { Profile, EditProfile } from './pages/profile';
+import { NotFound } from './pages/common';
+import TestComponents from './TestComponents';
 
 // Import admin pages
 import AdminLayout from './components/layout/AdminLayout';
@@ -58,22 +53,13 @@ function App() {
               }
             />
             <Route
-              path="/my-jobs"
+              path="/profile"
               element={
                 <ProtectedRoute>
-                  <MyJobs />
+                  <Profile />
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/applications"
-              element={
-                <ProtectedRoute>
-                  <MyApplications />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/profile/:userId" element={<Profile />} />
             <Route
               path="/profile/edit"
               element={
@@ -94,6 +80,7 @@ function App() {
               <Route path="users" element={<AdminUsers />} />
               <Route path="jobs" element={<AdminJobs />} />
             </Route>
+            <Route path="/test" element={<TestComponents />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
             </div>

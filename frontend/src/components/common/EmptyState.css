@@ -12,18 +12,22 @@
   font-size: 64px;
   margin-bottom: 20px;
   opacity: 0.5;
+  color: var(--gray-400);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .empty-title {
   font-size: 24px;
   font-weight: 700;
-  color: var(--neutral-800);
+  color: var(--gray-900);
   margin-bottom: 12px;
 }
 
 .empty-message {
   font-size: 16px;
-  color: var(--neutral-600);
+  color: var(--gray-500);
   margin-bottom: 24px;
   max-width: 400px;
 }

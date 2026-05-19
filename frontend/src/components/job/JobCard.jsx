@@ -1,59 +1,75 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Badge from '../common/Badge';
+import { FiPackage, FiBook, FiMonitor, FiMoreHorizontal, FiMapPin, FiUser, FiCalendar } from 'react-icons/fi';
+import { PiBroom } from 'react-icons/pi';
 import './JobCard.css';
-
-const getStatusBadge = (status) => {
-  const statusMap = {
-    'OPEN': { variant: 'success', label: 'Đang tuyển' },
-    'ASSIGNED': { variant: 'info', label: 'Đã giao' },
-    'COMPLETED': { variant: 'default', label: 'Hoàn thành' },
-    'CANCELLED': { variant: 'danger', label: 'Đã hủy' }
-  };
-  return statusMap[status] || statusMap['OPEN'];
-};
 
 const getCategoryIcon = (category) => {
   const icons = {
-    'Delivery': '🚚',
-    'Cleaning': '🧹',
-    'Tutoring': '📚',
-    'Tech Support': '💻',
-    'Other': '📋'
+    'Delivery': FiPackage,
+    'Cleaning': PiBroom,
+    'Tutoring': FiBook,
+    'Tech Support': FiMonitor,
+    'Other': FiMoreHorizontal
   };
-  return icons[category] || '📋';
+  return icons[category] || FiMoreHorizontal;
 };
 
 const JobCard = ({ job }) => {
-  const statusBadge = getStatusBadge(job.status);
+  const CategoryIcon = getCategoryIcon(job.category);
+
+  // Debug: log all job data
+  console.log('JobCard rendering with job:', job);
+  console.log('Job title:', job.title);
+
+  // Format date
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
 
   return (
     <div className="job-card">
       <div className="job-card-header">
         <div className="job-category">
-          <span className="category-icon">{getCategoryIcon(job.category)}</span>
+          <span className="category-icon">
+            <CategoryIcon />
+          </span>
           <span className="category-name">{job.category}</span>
         </div>
-        <Badge variant={statusBadge.variant}>{statusBadge.label}</Badge>
+        <div className="job-salary">
+          {job.salary.toLocaleString('vi-VN')} VNĐ
+        </div>
       </div>
 
-      <h3 className="job-title">{job.title}</h3>
-      <p className="job-description">{job.description}</p>
+      <h3 className="job-title" style={{
+        fontSize: '22px',
+        fontWeight: 800,
+        color: '#1a1a1a',
+        marginBottom: '16px',
+        marginTop: '12px',
+        textTransform: 'capitalize',
+        textAlign: 'left'
+      }}>
+        {job.title || 'Untitled Job'}
+      </h3>
 
       <div className="job-meta">
-        <div className="job-location">📍 {job.location}</div>
+        <div className="job-location">
+          <FiMapPin /> {job.location}
+        </div>
         <div className="job-poster">
-          👤 {job.poster?.name || 'Unknown'}
-          {job.poster?.averageRating > 0 && (
-            <span className="rating">⭐ {job.poster.averageRating.toFixed(1)}</span>
-          )}
+          <FiUser /> {job.poster?.name || 'Unknown'}
+        </div>
+        <div className="job-date">
+          <FiCalendar /> {formatDate(job.startDate)} - {formatDate(job.endDate)}
         </div>
       </div>
 
       <div className="job-card-footer">
-        <div className="job-salary">
-          {job.salary.toLocaleString('vi-VN')} VNĐ
-        </div>
         <Link to={`/jobs/${job._id}`} className="job-card-link">
           Xem chi tiết →
         </Link>

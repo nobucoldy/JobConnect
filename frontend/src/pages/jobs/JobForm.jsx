@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { jobService } from '../services/jobService';
-import Input from '../components/common/Input';
-import Button from '../components/common/Button';
+import { jobService } from '../../services/jobService';
+import Input from '../../components/common/Input';
+import Button from '../../components/common/Button';
 import './JobForm.css';
 
 const JobForm = () => {
@@ -165,41 +165,36 @@ const JobForm = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="job-form">
-          <div className="form-section">
-            <h2 className="section-title">
-              <span className="step-number">1</span>
-              Thông tin cơ bản
-            </h2>
+          <Input
+            label="Tiêu đề công việc"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            error={errors.title}
+            required
+            placeholder="VD: Nhân viên giao hàng nội thành"
+          />
 
-            <Input
-              label="Tiêu đề công việc"
-              name="title"
-              value={formData.title}
+          <div className="form-group">
+            <label htmlFor="description" className="form-label">
+              Mô tả công việc <span className="required">*</span>
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              value={formData.description}
               onChange={handleChange}
-              error={errors.title}
-              required
-              placeholder="VD: Nhân viên giao hàng nội thành"
+              placeholder="Mô tả chi tiết công việc, yêu cầu, trách nhiệm..."
+              className={`form-textarea ${errors.description ? 'error' : ''}`}
+              rows="5"
             />
+            {errors.description && <span className="error-text">{errors.description}</span>}
+          </div>
 
-            <div className="form-group">
-              <label htmlFor="description" className="form-label">
-                Mô tả công việc <span className="required">*</span>
-              </label>
-              <textarea
-                id="description"
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                placeholder="Mô tả chi tiết công việc, yêu cầu, trách nhiệm..."
-                className={`form-textarea ${errors.description ? 'error' : ''}`}
-                rows="6"
-              />
-              {errors.description && <span className="error-text">{errors.description}</span>}
-            </div>
-
+          <div className="form-row">
             <div className="form-group">
               <label htmlFor="category" className="form-label">
-                Danh mục công việc <span className="required">*</span>
+                Danh mục <span className="required">*</span>
               </label>
               <select
                 id="category"
@@ -217,23 +212,6 @@ const JobForm = () => {
               </select>
               {errors.category && <span className="error-text">{errors.category}</span>}
             </div>
-          </div>
-
-          <div className="form-section">
-            <h2 className="section-title">
-              <span className="step-number">2</span>
-              Địa điểm & Mức lương
-            </h2>
-
-            <Input
-              label="Địa điểm làm việc"
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
-              error={errors.location}
-              required
-              placeholder="VD: Quận 1, TP.HCM"
-            />
 
             <Input
               label="Mức lương (VNĐ)"
@@ -243,37 +221,40 @@ const JobForm = () => {
               onChange={handleChange}
               error={errors.salary}
               required
-              placeholder="VD: 200000"
+              placeholder="200000"
             />
           </div>
 
-          <div className="form-section">
-            <h2 className="section-title">
-              <span className="step-number">3</span>
-              Lịch trình
-            </h2>
+          <Input
+            label="Địa điểm làm việc"
+            name="location"
+            value={formData.location}
+            onChange={handleChange}
+            error={errors.location}
+            required
+            placeholder="VD: Quận 1, TP.HCM"
+          />
 
-            <div className="date-inputs">
-              <Input
-                label="Ngày bắt đầu"
-                type="date"
-                name="startDate"
-                value={formData.startDate}
-                onChange={handleChange}
-                error={errors.startDate}
-                required
-              />
+          <div className="form-row">
+            <Input
+              label="Ngày bắt đầu"
+              type="date"
+              name="startDate"
+              value={formData.startDate}
+              onChange={handleChange}
+              error={errors.startDate}
+              required
+            />
 
-              <Input
-                label="Ngày kết thúc"
-                type="date"
-                name="endDate"
-                value={formData.endDate}
-                onChange={handleChange}
-                error={errors.endDate}
-                required
-              />
-            </div>
+            <Input
+              label="Ngày kết thúc"
+              type="date"
+              name="endDate"
+              value={formData.endDate}
+              onChange={handleChange}
+              error={errors.endDate}
+              required
+            />
           </div>
 
           <div className="form-actions">

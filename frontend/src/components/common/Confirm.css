@@ -52,7 +52,7 @@
 .confirm-title {
   font-size: 20px;
   font-weight: 700;
-  color: var(--neutral-800);
+  color: var(--gray-900);
   margin: 0;
 }
 
@@ -60,7 +60,7 @@
   background: none;
   border: none;
   font-size: 24px;
-  color: var(--neutral-600);
+  color: var(--gray-500);
   cursor: pointer;
   padding: 4px;
   line-height: 1;
@@ -68,7 +68,7 @@
 }
 
 .confirm-close:hover {
-  color: var(--neutral-800);
+  color: var(--gray-900);
 }
 
 .confirm-body {
@@ -78,7 +78,7 @@
 .confirm-message {
   font-size: 16px;
   line-height: 1.6;
-  color: var(--neutral-700);
+  color: var(--gray-700);
   margin: 0;
 }
 
