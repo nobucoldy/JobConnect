@@ -1,70 +1,84 @@
-# Getting Started with Create React App
+# JobConnect Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Frontend application for JobConnect - a platform for short-term job posting and worker hiring.
 
-## Available Scripts
+## Tech Stack
 
-In the project directory, you can run:
+- **React** (v19)
+- **React Router DOM** for routing
+- **Axios** for API calls
+- **React Icons** for icons
 
-### `npm start`
+## Prerequisites
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Node.js (v16 or higher)
+- npm or yarn
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Installation
 
-### `npm test`
+1. Install dependencies:
+```bash
+npm install
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. Make sure backend is running on `http://localhost:5000`
 
-### `npm run build`
+## Running the App
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**Development mode:**
+```bash
+npm start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+App will run on `http://localhost:3000`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+**Build for production:**
+```bash
+npm run build
+```
 
-### `npm run eject`
+## Project Structure
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```
+frontend/
+├── src/
+│   ├── components/
+│   │   ├── common/       # Reusable components (Button, Input, Card, etc.)
+│   │   ├── layout/       # Layout components (Navbar, Footer)
+│   │   ├── job/          # Job-related components
+│   │   ├── application/  # Application components
+│   │   └── review/       # Review components
+│   ├── pages/            # Page components
+│   ├── services/         # API services
+│   ├── context/          # React Context providers
+│   ├── utils/            # Helper functions
+│   └── styles/           # CSS files
+├── public/
+└── package.json
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Available Routes
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- `/` - Home page
+- `/login` - Login page (Phase 2)
+- `/register` - Register page (Phase 2)
+- `/jobs` - Browse jobs (Phase 4)
+- `/my-jobs` - My posted jobs (Phase 4)
+- `/applications` - My applications (Phase 6)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Design System
 
-## Learn More
+All design tokens are defined in `src/styles/variables.css`:
+- Colors (primary, neutral, semantic)
+- Spacing
+- Border radius
+- Shadows
+- Typography
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+See `docs/design-specification.md` for complete design system documentation.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Current Status
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+✅ Phase 1 Complete: Project setup, routing, design system
+⏳ Phase 2: Authentication UI
+⏳ Phase 3: Job browsing and posting UI
