@@ -23,8 +23,8 @@ app.get('/', (req, res) => {
   });
 });
 
-// API routes will be mounted here
-// app.use('/api/auth', require('./src/routes/authRoutes'));
+// API routes
+app.use('/api/auth', require('./src/routes/authRoutes'));
 // app.use('/api/jobs', require('./src/routes/jobRoutes'));
 // app.use('/api/applications', require('./src/routes/applicationRoutes'));
 // app.use('/api/reviews', require('./src/routes/reviewRoutes'));
