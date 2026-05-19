@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { applicationService } from '../services/applicationService';
+import { useToast } from '../context/ToastContext';
 import Badge from '../components/common/Badge';
 import Button from '../components/common/Button';
+import Spinner from '../components/common/Spinner';
+import EmptyState from '../components/common/EmptyState';
 import './MyApplications.css';
 
 const MyApplications = () => {
   const navigate = useNavigate();
+  const toast = useToast();
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -41,7 +45,9 @@ const MyApplications = () => {
         ...response.data.pagination
       }));
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to load applications');
+      const errorMessage = err.response?.data?.message || 'Không thể tải ứng tuyển của bạn';
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -90,7 +96,7 @@ const MyApplications = () => {
     return (
       <div className="my-applications-page">
         <div className="my-applications-loading">
-          <div className="spinner"></div>
+          <Spinner size="lg" />
           <p>Đang tải ứng tuyển của bạn...</p>
         </div>
       </div>
@@ -145,14 +151,16 @@ const MyApplications = () => {
         </div>
 
         {applications.length === 0 ? (
-          <div className="empty-state">
-            <div className="empty-icon">📋</div>
-            <h3>Chưa có ứng tuyển nào</h3>
-            <p>Bắt đầu tìm kiếm và ứng tuyển vào các công việc phù hợp với bạn</p>
-            <Button onClick={() => navigate('/jobs')}>
-              Tìm việc ngay
-            </Button>
-          </div>
+          <EmptyState
+            icon="📋"
+            title="Chưa có ứng tuyển nào"
+            message="Bắt đầu tìm kiếm và ứng tuyển vào các công việc phù hợp với bạn"
+            action={
+              <Button onClick={() => navigate('/jobs')}>
+                Tìm việc ngay
+              </Button>
+            }
+          />
         ) : (
           <>
             <div className="applications-list">

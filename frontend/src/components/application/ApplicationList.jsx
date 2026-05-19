@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { applicationService } from '../../services/applicationService';
+import { useToast } from '../../context/ToastContext';
 import ApplicationCard from './ApplicationCard';
+import Spinner from '../common/Spinner';
+import EmptyState from '../common/EmptyState';
 import './ApplicationList.css';
 
 const ApplicationList = ({ jobId, onClose }) => {
+  const toast = useToast();
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -21,7 +25,9 @@ const ApplicationList = ({ jobId, onClose }) => {
       const response = await applicationService.getApplicationsForJob(jobId, params);
       setApplications(response.data.data);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to load applications');
+      const errorMessage = err.response?.data?.message || 'Không thể tải danh sách ứng viên';
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -99,20 +105,19 @@ const ApplicationList = ({ jobId, onClose }) => {
 
           {loading ? (
             <div className="application-list-loading">
-              <div className="spinner"></div>
+              <Spinner size="md" />
               <p>Đang tải danh sách ứng viên...</p>
             </div>
           ) : filteredApplications.length === 0 ? (
-            <div className="application-list-empty">
-              <div className="empty-icon">📋</div>
-              <h3>Chưa có ứng viên nào</h3>
-              <p>
-                {applications.length === 0
+            <EmptyState
+              icon="📋"
+              title="Chưa có ứng viên nào"
+              message={
+                applications.length === 0
                   ? 'Chưa có ai ứng tuyển vào công việc này'
                   : `Không có ứng viên ${statusFilter.toLowerCase()}`
-                }
-              </p>
-            </div>
+              }
+            />
           ) : (
             <div className="application-list-content">
               {filteredApplications.map(application => (

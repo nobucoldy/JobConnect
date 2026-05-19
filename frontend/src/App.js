@@ -1,7 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { ToastProvider } from './context/ToastContext';
 import ProtectedRoute from './components/common/ProtectedRoute';
+import ErrorBoundary from './components/common/ErrorBoundary';
 import Navbar from './components/layout/Navbar';
 import './styles/variables.css';
 import './App.css';
@@ -17,6 +19,7 @@ import MyJobs from './pages/MyJobs';
 import MyApplications from './pages/MyApplications';
 import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfile';
+import NotFound from './pages/NotFound';
 
 // Import admin pages
 import AdminLayout from './components/layout/AdminLayout';
@@ -26,11 +29,13 @@ import AdminJobs from './pages/admin/Jobs';
 
 function App() {
   return (
-    <Router>
-      <AuthProvider>
-        <div className="App">
-          <Navbar />
-          <Routes>
+    <ErrorBoundary>
+      <Router>
+        <AuthProvider>
+          <ToastProvider>
+            <div className="App">
+              <Navbar />
+              <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
@@ -89,11 +94,13 @@ function App() {
               <Route path="users" element={<AdminUsers />} />
               <Route path="jobs" element={<AdminJobs />} />
             </Route>
-            <Route path="*" element={<div style={{ padding: '40px' }}><h1>404 - Page Not Found</h1></div>} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
-        </div>
-      </AuthProvider>
-    </Router>
+            </div>
+          </ToastProvider>
+        </AuthProvider>
+      </Router>
+    </ErrorBoundary>
   );
 }
 

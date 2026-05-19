@@ -4,8 +4,11 @@ import { jobService } from '../services/jobService';
 import { applicationService } from '../services/applicationService';
 import { reviewService } from '../services/reviewService';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 import Button from '../components/common/Button';
 import Badge from '../components/common/Badge';
+import Spinner from '../components/common/Spinner';
+import Confirm from '../components/common/Confirm';
 import ApplicationModal from '../components/application/ApplicationModal';
 import ApplicationList from '../components/application/ApplicationList';
 import ReviewForm from '../components/review/ReviewForm';
@@ -16,6 +19,7 @@ const JobDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
+  const toast = useToast();
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -28,6 +32,8 @@ const JobDetail = () => {
   const [reviewsLoading, setReviewsLoading] = useState(false);
   const [hasReviewed, setHasReviewed] = useState(false);
   const [reviewLoading, setReviewLoading] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showCompleteConfirm, setShowCompleteConfirm] = useState(false);
 
   useEffect(() => {
     fetchJobDetail();
@@ -97,42 +103,38 @@ const JobDetail = () => {
     setReviewLoading(true);
     try {
       await reviewService.createReview(reviewData);
-      alert('Đánh giá thành công!');
+      toast.success('Đánh giá thành công!');
       setShowReviewForm(false);
       fetchReviews();
       fetchJobDetail(); // Refresh to update user ratings
     } catch (err) {
-      alert(err.response?.data?.message || 'Không thể gửi đánh giá');
+      toast.error(err.response?.data?.message || 'Không thể gửi đánh giá');
     } finally {
       setReviewLoading(false);
     }
   };
 
   const handleDelete = async () => {
-    if (!window.confirm('Bạn có chắc chắn muốn xóa công việc này?')) return;
-
     setActionLoading(true);
     try {
       await jobService.deleteJob(id);
-      alert('Đã xóa công việc thành công');
+      toast.success('Đã xóa công việc thành công');
       navigate('/my-jobs');
     } catch (err) {
-      alert(err.response?.data?.message || 'Failed to delete job');
+      toast.error(err.response?.data?.message || 'Không thể xóa công việc');
     } finally {
       setActionLoading(false);
     }
   };
 
   const handleMarkComplete = async () => {
-    if (!window.confirm('Đánh dấu công việc này đã hoàn thành?')) return;
-
     setActionLoading(true);
     try {
       await jobService.markJobComplete(id);
-      alert('Đã đánh dấu công việc hoàn thành');
+      toast.success('Đã đánh dấu công việc hoàn thành');
       fetchJobDetail();
     } catch (err) {
-      alert(err.response?.data?.message || 'Failed to mark as complete');
+      toast.error(err.response?.data?.message || 'Không thể đánh dấu hoàn thành');
     } finally {
       setActionLoading(false);
     }
@@ -177,6 +179,7 @@ const JobDetail = () => {
     return (
       <div className="job-detail-page">
         <div className="job-detail-loading">
+          <Spinner size="lg" />
           <div className="spinner"></div>
           <p>Đang tải thông tin công việc...</p>
         </div>
@@ -342,7 +345,7 @@ const JobDetail = () => {
                 {canMarkComplete && (
                   <Button
                     variant="success"
-                    onClick={handleMarkComplete}
+                    onClick={() => setShowCompleteConfirm(true)}
                     disabled={actionLoading}
                   >
                     ✅ Đánh dấu hoàn thành
@@ -351,7 +354,7 @@ const JobDetail = () => {
                 {canDelete && (
                   <Button
                     variant="danger"
-                    onClick={handleDelete}
+                    onClick={() => setShowDeleteConfirm(true)}
                     disabled={actionLoading}
                   >
                     🗑️ Xóa công việc
@@ -416,6 +419,28 @@ const JobDetail = () => {
             onClose={() => setShowApplicationList(false)}
           />
         )}
+
+        <Confirm
+          isOpen={showDeleteConfirm}
+          onClose={() => setShowDeleteConfirm(false)}
+          onConfirm={handleDelete}
+          title="Xóa công việc"
+          message="Bạn có chắc chắn muốn xóa công việc này? Hành động này không thể hoàn tác."
+          confirmText="Xóa"
+          cancelText="Hủy"
+          variant="danger"
+        />
+
+        <Confirm
+          isOpen={showCompleteConfirm}
+          onClose={() => setShowCompleteConfirm(false)}
+          onConfirm={handleMarkComplete}
+          title="Hoàn thành công việc"
+          message="Đánh dấu công việc này đã hoàn thành? Sau khi hoàn thành, bạn và người nhận việc có thể đánh giá nhau."
+          confirmText="Hoàn thành"
+          cancelText="Hủy"
+          variant="success"
+        />
       </div>
     </div>
   );

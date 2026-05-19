@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jobService } from '../services/jobService';
+import { useToast } from '../context/ToastContext';
 import JobCard from '../components/job/JobCard';
 import Button from '../components/common/Button';
+import Spinner from '../components/common/Spinner';
+import EmptyState from '../components/common/EmptyState';
 import './MyJobs.css';
 
 const MyJobs = () => {
   const navigate = useNavigate();
+  const toast = useToast();
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -23,7 +27,9 @@ const MyJobs = () => {
       const response = await jobService.getMyJobs();
       setJobs(response.data.data);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to load your jobs');
+      const errorMessage = err.response?.data?.message || 'Không thể tải công việc của bạn';
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -51,7 +57,7 @@ const MyJobs = () => {
     return (
       <div className="my-jobs-page">
         <div className="my-jobs-loading">
-          <div className="spinner"></div>
+          <Spinner size="lg" />
           <p>Đang tải công việc của bạn...</p>
         </div>
       </div>
@@ -135,26 +141,26 @@ const MyJobs = () => {
         </div>
 
         {filteredJobs.length === 0 ? (
-          <div className="empty-state">
-            <div className="empty-icon">📋</div>
-            <h3>
-              {jobs.length === 0
+          <EmptyState
+            icon="📋"
+            title={
+              jobs.length === 0
                 ? 'Chưa có công việc nào'
                 : `Không có công việc ${statusFilter === 'ALL' ? '' : statusFilter.toLowerCase()}`
-              }
-            </h3>
-            <p>
-              {jobs.length === 0
+            }
+            message={
+              jobs.length === 0
                 ? 'Bắt đầu đăng công việc đầu tiên của bạn'
                 : 'Thử chọn bộ lọc khác'
-              }
-            </p>
-            {jobs.length === 0 && (
-              <Button onClick={() => navigate('/jobs/create')}>
-                Đăng việc ngay
-              </Button>
-            )}
-          </div>
+            }
+            action={
+              jobs.length === 0 && (
+                <Button onClick={() => navigate('/jobs/create')}>
+                  Đăng việc ngay
+                </Button>
+              )
+            }
+          />
         ) : (
           <div className="jobs-grid">
             {filteredJobs.map(job => (

@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import { applicationService } from '../../services/applicationService';
+import { useToast } from '../../context/ToastContext';
 import Button from '../common/Button';
 import Badge from '../common/Badge';
+import Confirm from '../common/Confirm';
 import './ApplicationCard.css';
 
 const ApplicationCard = ({ application, onUpdate, isPoster = false }) => {
+  const toast = useToast();
   const [loading, setLoading] = useState(false);
+  const [showAcceptConfirm, setShowAcceptConfirm] = useState(false);
+  const [showRejectConfirm, setShowRejectConfirm] = useState(false);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -28,34 +33,26 @@ const ApplicationCard = ({ application, onUpdate, isPoster = false }) => {
   };
 
   const handleAccept = async () => {
-    if (!window.confirm('Bạn có chắc chắn muốn chấp nhận ứng viên này? Công việc sẽ được giao cho họ và các ứng tuyển khác sẽ bị từ chối.')) {
-      return;
-    }
-
     setLoading(true);
     try {
       await applicationService.acceptApplication(application._id);
-      alert('Đã chấp nhận ứng viên!');
+      toast.success('Đã chấp nhận ứng viên!');
       onUpdate();
     } catch (err) {
-      alert(err.response?.data?.message || 'Có lỗi xảy ra');
+      toast.error(err.response?.data?.message || 'Có lỗi xảy ra');
     } finally {
       setLoading(false);
     }
   };
 
   const handleReject = async () => {
-    if (!window.confirm('Bạn có chắc chắn muốn từ chối ứng viên này?')) {
-      return;
-    }
-
     setLoading(true);
     try {
       await applicationService.rejectApplication(application._id);
-      alert('Đã từ chối ứng viên!');
+      toast.success('Đã từ chối ứng viên!');
       onUpdate();
     } catch (err) {
-      alert(err.response?.data?.message || 'Có lỗi xảy ra');
+      toast.error(err.response?.data?.message || 'Có lỗi xảy ra');
     } finally {
       setLoading(false);
     }
@@ -126,7 +123,7 @@ const ApplicationCard = ({ application, onUpdate, isPoster = false }) => {
           <Button
             variant="success"
             size="sm"
-            onClick={handleAccept}
+            onClick={() => setShowAcceptConfirm(true)}
             disabled={loading}
           >
             ✅ Chấp nhận
@@ -134,7 +131,7 @@ const ApplicationCard = ({ application, onUpdate, isPoster = false }) => {
           <Button
             variant="danger"
             size="sm"
-            onClick={handleReject}
+            onClick={() => setShowRejectConfirm(true)}
             disabled={loading}
           >
             ❌ Từ chối
@@ -154,6 +151,28 @@ const ApplicationCard = ({ application, onUpdate, isPoster = false }) => {
           </Button>
         </div>
       )}
+
+      <Confirm
+        isOpen={showAcceptConfirm}
+        onClose={() => setShowAcceptConfirm(false)}
+        onConfirm={handleAccept}
+        title="Chấp nhận ứng viên"
+        message="Bạn có chắc chắn muốn chấp nhận ứng viên này? Công việc sẽ được giao cho họ và các ứng tuyển khác sẽ bị từ chối."
+        confirmText="Chấp nhận"
+        cancelText="Hủy"
+        variant="success"
+      />
+
+      <Confirm
+        isOpen={showRejectConfirm}
+        onClose={() => setShowRejectConfirm(false)}
+        onConfirm={handleReject}
+        title="Từ chối ứng viên"
+        message="Bạn có chắc chắn muốn từ chối ứng viên này?"
+        confirmText="Từ chối"
+        cancelText="Hủy"
+        variant="danger"
+      />
     </div>
   );
 };

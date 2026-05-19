@@ -1,0 +1,127 @@
+.error-boundary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.error-boundary-content {
+  background: white;
+  border-radius: 16px;
+  padding: 60px 40px;
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.error-icon {
+  font-size: 72px;
+  margin-bottom: 24px;
+}
+
+.error-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--neutral-800);
+  margin-bottom: 16px;
+}
+
+.error-message {
+  font-size: 18px;
+  color: var(--neutral-600);
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+.error-details {
+  text-align: left;
+  margin: 24px 0;
+  padding: 16px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.error-details summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--neutral-700);
+  margin-bottom: 12px;
+}
+
+.error-stack {
+  font-size: 12px;
+  color: #d32f2f;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.error-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.error-button,
+.error-button-secondary {
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.error-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.error-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.error-button-secondary {
+  background: white;
+  color: var(--neutral-700);
+  border: 2px solid var(--neutral-300);
+}
+
+.error-button-secondary:hover {
+  background: var(--neutral-100);
+  border-color: var(--neutral-400);
+}
+
+@media (max-width: 768px) {
+  .error-boundary-content {
+    padding: 40px 24px;
+  }
+
+  .error-icon {
+    font-size: 56px;
+  }
+
+  .error-title {
+    font-size: 24px;
+  }
+
+  .error-message {
+    font-size: 16px;
+  }
+
+  .error-actions {
+    flex-direction: column;
+  }
+
+  .error-button,
+  .error-button-secondary {
+    width: 100%;
+  }
+}
