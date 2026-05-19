@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/common/ProtectedRoute';
+import Navbar from './components/layout/Navbar';
 import './styles/variables.css';
 import './App.css';
 
@@ -10,22 +11,43 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import JobListPage from './pages/JobList';
+import JobDetail from './pages/JobDetail';
+import JobForm from './pages/JobForm';
+import MyJobs from './pages/MyJobs';
 
 function App() {
   return (
     <Router>
       <AuthProvider>
         <div className="App">
+          <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/jobs" element={<JobListPage />} />
+            <Route path="/jobs/:id" element={<JobDetail />} />
+            <Route
+              path="/jobs/create"
+              element={
+                <ProtectedRoute>
+                  <JobForm />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/jobs/edit/:id"
+              element={
+                <ProtectedRoute>
+                  <JobForm />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/my-jobs"
               element={
                 <ProtectedRoute>
-                  <div style={{ padding: '40px' }}><h1>My Jobs Page</h1><p>Coming soon in Phase 4</p></div>
+                  <MyJobs />
                 </ProtectedRoute>
               }
             />
