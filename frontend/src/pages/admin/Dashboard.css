@@ -1,0 +1,255 @@
+.admin-dashboard {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.admin-dashboard-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 30px 0;
+}
+
+.admin-dashboard-loading,
+.admin-dashboard-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 16px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.stat-icon {
+  font-size: 48px;
+  line-height: 1;
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 36px;
+  font-weight: 700;
+  color: #333;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.stat-detail {
+  font-size: 13px;
+  color: #999;
+}
+
+.stat-card-primary {
+  border-left: 4px solid #007bff;
+}
+
+.stat-card-success {
+  border-left: 4px solid #28a745;
+}
+
+.stat-card-info {
+  border-left: 4px solid #17a2b8;
+}
+
+.stat-card-warning {
+  border-left: 4px solid #ffc107;
+}
+
+.admin-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.admin-section {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 20px 0;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.status-item {
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  background: #f9f9f9;
+  border: 2px solid #e0e0e0;
+  transition: all 0.2s ease;
+}
+
+.status-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.status-value {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.status-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-open {
+  border-color: #007bff;
+  background: #e7f3ff;
+}
+
+.status-open .status-value {
+  color: #007bff;
+}
+
+.status-assigned {
+  border-color: #ffc107;
+  background: #fff8e1;
+}
+
+.status-assigned .status-value {
+  color: #ffc107;
+}
+
+.status-completed {
+  border-color: #28a745;
+  background: #e7f7ed;
+}
+
+.status-completed .status-value {
+  color: #28a745;
+}
+
+.status-cancelled {
+  border-color: #dc3545;
+  background: #fee;
+}
+
+.status-cancelled .status-value {
+  color: #dc3545;
+}
+
+.status-pending {
+  border-color: #ffc107;
+  background: #fff8e1;
+}
+
+.status-pending .status-value {
+  color: #ffc107;
+}
+
+.status-accepted {
+  border-color: #28a745;
+  background: #e7f7ed;
+}
+
+.status-accepted .status-value {
+  color: #28a745;
+}
+
+.status-rejected {
+  border-color: #dc3545;
+  background: #fee;
+}
+
+.status-rejected .status-value {
+  color: #dc3545;
+}
+
+@media (max-width: 768px) {
+  .admin-dashboard-title {
+    font-size: 24px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .stat-card {
+    padding: 20px;
+  }
+
+  .stat-icon {
+    font-size: 40px;
+  }
+
+  .stat-value {
+    font-size: 28px;
+  }
+
+  .admin-section {
+    padding: 20px;
+  }
+
+  .status-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

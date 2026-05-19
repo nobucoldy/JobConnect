@@ -5,7 +5,7 @@ import Button from '../common/Button';
 import './Navbar.css';
 
 const Navbar = () => {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -29,6 +29,11 @@ const Navbar = () => {
               <Link to="/jobs/create" className="navbar-link">Đăng việc</Link>
               <Link to="/my-jobs" className="navbar-link">Công việc của tôi</Link>
               <Link to="/applications" className="navbar-link">Ứng tuyển</Link>
+              {isAdmin && (
+                <Link to="/admin" className="navbar-link navbar-link-admin">
+                  Admin
+                </Link>
+              )}
             </>
           ) : (
             <Link to="/login" className="navbar-link">Đăng nhập</Link>

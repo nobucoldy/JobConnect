@@ -29,7 +29,7 @@ app.use('/api/jobs', require('./src/routes/jobRoutes'));
 app.use('/api/applications', require('./src/routes/applicationRoutes'));
 app.use('/api/reviews', require('./src/routes/reviewRoutes'));
 app.use('/api/users', require('./src/routes/userRoutes'));
-// app.use('/api/admin', require('./src/routes/adminRoutes'));
+app.use('/api/admin', require('./src/routes/adminRoutes'));
 
 // 404 handler
 app.use((req, res, next) => {

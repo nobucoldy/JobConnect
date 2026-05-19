@@ -50,6 +50,19 @@
   color: var(--primary-blue);
 }
 
+.navbar-link-admin {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white !important;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.navbar-link-admin:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
 .navbar-actions {
   display: flex;
   align-items: center;

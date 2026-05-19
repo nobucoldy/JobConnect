@@ -18,6 +18,12 @@ import MyApplications from './pages/MyApplications';
 import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfile';
 
+// Import admin pages
+import AdminLayout from './components/layout/AdminLayout';
+import AdminDashboard from './pages/admin/Dashboard';
+import AdminUsers from './pages/admin/Users';
+import AdminJobs from './pages/admin/Jobs';
+
 function App() {
   return (
     <Router>
@@ -71,6 +77,18 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute adminOnly>
+                  <AdminLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<AdminDashboard />} />
+              <Route path="users" element={<AdminUsers />} />
+              <Route path="jobs" element={<AdminJobs />} />
+            </Route>
             <Route path="*" element={<div style={{ padding: '40px' }}><h1>404 - Page Not Found</h1></div>} />
           </Routes>
         </div>
