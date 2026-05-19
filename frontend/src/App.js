@@ -9,6 +9,7 @@ import './App.css';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import JobListPage from './pages/JobList';
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/jobs" element={<div style={{ padding: '40px' }}><h1>Jobs Page</h1><p>Coming soon in Phase 4</p></div>} />
+            <Route path="/jobs" element={<JobListPage />} />
             <Route
               path="/my-jobs"
               element={

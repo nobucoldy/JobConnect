@@ -1,0 +1,121 @@
+.job-card {
+  background: white;
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-5);
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.job-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+  border-color: var(--primary-blue);
+}
+
+.job-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-3);
+}
+
+.job-category {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.category-icon {
+  font-size: 20px;
+}
+
+.category-name {
+  font-size: 14px;
+  color: var(--neutral-600);
+  font-weight: 500;
+}
+
+.job-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--neutral-900);
+  margin-bottom: var(--spacing-3);
+  line-height: 1.3;
+}
+
+.job-description {
+  color: var(--neutral-700);
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: var(--spacing-4);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex-grow: 1;
+}
+
+.job-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-4);
+  font-size: 14px;
+  color: var(--neutral-600);
+}
+
+.job-location, .job-poster {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+.rating {
+  margin-left: var(--spacing-1);
+  color: var(--warning-yellow);
+  font-weight: 600;
+}
+
+.job-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--spacing-4);
+  border-top: 1px solid var(--neutral-200);
+}
+
+.job-salary {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary-blue);
+}
+
+.job-card-link {
+  color: var(--primary-blue);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.job-card-link:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .job-card {
+    padding: var(--spacing-4);
+  }
+
+  .job-title {
+    font-size: 18px;
+  }
+
+  .job-salary {
+    font-size: 16px;
+  }
+}
