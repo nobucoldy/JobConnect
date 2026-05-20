@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { adminService } from '../../services/adminService';
 import { FiStar, FiPlus, FiX } from 'react-icons/fi';
 import './Users.css';
@@ -25,11 +25,7 @@ const Users = () => {
     pages: 0
   });
 
-  useEffect(() => {
-    fetchUsers();
-  }, [pagination.page, roleFilter]);
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
       const params = {
@@ -49,7 +45,11 @@ const Users = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [pagination.page, pagination.limit, roleFilter]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);

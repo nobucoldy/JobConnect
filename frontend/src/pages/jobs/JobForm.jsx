@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { jobService } from '../../services/jobService';
 import Input from '../../components/common/Input';
@@ -25,13 +25,7 @@ const JobForm = () => {
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(isEditMode);
 
-  useEffect(() => {
-    if (isEditMode) {
-      fetchJobData();
-    }
-  }, [id]);
-
-  const fetchJobData = async () => {
+  const fetchJobData = useCallback(async () => {
     setFetchLoading(true);
     try {
       const response = await jobService.getJobById(id);
@@ -53,7 +47,13 @@ const JobForm = () => {
     } finally {
       setFetchLoading(false);
     }
-  };
+  }, [id, navigate]);
+
+  useEffect(() => {
+    if (isEditMode) {
+      fetchJobData();
+    }
+  }, [fetchJobData, isEditMode]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

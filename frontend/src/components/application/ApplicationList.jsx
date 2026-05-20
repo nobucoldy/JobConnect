@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { applicationService } from '../../services/applicationService';
 import { useToast } from '../../context/ToastContext';
 import ApplicationCard from './ApplicationCard';
@@ -13,11 +13,7 @@ const ApplicationList = ({ jobId, onClose }) => {
   const [error, setError] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
 
-  useEffect(() => {
-    fetchApplications();
-  }, [jobId]);
-
-  const fetchApplications = async () => {
+  const fetchApplications = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
@@ -31,7 +27,11 @@ const ApplicationList = ({ jobId, onClose }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [jobId, statusFilter, toast]);
+
+  useEffect(() => {
+    fetchApplications();
+  }, [fetchApplications]);
 
   const handleUpdate = () => {
     fetchApplications();

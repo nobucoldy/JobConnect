@@ -80,6 +80,12 @@
   color: var(--gray-600);
 }
 
+.job-info-summary .job-date-range {
+  margin-top: var(--space-2);
+  color: var(--gray-700);
+  font-weight: 500;
+}
+
 .form-group {
   margin-bottom: var(--space-5);
 }

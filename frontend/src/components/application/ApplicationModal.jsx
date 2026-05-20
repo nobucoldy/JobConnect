@@ -11,6 +11,17 @@ const ApplicationModal = ({ job, onClose, onSuccess }) => {
   const maxLength = 500;
   const remainingChars = maxLength - coverLetter.length;
 
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    if (Number.isNaN(date.getTime())) return 'N/A';
+    return date.toLocaleDateString('vi-VN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -63,6 +74,10 @@ const ApplicationModal = ({ job, onClose, onSuccess }) => {
             <p className="job-meta">
               <span>{job.category}</span> • <span>{job.location}</span>
             </p>
+            <p className="job-meta job-date-range">
+              <span>Bắt đầu: {formatDate(job.startDate)}</span> •{' '}
+              <span>Kết thúc: {formatDate(job.endDate)}</span>
+            </p>
           </div>
 
           <form onSubmit={handleSubmit}>
@@ -79,7 +94,7 @@ const ApplicationModal = ({ job, onClose, onSuccess }) => {
                 className="form-textarea"
                 disabled={loading}
               />
-              <div className="char-count" style={{ color: remainingChars < 0 ? 'var(--danger-red)' : 'var(--neutral-600)' }}>
+              <div className="char-count" style={{ color: remainingChars < 0 ? 'var(--danger)' : 'var(--gray-600)' }}>
                 {remainingChars} ký tự còn lại
               </div>
             </div>

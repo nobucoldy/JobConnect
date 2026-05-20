@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { jobService } from '../../services/jobService';
 import { applicationService } from '../../services/applicationService';
@@ -14,7 +14,7 @@ import ApplicationModal from '../../components/application/ApplicationModal';
 import ApplicationList from '../../components/application/ApplicationList';
 import ReviewForm from '../../components/review/ReviewForm';
 import ReviewList from '../../components/review/ReviewList';
-import { FiPackage, FiBook, FiMonitor, FiMoreHorizontal, FiDollarSign, FiMapPin, FiCalendar, FiStar, FiMail, FiPhone, FiUsers, FiEdit2, FiTrash2, FiCheckCircle } from 'react-icons/fi';
+import { FiPackage, FiBook, FiMonitor, FiMoreHorizontal, FiDollarSign, FiMapPin, FiCalendar, FiStar, FiUsers, FiEdit2, FiTrash2, FiCheckCircle } from 'react-icons/fi';
 import { PiBroom } from 'react-icons/pi';
 import './JobDetail.css';
 
@@ -38,24 +38,7 @@ const JobDetail = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false);
 
-  useEffect(() => {
-    fetchJobDetail();
-    fetchReviews();
-  }, [id]);
-
-  useEffect(() => {
-    if (isAuthenticated && job && user && user._id !== job.poster?._id) {
-      checkIfApplied();
-    }
-  }, [isAuthenticated, job, user]);
-
-  useEffect(() => {
-    if (isAuthenticated && job && reviews.length > 0) {
-      checkIfReviewed();
-    }
-  }, [isAuthenticated, job, reviews]);
-
-  const fetchJobDetail = async () => {
+  const fetchJobDetail = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
@@ -66,9 +49,9 @@ const JobDetail = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
-  const checkIfApplied = async () => {
+  const checkIfApplied = useCallback(async () => {
     try {
       const response = await applicationService.getMyApplications();
       const applications = response.data.data;
@@ -78,9 +61,9 @@ const JobDetail = () => {
       // Silently fail - not critical
       console.error('Failed to check application status:', err);
     }
-  };
+  }, [id]);
 
-  const fetchReviews = async () => {
+  const fetchReviews = useCallback(async () => {
     setReviewsLoading(true);
     try {
       const response = await reviewService.getReviewsForJob(id);
@@ -90,12 +73,29 @@ const JobDetail = () => {
     } finally {
       setReviewsLoading(false);
     }
-  };
+  }, [id]);
 
-  const checkIfReviewed = () => {
+  const checkIfReviewed = useCallback(() => {
     const userReview = reviews.find(review => review.reviewer?._id === user?._id);
     setHasReviewed(!!userReview);
-  };
+  }, [reviews, user]);
+
+  useEffect(() => {
+    fetchJobDetail();
+    fetchReviews();
+  }, [fetchJobDetail, fetchReviews]);
+
+  useEffect(() => {
+    if (isAuthenticated && job && user && user._id !== job.poster?._id) {
+      checkIfApplied();
+    }
+  }, [isAuthenticated, job, user, checkIfApplied]);
+
+  useEffect(() => {
+    if (isAuthenticated && job && reviews.length > 0) {
+      checkIfReviewed();
+    }
+  }, [isAuthenticated, job, reviews, checkIfReviewed]);
 
   const handleApplySuccess = () => {
     setHasApplied(true);
@@ -161,19 +161,10 @@ const JobDetail = () => {
     return icons[category] || FiMoreHorizontal;
   };
 
-  const getStatusBadgeVariant = (status) => {
-    const variants = {
-      'OPEN': 'success',
-      'ASSIGNED': 'info',
-      'COMPLETED': 'default',
-      'CANCELLED': 'danger'
-    };
-    return variants[status] || 'default';
-  };
-
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
+    if (Number.isNaN(date.getTime())) return 'N/A';
     return date.toLocaleDateString('vi-VN', {
       day: '2-digit',
       month: '2-digit',
@@ -183,27 +174,6 @@ const JobDetail = () => {
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('vi-VN').format(amount);
-  };
-
-  const maskEmail = (email) => {
-    if (!email) return '';
-    const [username, domain] = email.split('@');
-    if (username.length <= 4) {
-      return `${username.charAt(0)}***@${domain}`;
-    }
-    const visiblePart = username.substring(0, 4);
-    return `${visiblePart}****@${domain}`;
-  };
-
-  const maskPhone = (phone) => {
-    if (!phone) return '';
-    const cleaned = phone.replace(/\D/g, '');
-    if (cleaned.length <= 6) {
-      return cleaned.substring(0, 3) + '****';
-    }
-    const start = cleaned.substring(0, 3);
-    const end = cleaned.substring(cleaned.length - 3);
-    return `${start}****${end}`;
   };
 
   if (loading) {
@@ -267,7 +237,11 @@ const JobDetail = () => {
               </div>
               <div className="meta-item">
                 <FiCalendar />
-                <span>{formatDate(job.startDate)}</span>
+                <span>Bắt đầu: {formatDate(job.startDate)}</span>
+              </div>
+              <div className="meta-item">
+                <FiCalendar />
+                <span>Kết thúc: {formatDate(job.endDate)}</span>
               </div>
             </div>
 

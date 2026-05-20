@@ -9,11 +9,12 @@
 
 .auth-card {
   background: white;
-  padding: 60px 50px;
+  padding: var(--space-10);
   max-width: 500px;
   width: 100%;
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
 }
 
 .auth-title {

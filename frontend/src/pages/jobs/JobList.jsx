@@ -1,9 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { jobService } from '../../services/jobService';
 import JobList from '../../components/job/JobList';
 import Button from '../../components/common/Button';
 import './JobList.css';
+
+const getResponsivePageSize = () => {
+  if (typeof window === 'undefined') return 8;
+
+  const width = window.innerWidth;
+  if (width <= 768) return 2;
+  if (width <= 1024) return 4;
+  if (width <= 1400) return 6;
+  return 8;
+};
 
 const JobListPage = () => {
   const location = useLocation();
@@ -18,12 +28,29 @@ const JobListPage = () => {
   });
   const [pagination, setPagination] = useState({
     page: 1,
-    limit: 8,
+    limit: getResponsivePageSize(),
     total: 0,
     pages: 0
   });
 
-  // Lấy category từ URL query params khi component mount
+  useEffect(() => {
+    const handleResize = () => {
+      const nextLimit = getResponsivePageSize();
+      setPagination(prev => {
+        if (prev.limit === nextLimit) return prev;
+        return {
+          ...prev,
+          page: 1,
+          limit: nextLimit
+        };
+      });
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const categoryParam = searchParams.get('category');
@@ -36,13 +63,7 @@ const JobListPage = () => {
     setInitialized(true);
   }, [location.search]);
 
-  useEffect(() => {
-    if (initialized) {
-      fetchJobs();
-    }
-  }, [filters, pagination.page, initialized]);
-
-  const fetchJobs = async () => {
+  const fetchJobs = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
@@ -52,7 +73,6 @@ const JobListPage = () => {
         ...filters
       };
 
-      // Remove empty filters
       Object.keys(params).forEach(key => {
         if (params[key] === '') delete params[key];
       });
@@ -68,7 +88,13 @@ const JobListPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters, pagination.limit, pagination.page]);
+
+  useEffect(() => {
+    if (initialized) {
+      fetchJobs();
+    }
+  }, [fetchJobs, initialized]);
 
   const handleFilterChange = (e) => {
     setFilters({
@@ -128,7 +154,7 @@ const JobListPage = () => {
               disabled={pagination.page === 1}
               onClick={() => handlePageChange(pagination.page - 1)}
             >
-              ← Trang trước
+              Trang trước
             </Button>
             <span className="page-info">
               Trang {pagination.page} / {pagination.pages}
@@ -138,7 +164,7 @@ const JobListPage = () => {
               disabled={pagination.page === pagination.pages}
               onClick={() => handlePageChange(pagination.page + 1)}
             >
-              Trang sau →
+              Trang sau
             </Button>
           </div>
         )}

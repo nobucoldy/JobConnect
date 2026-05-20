@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { adminService } from '../../services/adminService';
 import { FiEye, FiTrash2 } from 'react-icons/fi';
@@ -19,11 +19,7 @@ const Jobs = () => {
     pages: 0
   });
 
-  useEffect(() => {
-    fetchJobs();
-  }, [pagination.page, statusFilter]);
-
-  const fetchJobs = async () => {
+  const fetchJobs = useCallback(async () => {
     try {
       setLoading(true);
       const params = {
@@ -43,7 +39,11 @@ const Jobs = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [pagination.page, pagination.limit, statusFilter]);
+
+  useEffect(() => {
+    fetchJobs();
+  }, [fetchJobs]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -56,16 +56,6 @@ const Jobs = () => {
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('vi-VN').format(amount);
-  };
-
-  const getStatusBadgeVariant = (status) => {
-    const variants = {
-      'OPEN': 'success',
-      'ASSIGNED': 'info',
-      'COMPLETED': 'default',
-      'CANCELLED': 'danger'
-    };
-    return variants[status] || 'default';
   };
 
   const handlePageChange = (newPage) => {
