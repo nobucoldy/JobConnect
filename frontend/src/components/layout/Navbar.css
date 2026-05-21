@@ -39,14 +39,20 @@
 
 .navbar-link {
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--gray-700);
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, background-color 0.2s ease;
   white-space: nowrap;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
 }
 
 .navbar-link:hover {
+  color: var(--primary-blue);
+}
+
+.navbar-link-active {
   color: var(--primary-blue);
 }
 

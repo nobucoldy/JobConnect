@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Button from '../common/Button';
 import './Navbar.css';
@@ -13,6 +13,9 @@ const Navbar = () => {
     navigate('/');
   };
 
+  const getNavLinkClass = ({ isActive }) =>
+    `navbar-link ${isActive ? 'navbar-link-active' : ''}`;
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
@@ -23,12 +26,12 @@ const Navbar = () => {
         <div className="navbar-links">
           {!isAdmin && (
             <>
-              <Link to="/" className="navbar-link">Trang chủ</Link>
-              <Link to="/jobs" className="navbar-link">Tìm việc</Link>
+              <NavLink to="/" end className={getNavLinkClass}>Trang chủ</NavLink>
+              <NavLink to="/jobs" end className={getNavLinkClass}>Tìm việc</NavLink>
               {isAuthenticated && (
                 <>
-                  <Link to="/jobs/create" className="navbar-link">Đăng việc</Link>
-                  <Link to="/profile" className="navbar-link">Hồ sơ</Link>
+                  <NavLink to="/jobs/create" className={getNavLinkClass}>Đăng việc</NavLink>
+                  <NavLink to="/profile" className={getNavLinkClass}>Hồ sơ</NavLink>
                 </>
               )}
             </>
