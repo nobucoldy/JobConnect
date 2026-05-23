@@ -14,6 +14,11 @@ const jobSchema = new mongoose.Schema({
     minlength: [20, 'Description must be at least 20 characters'],
     maxlength: [1000, 'Description cannot exceed 1000 characters']
   },
+  requirements: {
+    type: String,
+    maxlength: [500, 'Requirements cannot exceed 500 characters'],
+    default: ''
+  },
   category: {
     type: String,
     required: [true, 'Category is required'],
@@ -35,6 +40,29 @@ const jobSchema = new mongoose.Schema({
     type: String,
     enum: ['giờ', 'buổi', 'ngày', 'tuần', 'tháng', 'dự án'],
     default: 'ngày'
+  },
+  slots: {
+    type: Number,
+    default: 1,
+    min: [1, 'Slots must be at least 1'],
+    max: [100, 'Slots cannot exceed 100']
+  },
+  applicationDeadline: {
+    type: Date,
+    validate: {
+      validator: function(value) {
+        return !value || value > new Date();
+      },
+      message: 'Application deadline must be in the future'
+    }
+  },
+  images: [{
+    type: String
+  }],
+  views: {
+    type: Number,
+    default: 0,
+    min: 0
   },
   poster: {
     type: mongoose.Schema.Types.ObjectId,
@@ -71,6 +99,9 @@ jobSchema.pre('save', function() {
   if (this.startDate && this.startDate < new Date()) {
     throw new Error('Start date cannot be in the past');
   }
+  if (this.applicationDeadline && this.startDate && this.applicationDeadline > this.startDate) {
+    throw new Error('Application deadline must be before start date');
+  }
 });
 
 // Virtual for applications
@@ -80,11 +111,20 @@ jobSchema.virtual('applications', {
   foreignField: 'job'
 });
 
+// Virtual: check if still accepting applications
+jobSchema.virtual('isAcceptingApplications').get(function() {
+  if (this.status !== 'OPEN') return false;
+  if (this.applicationDeadline && this.applicationDeadline < new Date()) return false;
+  return true;
+});
+
 // Indexes
 jobSchema.index({ poster: 1 });
 jobSchema.index({ assignedWorker: 1 });
 jobSchema.index({ status: 1 });
 jobSchema.index({ category: 1 });
 jobSchema.index({ status: 1, createdAt: -1 });
+jobSchema.index({ applicationDeadline: 1 });
+jobSchema.index({ views: -1 });
 
 module.exports = mongoose.model('Job', jobSchema);

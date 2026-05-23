@@ -1,4 +1,8 @@
 require('dotenv').config();
+
+const dns = require("dns");
+dns.setServers(["8.8.8.8"]);
+
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./src/config/database');
@@ -6,7 +10,7 @@ const errorHandler = require('./src/middlewares/errorHandler');
 
 // Initialize Express app
 const app = express();
-
+console.log(process.env.MONGODB_URI);
 // Connect to database
 connectDB();
 

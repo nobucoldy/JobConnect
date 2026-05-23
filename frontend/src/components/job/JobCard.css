@@ -171,3 +171,34 @@
     font-size: var(--font-size-sm);
   }
 }
+.job-slots,
+.job-deadline,
+.job-views {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.job-slots svg,
+.job-deadline svg,
+.job-views svg {
+  width: 13px;
+  height: 13px;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+.job-deadline.deadline-soon {
+  color: var(--warning, #f59e0b);
+  font-weight: 600;
+}
+
+.deadline-badge {
+  background: var(--warning, #f59e0b);
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 999px;
+  margin-left: 4px;
+}

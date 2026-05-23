@@ -14,7 +14,7 @@ import ApplicationModal from '../../components/application/ApplicationModal';
 import ApplicationList from '../../components/application/ApplicationList';
 import ReviewForm from '../../components/review/ReviewForm';
 import ReviewList from '../../components/review/ReviewList';
-import { FiPackage, FiBook, FiMonitor, FiMoreHorizontal, FiDollarSign, FiMapPin, FiCalendar, FiStar, FiUsers, FiEdit2, FiTrash2, FiCheckCircle } from 'react-icons/fi';
+import { FiPackage, FiBook, FiMonitor, FiMoreHorizontal, FiDollarSign, FiMapPin, FiCalendar, FiStar, FiUsers, FiEdit2, FiTrash2, FiCheckCircle, FiEye, FiClock, FiList } from 'react-icons/fi';
 import { PiBroom } from 'react-icons/pi';
 import './JobDetail.css';
 
@@ -58,7 +58,6 @@ const JobDetail = () => {
       const applied = applications.some(app => app.job._id === id);
       setHasApplied(applied);
     } catch (err) {
-      // Silently fail - not critical
       console.error('Failed to check application status:', err);
     }
   }, [id]);
@@ -109,7 +108,7 @@ const JobDetail = () => {
       toast.success('Đánh giá thành công!');
       setShowReviewForm(false);
       fetchReviews();
-      fetchJobDetail(); // Refresh to update user ratings
+      fetchJobDetail();
     } catch (err) {
       toast.error(err.response?.data?.message || 'Không thể gửi đánh giá');
     } finally {
@@ -120,7 +119,6 @@ const JobDetail = () => {
   const handleDelete = async () => {
     setActionLoading(true);
     try {
-      // Nếu là admin, sử dụng API admin để xóa
       if (isAdmin) {
         await adminService.deleteJob(id);
         toast.success('Đã xóa công việc thành công');
@@ -181,7 +179,6 @@ const JobDetail = () => {
       <div className="job-detail-page">
         <div className="job-detail-loading">
           <Spinner size="lg" />
-          <div className="spinner"></div>
           <p>Đang tải thông tin công việc...</p>
         </div>
       </div>
@@ -203,28 +200,38 @@ const JobDetail = () => {
   const isOwner = isAuthenticated && user?._id === job.poster?._id;
   const isAssignedWorker = isAuthenticated && user?._id === job.assignedWorker?._id;
   const canEdit = isOwner && job.status === 'OPEN';
-  const canDelete = (isOwner && job.status === 'OPEN') || isAdmin; // Admin có thể xóa bất kỳ job nào
+  const canDelete = (isOwner && job.status === 'OPEN') || isAdmin;
   const canMarkComplete = isOwner && job.status === 'ASSIGNED';
   const canReview = isAuthenticated && job.status === 'COMPLETED' && (isOwner || isAssignedWorker) && !hasReviewed;
+
+  const deadlinePassed = job.applicationDeadline && new Date(job.applicationDeadline) < new Date();
+  const isAccepting = job.isAcceptingApplications ?? (!deadlinePassed && job.status === 'OPEN');
 
   return (
     <div className="job-detail-page">
       <div className="job-detail-container">
-        <button
-          onClick={() => navigate(-1)}
-          className="back-button"
-        >
+        <button onClick={() => navigate(-1)} className="back-button">
           ← Quay lại danh sách
         </button>
 
         <div className="job-detail-main">
-          {/* Left column - Job details */}
+          {/* Left column */}
           <div className="job-detail-left">
             <div className="job-category-badge">
               {React.createElement(getCategoryIcon(job.category))}
               <span>{job.category}</span>
             </div>
+
             <h1 className="job-title">{job.title}</h1>
+
+            {/* Trạng thái nhận đơn */}
+            <div className="job-accepting-status">
+              {isAccepting ? (
+                <Badge variant="success">Đang nhận hồ sơ</Badge>
+              ) : (
+                <Badge variant="danger">Ngừng nhận hồ sơ</Badge>
+              )}
+            </div>
 
             <div className="job-meta-info">
               <div className="meta-item">
@@ -236,6 +243,10 @@ const JobDetail = () => {
                 <span>{job.location}</span>
               </div>
               <div className="meta-item">
+                <FiUsers />
+                <span>Tuyển {job.slots || 1} người</span>
+              </div>
+              <div className="meta-item">
                 <FiCalendar />
                 <span>Bắt đầu: {formatDate(job.startDate)}</span>
               </div>
@@ -243,12 +254,32 @@ const JobDetail = () => {
                 <FiCalendar />
                 <span>Kết thúc: {formatDate(job.endDate)}</span>
               </div>
+              {job.applicationDeadline && (
+                <div className={`meta-item ${deadlinePassed ? 'meta-item--danger' : ''}`}>
+                  <FiClock />
+                  <span>Hạn nộp hồ sơ: {formatDate(job.applicationDeadline)}</span>
+                  {deadlinePassed && <span className="meta-badge meta-badge--danger">Đã hết hạn</span>}
+                </div>
+              )}
+              <div className="meta-item">
+                <FiEye />
+                <span>{job.views || 0} lượt xem</span>
+              </div>
             </div>
 
             <div className="job-section">
               <h2 className="section-title">Mô tả công việc</h2>
               <p className="job-description">{job.description}</p>
             </div>
+
+            {job.requirements && (
+              <div className="job-section">
+                <h2 className="section-title">
+                  <FiList /> Yêu cầu công việc
+                </h2>
+                <p className="job-requirements">{job.requirements}</p>
+              </div>
+            )}
 
             {job.assignedWorker && (
               <div className="job-section">
@@ -268,67 +299,15 @@ const JobDetail = () => {
             )}
 
             <div className="job-detail-actions">
-            {!isAuthenticated && (
-              <div className="action-message">
-                <p>Đăng nhập để ứng tuyển hoặc quản lý công việc</p>
-                <Button onClick={() => navigate('/login')}>Đăng nhập</Button>
-              </div>
-            )}
+              {!isAuthenticated && (
+                <div className="action-message">
+                  <p>Đăng nhập để ứng tuyển hoặc quản lý công việc</p>
+                  <Button onClick={() => navigate('/login')}>Đăng nhập</Button>
+                </div>
+              )}
 
-            {isAdmin && (
-              <div className="owner-actions">
-                <Button
-                  variant="danger"
-                  onClick={() => setShowDeleteConfirm(true)}
-                  disabled={actionLoading}
-                >
-                  <FiTrash2 /> Xóa công việc
-                </Button>
-              </div>
-            )}
-
-            {isAuthenticated && !isOwner && !isAdmin && job.status === 'OPEN' && (
-              <div className="action-message">
-                {hasApplied ? (
-                  <>
-                    <Badge variant="success">Đã ứng tuyển</Badge>
-                    <p className="action-note">Bạn đã ứng tuyển vào công việc này. Vui lòng chờ người đăng xét duyệt.</p>
-                  </>
-                ) : (
-                  <Button size="lg" fullWidth onClick={() => setShowApplicationModal(true)}>
-                    Ứng tuyển ngay
-                  </Button>
-                )}
-              </div>
-            )}
-
-            {isOwner && (
-              <div className="owner-actions">
-                <Button
-                  variant="info"
-                  onClick={() => setShowApplicationList(true)}
-                >
-                  <FiUsers /> Xem ứng viên
-                </Button>
-                {canEdit && (
-                  <Button
-                    variant="secondary"
-                    onClick={() => navigate(`/jobs/edit/${job._id}`)}
-                    disabled={actionLoading}
-                  >
-                    <FiEdit2 /> Chỉnh sửa
-                  </Button>
-                )}
-                {canMarkComplete && (
-                  <Button
-                    variant="success"
-                    onClick={() => setShowCompleteConfirm(true)}
-                    disabled={actionLoading}
-                  >
-                    <FiCheckCircle /> Đánh dấu hoàn thành
-                  </Button>
-                )}
-                {canDelete && (
+              {isAdmin && (
+                <div className="owner-actions">
                   <Button
                     variant="danger"
                     onClick={() => setShowDeleteConfirm(true)}
@@ -336,32 +315,78 @@ const JobDetail = () => {
                   >
                     <FiTrash2 /> Xóa công việc
                   </Button>
-                )}
-              </div>
-            )}
+                </div>
+              )}
 
-            {canReview && (
-              <div className="review-action">
-                <Button
-                  variant="primary"
-                  size="lg"
-                  fullWidth
-                  onClick={() => setShowReviewForm(true)}
-                >
-                  <FiStar /> Viết đánh giá
-                </Button>
-              </div>
-            )}
+              {isAuthenticated && !isOwner && !isAdmin && job.status === 'OPEN' && (
+                <div className="action-message">
+                  {!isAccepting ? (
+                    <Badge variant="danger">Đã hết hạn ứng tuyển</Badge>
+                  ) : hasApplied ? (
+                    <>
+                      <Badge variant="success">Đã ứng tuyển</Badge>
+                      <p className="action-note">Bạn đã ứng tuyển vào công việc này. Vui lòng chờ người đăng xét duyệt.</p>
+                    </>
+                  ) : (
+                    <Button size="lg" fullWidth onClick={() => setShowApplicationModal(true)}>
+                      Ứng tuyển ngay
+                    </Button>
+                  )}
+                </div>
+              )}
 
-            {hasReviewed && job.status === 'COMPLETED' && (
-              <div className="action-message">
-                <Badge variant="success">Đã đánh giá</Badge>
-              </div>
-            )}
+              {isOwner && (
+                <div className="owner-actions">
+                  <Button variant="info" onClick={() => setShowApplicationList(true)}>
+                    <FiUsers /> Xem ứng viên
+                  </Button>
+                  {canEdit && (
+                    <Button
+                      variant="secondary"
+                      onClick={() => navigate(`/jobs/edit/${job._id}`)}
+                      disabled={actionLoading}
+                    >
+                      <FiEdit2 /> Chỉnh sửa
+                    </Button>
+                  )}
+                  {canMarkComplete && (
+                    <Button
+                      variant="success"
+                      onClick={() => setShowCompleteConfirm(true)}
+                      disabled={actionLoading}
+                    >
+                      <FiCheckCircle /> Đánh dấu hoàn thành
+                    </Button>
+                  )}
+                  {canDelete && (
+                    <Button
+                      variant="danger"
+                      onClick={() => setShowDeleteConfirm(true)}
+                      disabled={actionLoading}
+                    >
+                      <FiTrash2 /> Xóa công việc
+                    </Button>
+                  )}
+                </div>
+              )}
+
+              {canReview && (
+                <div className="review-action">
+                  <Button variant="primary" size="lg" fullWidth onClick={() => setShowReviewForm(true)}>
+                    <FiStar /> Viết đánh giá
+                  </Button>
+                </div>
+              )}
+
+              {hasReviewed && job.status === 'COMPLETED' && (
+                <div className="action-message">
+                  <Badge variant="success">Đã đánh giá</Badge>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Right column - Poster info */}
+          {/* Right column */}
           <div className="job-detail-right">
             <div className="poster-section-title">NGƯỜI ĐĂNG TIN</div>
             <div className="poster-info">

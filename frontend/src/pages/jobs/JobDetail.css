@@ -408,3 +408,49 @@
     padding: 24px 20px;
   }
 }
+/* ── Accepting status badge ── */
+.job-accepting-status {
+  margin-bottom: 16px;
+}
+
+/* ── Requirements section ── */
+.job-requirements {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--gray-700);
+  white-space: pre-wrap;
+  text-align: left;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-title svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2;
+  color: var(--primary-blue);
+}
+.meta-item--danger {
+  color: var(--danger, #ef4444);
+}
+
+.meta-item--danger svg {
+  color: var(--danger, #ef4444);
+}
+
+.meta-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 8px;
+  border-radius: 999px;
+  margin-left: 6px;
+}
+
+.meta-badge--danger {
+  background: var(--danger, #ef4444);
+  color: white;
+}

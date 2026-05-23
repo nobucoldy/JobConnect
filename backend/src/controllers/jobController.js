@@ -26,7 +26,6 @@ exports.getAllJobs = async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    // Build query
     const query = {};
 
     if (req.query.category) {
@@ -44,14 +43,41 @@ exports.getAllJobs = async (req, res, next) => {
     if (req.query.search) {
       query.$or = [
         { title: { $regex: req.query.search, $options: 'i' } },
+        { description: { $regex: req.query.search, $options: 'i' } },
         { location: { $regex: req.query.search, $options: 'i' } }
       ];
     }
 
-    // Execute query
+    // Lọc theo lương
+    if (req.query.minSalary) {
+      query.salary = { $gte: parseInt(req.query.minSalary) };
+    }
+
+    if (req.query.maxSalary) {
+      query.salary = { ...query.salary, $lte: parseInt(req.query.maxSalary) };
+    }
+
+    // Chỉ lấy job còn hạn ứng tuyển
+    if (req.query.activeOnly === 'true') {
+      query.$and = [
+        ...(query.$and || []),
+        {
+          $or: [
+            { applicationDeadline: null },
+            { applicationDeadline: { $gt: new Date() } }
+          ]
+        }
+      ];
+    }
+
+    // Sắp xếp
+    let sortOption = { createdAt: -1 };
+    if (req.query.sortBy === 'salary') sortOption = { salary: -1 };
+    if (req.query.sortBy === 'views') sortOption = { views: -1 };
+
     const jobs = await Job.find(query)
       .populate('poster', 'name averageRating')
-      .sort({ createdAt: -1 })
+      .sort(sortOption)
       .skip(skip)
       .limit(limit);
 
@@ -85,6 +111,9 @@ exports.getJobById = async (req, res, next) => {
       });
     }
 
+    // Tăng lượt xem
+    await Job.findByIdAndUpdate(req.params.id, { $inc: { views: 1 } });
+
     res.status(200).json({
       success: true,
       data: job
@@ -105,7 +134,6 @@ exports.updateJob = async (req, res, next) => {
       });
     }
 
-    // Check ownership
     if (job.poster.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
@@ -113,7 +141,6 @@ exports.updateJob = async (req, res, next) => {
       });
     }
 
-    // Cannot edit completed or cancelled jobs
     if (['COMPLETED', 'CANCELLED'].includes(job.status)) {
       return res.status(400).json({
         success: false,
@@ -121,8 +148,9 @@ exports.updateJob = async (req, res, next) => {
       });
     }
 
-    // Update job
-    Object.assign(job, req.body);
+    // Không cho phép sửa views và poster
+    const { views, poster, ...updateData } = req.body;
+    Object.assign(job, updateData);
     await job.save();
 
     res.status(200).json({
@@ -145,7 +173,6 @@ exports.deleteJob = async (req, res, next) => {
       });
     }
 
-    // Check ownership
     if (job.poster.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
@@ -153,7 +180,6 @@ exports.deleteJob = async (req, res, next) => {
       });
     }
 
-    // Can only delete OPEN jobs
     if (job.status !== 'OPEN') {
       return res.status(400).json({
         success: false,
@@ -218,7 +244,6 @@ exports.markJobComplete = async (req, res, next) => {
       });
     }
 
-    // Check ownership
     if (job.poster.toString() !== req.user._id.toString()) {
       return res.status(403).json({
         success: false,
@@ -226,7 +251,6 @@ exports.markJobComplete = async (req, res, next) => {
       });
     }
 
-    // Can only complete ASSIGNED jobs
     if (job.status !== 'ASSIGNED') {
       return res.status(400).json({
         success: false,

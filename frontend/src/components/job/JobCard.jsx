@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FiPackage, FiBook, FiMonitor, FiMoreHorizontal, FiMapPin, FiUser, FiCalendar } from 'react-icons/fi';
+import { FiPackage, FiBook, FiMonitor, FiMoreHorizontal, FiMapPin, FiUser, FiCalendar, FiUsers, FiEye, FiClock } from 'react-icons/fi';
 import { PiBroom } from 'react-icons/pi';
 import './JobCard.css';
 
@@ -26,6 +26,14 @@ const JobCard = ({ job }) => {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
+  };
+
+  const isDeadlineSoon = () => {
+    if (!job.applicationDeadline) return false;
+    const deadline = new Date(job.applicationDeadline);
+    const now = new Date();
+    const diffDays = (deadline - now) / (1000 * 60 * 60 * 24);
+    return diffDays >= 0 && diffDays <= 3;
   };
 
   return (
@@ -56,6 +64,22 @@ const JobCard = ({ job }) => {
         <div className="job-date">
           <FiCalendar /> {formatDate(job.startDate)} - {formatDate(job.endDate)}
         </div>
+        {job.slots && (
+          <div className="job-slots">
+            <FiUsers /> {job.slots} người cần tuyển
+          </div>
+        )}
+        {job.applicationDeadline && (
+          <div className={`job-deadline ${isDeadlineSoon() ? 'deadline-soon' : ''}`}>
+            <FiClock /> Hạn nộp: {formatDate(job.applicationDeadline)}
+            {isDeadlineSoon() && <span className="deadline-badge">Sắp hết hạn</span>}
+          </div>
+        )}
+        {job.views > 0 && (
+          <div className="job-views">
+            <FiEye /> {job.views} lượt xem
+          </div>
+        )}
       </div>
 
       <div className="job-card-footer">

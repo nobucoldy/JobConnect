@@ -13,10 +13,13 @@ const JobForm = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
+    requirements: '',
     category: '',
     location: '',
     salary: '',
     salaryUnit: 'ngày',
+    slots: 1,
+    applicationDeadline: '',
     startDate: '',
     endDate: ''
   });
@@ -34,10 +37,13 @@ const JobForm = () => {
       setFormData({
         title: job.title,
         description: job.description,
+        requirements: job.requirements || '',
         category: job.category,
         location: job.location,
         salary: job.salary,
         salaryUnit: job.salaryUnit || 'ngày',
+        slots: job.slots || 1,
+        applicationDeadline: job.applicationDeadline ? job.applicationDeadline.split('T')[0] : '',
         startDate: job.startDate ? job.startDate.split('T')[0] : '',
         endDate: job.endDate ? job.endDate.split('T')[0] : ''
       });
@@ -57,16 +63,9 @@ const JobForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    // Clear error for this field
+    setFormData(prev => ({ ...prev, [name]: value }));
     if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
+      setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
 
@@ -99,6 +98,10 @@ const JobForm = () => {
       newErrors.salary = 'Mức lương không hợp lệ';
     }
 
+    if (!formData.slots || formData.slots < 1) {
+      newErrors.slots = 'Số lượng tuyển phải ít nhất là 1';
+    }
+
     if (!formData.startDate) {
       newErrors.startDate = 'Vui lòng chọn ngày bắt đầu';
     }
@@ -113,22 +116,26 @@ const JobForm = () => {
       }
     }
 
+    if (formData.applicationDeadline && formData.startDate) {
+      if (new Date(formData.applicationDeadline) > new Date(formData.startDate)) {
+        newErrors.applicationDeadline = 'Hạn ứng tuyển phải trước ngày bắt đầu';
+      }
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
     setLoading(true);
     try {
       const jobData = {
         ...formData,
-        salary: Number(formData.salary)
+        salary: Number(formData.salary),
+        slots: Number(formData.slots)
       };
 
       if (isEditMode) {
@@ -186,11 +193,26 @@ const JobForm = () => {
               name="description"
               value={formData.description}
               onChange={handleChange}
-              placeholder="Mô tả chi tiết công việc, yêu cầu, trách nhiệm..."
+              placeholder="Mô tả chi tiết công việc, trách nhiệm..."
               className={`form-textarea ${errors.description ? 'error' : ''}`}
               rows="5"
             />
             {errors.description && <span className="error-text">{errors.description}</span>}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="requirements" className="form-label">
+              Yêu cầu công việc
+            </label>
+            <textarea
+              id="requirements"
+              name="requirements"
+              value={formData.requirements}
+              onChange={handleChange}
+              placeholder="VD: Có xe máy, biết đường, chăm chỉ..."
+              className="form-textarea"
+              rows="3"
+            />
           </div>
 
           <div className="form-row">
@@ -214,6 +236,18 @@ const JobForm = () => {
               </select>
               {errors.category && <span className="error-text">{errors.category}</span>}
             </div>
+
+            <Input
+              label="Số lượng tuyển"
+              type="number"
+              name="slots"
+              value={formData.slots}
+              onChange={handleChange}
+              error={errors.slots}
+              required
+              placeholder="1"
+              min="1"
+            />
           </div>
 
           <div className="form-row">
@@ -280,6 +314,15 @@ const JobForm = () => {
               required
             />
           </div>
+
+          <Input
+            label="Hạn chót ứng tuyển"
+            type="date"
+            name="applicationDeadline"
+            value={formData.applicationDeadline}
+            onChange={handleChange}
+            error={errors.applicationDeadline}
+          />
 
           <div className="form-actions">
             <Button
