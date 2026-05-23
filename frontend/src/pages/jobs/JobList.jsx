@@ -38,11 +38,7 @@ const JobListPage = () => {
       const nextLimit = getResponsivePageSize();
       setPagination(prev => {
         if (prev.limit === nextLimit) return prev;
-        return {
-          ...prev,
-          page: 1,
-          limit: nextLimit
-        };
+        return { ...prev, page: 1, limit: nextLimit };
       });
     };
 
@@ -54,12 +50,13 @@ const JobListPage = () => {
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const categoryParam = searchParams.get('category');
-    if (categoryParam) {
-      setFilters(prev => ({
-        ...prev,
-        category: decodeURIComponent(categoryParam)
-      }));
-    }
+    const searchParam = searchParams.get('search');
+
+    setFilters(prev => ({
+      ...prev,
+      category: categoryParam ? decodeURIComponent(categoryParam) : '',
+      search: searchParam ? decodeURIComponent(searchParam) : '',
+    }));
     setInitialized(true);
   }, [location.search]);
 
