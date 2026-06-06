@@ -14,8 +14,9 @@ import ApplicationModal from '../../components/application/ApplicationModal';
 import ApplicationList from '../../components/application/ApplicationList';
 import ReviewForm from '../../components/review/ReviewForm';
 import ReviewList from '../../components/review/ReviewList';
-import { FiPackage, FiBook, FiMonitor, FiMoreHorizontal, FiDollarSign, FiMapPin, FiCalendar, FiStar, FiUsers, FiEdit2, FiTrash2, FiCheckCircle, FiEye, FiClock, FiList } from 'react-icons/fi';
+import { FiPackage, FiBook, FiMonitor, FiMoreHorizontal, FiDollarSign, FiMapPin, FiCalendar, FiStar, FiUsers, FiEdit2, FiTrash2, FiCheckCircle, FiEye, FiClock, FiList, FiBookmark } from 'react-icons/fi';
 import { PiBroom } from 'react-icons/pi';
+import { bookmarkService } from '../../services/bookmarkService';
 import './JobDetail.css';
 
 const JobDetail = () => {
@@ -37,6 +38,8 @@ const JobDetail = () => {
   const [reviewLoading, setReviewLoading] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [bookmarkLoading, setBookmarkLoading] = useState(false);
 
   const fetchJobDetail = useCallback(async () => {
     setLoading(true);
@@ -96,6 +99,18 @@ const JobDetail = () => {
     }
   }, [isAuthenticated, job, reviews, checkIfReviewed]);
 
+  useEffect(() => {
+    const checkBookmark = async () => {
+      if (!isAuthenticated || !job) return;
+      try {
+        const res = await bookmarkService.getSaved();
+        const saved = res.data.data.some(j => j._id === job._id);
+        setIsBookmarked(saved);
+      } catch (err) { /* silent */ }
+    };
+    checkBookmark();
+  }, [isAuthenticated, job]);
+
   const handleApplySuccess = () => {
     setHasApplied(true);
     fetchJobDetail();
@@ -145,6 +160,20 @@ const JobDetail = () => {
       toast.error(err.response?.data?.message || 'Không thể đánh dấu hoàn thành');
     } finally {
       setActionLoading(false);
+    }
+  };
+
+  const handleToggleBookmark = async () => {
+    if (!isAuthenticated) { navigate('/login'); return; }
+    setBookmarkLoading(true);
+    try {
+      const res = await bookmarkService.toggle(job._id);
+      setIsBookmarked(res.data.saved);
+      toast.success(res.data.message);
+    } catch (err) {
+      toast.error('Không thể lưu công việc');
+    } finally {
+      setBookmarkLoading(false);
     }
   };
 
@@ -223,6 +252,29 @@ const JobDetail = () => {
             </div>
 
             <h1 className="job-title">{job.title}</h1>
+            <div className="job-bookmark-row">
+  <button
+    className={`bookmark-btn ${isBookmarked ? 'bookmark-btn--active' : ''}`}
+    onClick={handleToggleBookmark}
+    disabled={bookmarkLoading}
+    title={isBookmarked ? 'Bỏ lưu' : 'Lưu việc làm'}
+  >
+    <FiBookmark size={18} />
+    <span>{isBookmarked ? 'Đã lưu' : 'Lưu việc làm'}</span>
+  </button>
+</div>
+
+            <div className="job-bookmark-row">
+              <button
+                className={`bookmark-btn ${isBookmarked ? 'bookmark-btn--active' : ''}`}
+                onClick={handleToggleBookmark}
+                disabled={bookmarkLoading}
+                title={isBookmarked ? 'Bỏ lưu' : 'Lưu việc làm'}
+              >
+                <FiBookmark size={18} />
+                <span>{isBookmarked ? 'Đã lưu' : 'Lưu việc làm'}</span>
+              </button>
+            </div>
 
             {/* Trạng thái nhận đơn */}
             <div className="job-accepting-status">

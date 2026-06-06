@@ -454,3 +454,24 @@
   background: var(--danger, #ef4444);
   color: white;
 }
+.job-bookmark-row { margin: var(--space-3) 0; }
+
+.bookmark-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 8px 16px;
+  border: 1.5px solid var(--gray-300);
+  border-radius: var(--radius-full);
+  background: none;
+  color: var(--gray-600);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+.bookmark-btn:hover { border-color: var(--primary-blue); color: var(--primary-blue); }
+.bookmark-btn--active {
+  background: var(--primary-blue-light);
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+}

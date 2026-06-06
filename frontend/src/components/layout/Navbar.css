@@ -94,6 +94,24 @@
   gap: var(--space-2);
 }
 
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  padding: 6px 8px;
+  color: var(--gray-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: var(--space-2);
+}
+
+.theme-toggle:hover {
+  background: var(--gray-100);
+  color: var(--primary-blue);
+}
+
 @media (max-width: 768px) {
   .navbar-container {
     flex-wrap: wrap;

@@ -22,11 +22,14 @@ import AdminLayout from './components/layout/AdminLayout';
 import AdminDashboard from './pages/admin/Dashboard';
 import AdminUsers from './pages/admin/Users';
 import AdminJobs from './pages/admin/Jobs';
+import { ThemeProvider } from './context/ThemeContext';
+
 
 function App() {
   return (
     <ErrorBoundary>
       <Router>
+        <ThemeProvider> 
         <AuthProvider>
           <ToastProvider>
             <div className="App">
@@ -105,6 +108,7 @@ function App() {
             </div>
           </ToastProvider>
         </AuthProvider>
+        </ThemeProvider>
       </Router>
     </ErrorBoundary>
   );

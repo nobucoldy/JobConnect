@@ -17,6 +17,7 @@ connectDB();
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use('/api/bookmarks', require('./src/routes/bookmarkRoutes')); // ← THÊM
 app.use(express.urlencoded({ extended: true }));
 
 // Basic route for testing
