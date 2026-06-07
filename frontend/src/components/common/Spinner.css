@@ -35,3 +35,9 @@
     transform: rotate(360deg);
   }
 }
+
+/* Dark mode */
+[data-theme="dark"] .spinner-circle {
+  border-color: rgba(99, 155, 255, 0.15);
+  border-top-color: var(--primary-blue);
+}

@@ -421,6 +421,79 @@
 .status-accepted { background: #E1F5EE; color: #0F6E56; }
 .status-rejected { background: #FCEBEB; color: #A32D2D; }
 
+/* Dark mode */
+[data-theme="dark"] .profile-page {
+  background-color: var(--gray-950, #0f1117);
+}
+
+[data-theme="dark"] .spinner {
+  border-color: var(--gray-600, #4b5563);
+  border-top-color: var(--primary-blue, #185FA5);
+}
+
+[data-theme="dark"] .profile-stats {
+  background: var(--gray-800, #1f2937);
+  border-color: var(--gray-700, #374151);
+}
+
+[data-theme="dark"] .profile-stat-item {
+  border-color: var(--gray-700, #374151);
+}
+
+[data-theme="dark"] .profile-stat-label {
+  color: var(--gray-400, #9ca3af);
+}
+
+[data-theme="dark"] .profile-tabs {
+  background: var(--gray-800, #1f2937);
+  border-color: var(--gray-700, #374151);
+}
+
+[data-theme="dark"] .profile-tab {
+  color: var(--gray-400, #9ca3af);
+}
+
+[data-theme="dark"] .profile-tab:hover,
+[data-theme="dark"] .profile-tab.active {
+  color: var(--primary-blue, #185FA5);
+  background: var(--gray-700, #374151);
+}
+
+[data-theme="dark"] .profile-jobs {
+  background: var(--gray-800, #1f2937);
+  border-color: var(--gray-700, #374151);
+}
+
+[data-theme="dark"] .profile-jobs-title {
+  color: var(--gray-100, #f3f4f6);
+}
+
+[data-theme="dark"] .profile-jobs-empty {
+  color: var(--gray-400, #9ca3af);
+}
+
+[data-theme="dark"] .profile-job-card {
+  background: var(--gray-700, #374151);
+  border-color: var(--gray-600, #4b5563);
+}
+
+[data-theme="dark"] .profile-job-card:hover {
+  background: var(--gray-600, #4b5563);
+  border-color: var(--primary-blue, #185FA5);
+}
+
+[data-theme="dark"] .job-card-icon {
+  background: rgba(24, 95, 165, 0.25);
+}
+
+[data-theme="dark"] .job-card-title {
+  color: var(--gray-100, #f3f4f6);
+}
+
+[data-theme="dark"] .job-card-meta {
+  color: var(--gray-400, #9ca3af);
+}
+
 /* ===========================
    Responsive
    =========================== */

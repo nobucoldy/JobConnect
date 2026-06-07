@@ -130,6 +130,49 @@
   gap: 16px;
 }
 
+/* Dark mode */
+[data-theme="dark"] .edit-profile-card {
+  background: var(--gray-800, #1f2937);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .edit-profile-title {
+  color: var(--gray-100, #f3f4f6);
+}
+
+[data-theme="dark"] .form-group label {
+  color: var(--gray-200, #e5e7eb);
+}
+
+[data-theme="dark"] .form-input {
+  background: var(--gray-700, #374151);
+  color: var(--gray-100, #f3f4f6);
+  border-color: var(--gray-600, #4b5563);
+}
+
+[data-theme="dark"] .form-input:focus {
+  border-color: var(--primary-blue, #007bff);
+}
+
+[data-theme="dark"] .form-input:disabled {
+  background-color: var(--gray-700, #374151);
+  color: var(--gray-500, #6b7280);
+}
+
+[data-theme="dark"] .form-hint {
+  color: var(--gray-400, #9ca3af);
+}
+
+[data-theme="dark"] .form-error {
+  background-color: rgba(220, 53, 69, 0.15);
+  color: #f87171;
+}
+
+[data-theme="dark"] .form-success {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+
 @media (max-width: 768px) {
   .edit-profile-container {
     padding: 20px 16px;

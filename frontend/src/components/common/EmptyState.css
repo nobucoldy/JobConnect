@@ -36,6 +36,15 @@
   margin-top: 8px;
 }
 
+/* Dark mode */
+[data-theme="dark"] .empty-title {
+  color: var(--gray-100, #f3f4f6);
+}
+
+[data-theme="dark"] .empty-message {
+  color: var(--gray-400, #9ca3af);
+}
+
 @media (max-width: 768px) {
   .empty-state {
     padding: 40px 20px;

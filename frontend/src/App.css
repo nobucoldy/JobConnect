@@ -2,3 +2,7 @@
   min-height: 100vh;
   background: var(--gray-50);
 }
+
+[data-theme="dark"] .App {
+  background: var(--gray-950, #0f1117);
+}

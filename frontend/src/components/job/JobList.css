@@ -50,6 +50,21 @@
   font-size: 16px;
 }
 
+/* Dark mode */
+[data-theme="dark"] .job-list-loading,
+[data-theme="dark"] .job-list-empty {
+  color: var(--gray-400, #9ca3af);
+}
+
+[data-theme="dark"] .spinner {
+  border-color: var(--gray-600, #4b5563);
+  border-top-color: var(--primary-blue);
+}
+
+[data-theme="dark"] .job-list-empty h3 {
+  color: var(--gray-100, #f3f4f6);
+}
+
 @media (max-width: 768px) {
   .job-list {
     grid-template-columns: 1fr;

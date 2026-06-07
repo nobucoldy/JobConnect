@@ -30,7 +30,7 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
+  0%   { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
@@ -42,7 +42,7 @@
 }
 
 .stat-card {
-  background: white;
+  background: var(--white);
   border: 1px solid var(--gray-200);
   border-radius: var(--radius-lg);
   padding: 24px;
@@ -75,41 +75,19 @@
   color: var(--primary-blue);
 }
 
-.stat-card-primary .stat-icon {
-  background: var(--primary-blue-light);
-}
+.stat-card-primary .stat-icon { background: var(--primary-blue-light); }
+.stat-card-primary .stat-icon svg { color: var(--primary-blue); }
 
-.stat-card-primary .stat-icon svg {
-  color: var(--primary-blue);
-}
+.stat-card-success .stat-icon { background: var(--success-light); }
+.stat-card-success .stat-icon svg { color: var(--success); }
 
-.stat-card-success .stat-icon {
-  background: var(--success-light);
-}
+.stat-card-info .stat-icon { background: var(--info-light); }
+.stat-card-info .stat-icon svg { color: var(--info); }
 
-.stat-card-success .stat-icon svg {
-  color: var(--success);
-}
+.stat-card-warning .stat-icon { background: var(--warning-light); }
+.stat-card-warning .stat-icon svg { color: var(--warning); }
 
-.stat-card-info .stat-icon {
-  background: var(--info-light);
-}
-
-.stat-card-info .stat-icon svg {
-  color: var(--info);
-}
-
-.stat-card-warning .stat-icon {
-  background: var(--warning-light);
-}
-
-.stat-card-warning .stat-icon svg {
-  color: var(--warning);
-}
-
-.stat-content {
-  flex: 1;
-}
+.stat-content { flex: 1; }
 
 .stat-value {
   font-size: 36px;
@@ -133,21 +111,10 @@
   color: var(--gray-500);
 }
 
-.stat-card-primary {
-  border-left: 4px solid var(--primary-blue);
-}
-
-.stat-card-success {
-  border-left: 4px solid var(--success);
-}
-
-.stat-card-info {
-  border-left: 4px solid var(--info);
-}
-
-.stat-card-warning {
-  border-left: 4px solid var(--warning);
-}
+.stat-card-primary { border-left: 4px solid var(--primary-blue); }
+.stat-card-success  { border-left: 4px solid var(--success); }
+.stat-card-info     { border-left: 4px solid var(--info); }
+.stat-card-warning  { border-left: 4px solid var(--warning); }
 
 .admin-sections {
   display: flex;
@@ -156,7 +123,7 @@
 }
 
 .admin-section {
-  background: white;
+  background: var(--white);
   border: 1px solid var(--gray-200);
   border-radius: var(--radius-lg);
   padding: 30px;
@@ -187,9 +154,7 @@
   transition: all 0.2s ease;
 }
 
-.status-item:hover {
-  box-shadow: var(--shadow-sm);
-}
+.status-item:hover { box-shadow: var(--shadow-sm); }
 
 .status-value {
   font-size: 32px;
@@ -205,96 +170,32 @@
   letter-spacing: 0.5px;
 }
 
-.status-open {
-  border-color: var(--primary-blue);
-  background: var(--primary-blue-light);
-}
+.status-open      { border-color: var(--primary-blue); background: var(--primary-blue-light); }
+.status-open .status-value      { color: var(--primary-blue); }
 
-.status-open .status-value {
-  color: var(--primary-blue);
-}
+.status-assigned  { border-color: var(--warning); background: var(--warning-light); }
+.status-assigned .status-value  { color: var(--warning); }
 
-.status-assigned {
-  border-color: var(--warning);
-  background: var(--warning-light);
-}
+.status-completed { border-color: var(--success); background: var(--success-light); }
+.status-completed .status-value { color: var(--success); }
 
-.status-assigned .status-value {
-  color: var(--warning);
-}
+.status-cancelled { border-color: var(--danger); background: var(--danger-light); }
+.status-cancelled .status-value { color: var(--danger); }
 
-.status-completed {
-  border-color: var(--success);
-  background: var(--success-light);
-}
+.status-pending   { border-color: var(--warning); background: var(--warning-light); }
+.status-pending .status-value   { color: var(--warning); }
 
-.status-completed .status-value {
-  color: var(--success);
-}
+.status-accepted  { border-color: var(--success); background: var(--success-light); }
+.status-accepted .status-value  { color: var(--success); }
 
-.status-cancelled {
-  border-color: var(--danger);
-  background: var(--danger-light);
-}
-
-.status-cancelled .status-value {
-  color: var(--danger);
-}
-
-.status-pending {
-  border-color: var(--warning);
-  background: var(--warning-light);
-}
-
-.status-pending .status-value {
-  color: var(--warning);
-}
-
-.status-accepted {
-  border-color: var(--success);
-  background: var(--success-light);
-}
-
-.status-accepted .status-value {
-  color: var(--success);
-}
-
-.status-rejected {
-  border-color: var(--danger);
-  background: var(--danger-light);
-}
-
-.status-rejected .status-value {
-  color: var(--danger);
-}
+.status-rejected  { border-color: var(--danger); background: var(--danger-light); }
+.status-rejected .status-value  { color: var(--danger); }
 
 @media (max-width: 768px) {
-  .admin-dashboard-title {
-    font-size: 24px;
-  }
-
-  .stats-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .stat-card {
-    padding: 20px;
-  }
-
-  .stat-icon {
-    font-size: 40px;
-  }
-
-  .stat-value {
-    font-size: 28px;
-  }
-
-  .admin-section {
-    padding: 20px;
-  }
-
-  .status-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .admin-dashboard-title { font-size: 24px; }
+  .stats-grid { grid-template-columns: 1fr; gap: 16px; }
+  .stat-card  { padding: 20px; }
+  .stat-value { font-size: 28px; }
+  .admin-section { padding: 20px; }
+  .status-grid { grid-template-columns: repeat(2, 1fr); }
 }

@@ -109,13 +109,6 @@
   margin-bottom: var(--space-2);
 }
 
-.jobs-count {
-  font-size: 16px;
-  color: var(--gray-600);
-  margin-bottom: var(--space-4);
-  font-weight: 500;
-}
-
 .pagination {
   display: flex;
   justify-content: center;
@@ -128,6 +121,47 @@
   font-size: 16px;
   color: var(--gray-700);
   font-weight: 500;
+}
+
+/* Dark mode */
+[data-theme="dark"] .job-list-page {
+  background-color: var(--gray-950, #0f1117);
+}
+
+[data-theme="dark"] .page-header {
+  background: var(--gray-800, #1f2937);
+  border-color: var(--gray-700, #374151);
+}
+
+[data-theme="dark"] .page-header h1 {
+  color: var(--gray-100, #f3f4f6);
+}
+
+[data-theme="dark"] .page-header p {
+  color: var(--gray-400, #9ca3af);
+}
+
+[data-theme="dark"] .jobs-toolbar {
+  background: var(--gray-800, #1f2937);
+}
+
+[data-theme="dark"] .jobs-count {
+  color: var(--gray-300, #d1d5db);
+}
+
+[data-theme="dark"] .filter-select,
+[data-theme="dark"] .filter-input {
+  background: var(--gray-700, #374151);
+  color: var(--gray-100, #f3f4f6);
+  border-color: var(--gray-600, #4b5563);
+}
+
+[data-theme="dark"] .filter-group label {
+  color: var(--gray-300, #d1d5db);
+}
+
+[data-theme="dark"] .page-info {
+  color: var(--gray-400, #9ca3af);
 }
 
 @media (max-width: 768px) {
