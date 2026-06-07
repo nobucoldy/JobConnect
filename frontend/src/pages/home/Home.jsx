@@ -3,7 +3,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { jobService } from '../../services/jobService';
 import JobCard from '../../components/job/JobCard';
-import { FiPackage, FiBook, FiMonitor, FiMoreHorizontal, FiSearch, FiBriefcase, FiUsers, FiMessageCircle } from 'react-icons/fi';
+import { FiPackage, FiBook, FiMonitor, FiMoreHorizontal, FiSearch, FiUsers } from 'react-icons/fi';
 import { PiBroom } from 'react-icons/pi';
 import './Home.css';
 
@@ -65,10 +65,7 @@ const Home = () => {
       <section className="hero-section">
         <div className="hero-container">
           <div className="hero-content">
-            <div className="hero-badge">
-              <span className="hero-badge-dot"></span>
-              <span>Hơn 1,200 việc làm mới hôm nay</span>
-            </div>
+            
             <h1 className="hero-title">
               Việc làm phù hợp<br />với bạn ngay hôm nay
             </h1>
@@ -160,50 +157,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Stats Bar */}
-      <div className="stats-bar">
-        <div className="stats-container">
-          <div className="stat-item">
-            <div className="stat-icon-wrap stat-icon-blue">
-              <FiBriefcase size={18} />
-            </div>
-            <div>
-              <div className="stat-number">36+</div>
-              <div className="stat-label">VIỆC LÀM</div>
-            </div>
-          </div>
-          <div className="stat-divider"></div>
-          <div className="stat-item">
-            <div className="stat-icon-wrap stat-icon-purple">
-              <FiUsers size={18} />
-            </div>
-            <div>
-              <div className="stat-number">36+</div>
-              <div className="stat-label">NHÀ TUYỂN DỤNG</div>
-            </div>
-          </div>
-          <div className="stat-divider"></div>
-          <div className="stat-item">
-            <div className="stat-icon-wrap stat-icon-green">
-              <span style={{ fontSize: '16px' }}>🔖</span>
-            </div>
-            <div>
-              <div className="stat-number">36%</div>
-              <div className="stat-label">LÒNG HÀI HƯỚC</div>
-            </div>
-          </div>
-          <div className="stat-divider"></div>
-          <div className="stat-item">
-            <div className="stat-icon-wrap stat-icon-orange">
-              <FiMessageCircle size={18} />
-            </div>
-            <div>
-              <div className="stat-number">36p</div>
-              <div className="stat-label">PHẢN HỒI TRUNG BÌNH</div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Services Section */}
       <section className="services-section">

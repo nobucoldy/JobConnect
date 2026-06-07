@@ -127,30 +127,7 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* Stats Row */}
-      <div className="profile-stats">
-        <div className="profile-stats-inner">
-          <div className="profile-stat-item">
-            <div className="profile-stat-number">{postedJobs.length}</div>
-            <div className="profile-stat-label">Việc đã đăng</div>
-          </div>
-          <div className="profile-stat-item">
-            <div className="profile-stat-number">{appliedJobs.length}</div>
-            <div className="profile-stat-label">Đã ứng tuyển</div>
-          </div>
-          <div className="profile-stat-item">
-            <div className="profile-stat-number">
-              {user.averageRating > 0 ? user.averageRating.toFixed(1) : '0.0'}
-            </div>
-            <div className="profile-stat-label">Đánh giá</div>
-          </div>
-          <div className="profile-stat-item">
-            <div className="profile-stat-number">{user.totalReviews || 0}</div>
-            <div className="profile-stat-label">Lượt đánh giá</div>
-          </div>
-        </div>
-      </div>
-
+     
       {/* Main Content */}
       <div className="profile-container">
 
