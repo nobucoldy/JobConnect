@@ -13,7 +13,7 @@
 }
 
 .modal-content {
-  background: white;
+  background: var(--white);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
   max-width: 600px;
@@ -99,7 +99,7 @@
 }
 
 .required {
-  color: var(--danger-red);
+  color: var(--danger);
 }
 
 .form-textarea {
@@ -111,6 +111,8 @@
   border-radius: var(--radius-md);
   transition: border-color 0.2s ease;
   resize: vertical;
+  background: var(--white);
+  color: var(--gray-800);
 }
 
 .form-textarea:focus {
@@ -127,14 +129,15 @@
   text-align: right;
   font-size: 14px;
   margin-top: var(--space-2);
+  color: var(--gray-500);
 }
 
 .error-message {
   padding: var(--space-3);
-  background: #fee;
-  border: 1px solid var(--danger-red);
+  background: var(--danger-light);
+  border: 1px solid var(--danger);
   border-radius: var(--radius-md);
-  color: var(--danger-red);
+  color: var(--danger);
   font-size: 14px;
   margin-bottom: var(--space-4);
 }

@@ -1,6 +1,6 @@
 .review-card {
-  background: white;
-  border: 1px solid #e0e0e0;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
   border-radius: 12px;
   padding: 20px;
   display: flex;
@@ -50,15 +50,15 @@
 .review-card-author-name {
   font-size: 16px;
   font-weight: 600;
-  color: #333;
+  color: var(--gray-900);
   margin: 0;
 }
 
 .review-card-role-badge {
   display: inline-block;
   padding: 2px 8px;
-  background-color: #e7f3ff;
-  color: #0066cc;
+  background-color: var(--primary-blue-light);
+  color: var(--primary-blue);
   border-radius: 4px;
   font-size: 12px;
   font-weight: 500;
@@ -66,7 +66,7 @@
 
 .review-card-date {
   font-size: 13px;
-  color: #666;
+  color: var(--gray-500);
   white-space: nowrap;
 }
 
@@ -77,23 +77,23 @@
 .review-card-comment {
   font-size: 14px;
   line-height: 1.6;
-  color: #444;
+  color: var(--gray-700);
   margin: 0;
 }
 
 .review-card-job {
   padding-top: 12px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--gray-100);
   font-size: 13px;
 }
 
 .review-card-job-label {
-  color: #666;
+  color: var(--gray-500);
   margin-right: 6px;
 }
 
 .review-card-job-title {
-  color: #333;
+  color: var(--gray-800);
   font-weight: 500;
 }
 

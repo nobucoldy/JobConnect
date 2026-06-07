@@ -168,7 +168,7 @@ const Home = () => {
               <FiBriefcase size={18} />
             </div>
             <div>
-              <div className="stat-number">36+</div>
+              <div className="stat-number">1200+</div>
               <div className="stat-label">VIỆC LÀM</div>
             </div>
           </div>
@@ -178,7 +178,7 @@ const Home = () => {
               <FiUsers size={18} />
             </div>
             <div>
-              <div className="stat-number">36+</div>
+              <div className="stat-number">190+</div>
               <div className="stat-label">NHÀ TUYỂN DỤNG</div>
             </div>
           </div>
@@ -188,8 +188,8 @@ const Home = () => {
               <span style={{ fontSize: '16px' }}>🔖</span>
             </div>
             <div>
-              <div className="stat-number">36%</div>
-              <div className="stat-label">LÒNG HÀI HƯỚC</div>
+              <div className="stat-number">95%</div>
+              <div className="stat-label">HÀI LÒNG</div>
             </div>
           </div>
           <div className="stat-divider"></div>
@@ -198,7 +198,7 @@ const Home = () => {
               <FiMessageCircle size={18} />
             </div>
             <div>
-              <div className="stat-number">36p</div>
+              <div className="stat-number">20p</div>
               <div className="stat-label">PHẢN HỒI TRUNG BÌNH</div>
             </div>
           </div>

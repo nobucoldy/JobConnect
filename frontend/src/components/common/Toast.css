@@ -109,6 +109,13 @@
   align-items: flex-end;
 }
 
+/* Dark mode */
+[data-theme="dark"] .toast {
+  background: var(--gray-800, #1f2937);
+  color: var(--gray-100, #f3f4f6);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
 @media (max-width: 768px) {
   .toast {
     min-width: auto;

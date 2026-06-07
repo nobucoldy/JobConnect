@@ -1,5 +1,5 @@
 .application-card {
-  background: white;
+  background: var(--white);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   padding: var(--space-5);

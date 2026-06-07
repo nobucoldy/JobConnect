@@ -361,6 +361,86 @@
   cursor: not-allowed;
 }
 
+/* Dark mode */
+[data-theme="dark"] .admin-jobs-title {
+  color: var(--gray-100, #f3f4f6);
+}
+
+[data-theme="dark"] .filter-select {
+  background: var(--gray-800, #1f2937);
+  color: var(--gray-100, #f3f4f6);
+  border-color: var(--gray-600, #4b5563);
+}
+
+[data-theme="dark"] .admin-jobs-loading,
+[data-theme="dark"] .admin-jobs-error,
+[data-theme="dark"] .admin-jobs-empty {
+  background: var(--gray-800, #1f2937);
+  border-color: var(--gray-700, #374151);
+}
+
+[data-theme="dark"] .jobs-table-container {
+  background: var(--gray-800, #1f2937);
+  border-color: var(--gray-700, #374151);
+}
+
+[data-theme="dark"] .jobs-table thead {
+  background: var(--gray-900, #111827);
+  border-color: var(--gray-700, #374151);
+}
+
+[data-theme="dark"] .jobs-table th {
+  color: var(--gray-400, #9ca3af);
+}
+
+[data-theme="dark"] .jobs-table td {
+  color: var(--gray-200, #e5e7eb);
+  border-color: var(--gray-700, #374151);
+}
+
+[data-theme="dark"] .jobs-table tbody tr:hover {
+  background-color: var(--gray-700, #374151);
+}
+
+[data-theme="dark"] .status-badge.status-completed {
+  background: var(--gray-700, #374151);
+  color: var(--gray-300, #d1d5db);
+}
+
+[data-theme="dark"] .pagination {
+  background: var(--gray-800, #1f2937);
+  border-color: var(--gray-700, #374151);
+}
+
+[data-theme="dark"] .pagination-info {
+  color: var(--gray-400, #9ca3af);
+}
+
+[data-theme="dark"] .pagination-btn:disabled {
+  background-color: var(--gray-600, #4b5563);
+}
+
+[data-theme="dark"] .modal-content {
+  background: var(--gray-800, #1f2937);
+}
+
+[data-theme="dark"] .modal-title {
+  color: var(--gray-100, #f3f4f6);
+}
+
+[data-theme="dark"] .modal-message {
+  color: var(--gray-400, #9ca3af);
+}
+
+[data-theme="dark"] .btn-cancel {
+  background-color: var(--gray-700, #374151);
+  color: var(--gray-200, #e5e7eb);
+}
+
+[data-theme="dark"] .btn-cancel:hover:not(:disabled) {
+  background-color: var(--gray-600, #4b5563);
+}
+
 @media (max-width: 768px) {
   .admin-jobs-header {
     flex-direction: column;

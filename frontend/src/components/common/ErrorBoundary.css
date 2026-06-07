@@ -107,6 +107,38 @@
   border-color: var(--gray-500);
 }
 
+/* Dark mode */
+[data-theme="dark"] .error-boundary-content {
+  background: var(--gray-800, #1f2937);
+}
+
+[data-theme="dark"] .error-title {
+  color: var(--gray-100, #f3f4f6);
+}
+
+[data-theme="dark"] .error-message {
+  color: var(--gray-400, #9ca3af);
+}
+
+[data-theme="dark"] .error-details {
+  background: var(--gray-700, #374151);
+  border-color: var(--gray-600, #4b5563);
+}
+
+[data-theme="dark"] .error-details summary {
+  color: var(--gray-300, #d1d5db);
+}
+
+[data-theme="dark"] .error-button-secondary {
+  background: var(--gray-700, #374151);
+  color: var(--gray-200, #e5e7eb);
+  border-color: var(--gray-600, #4b5563);
+}
+
+[data-theme="dark"] .error-button-secondary:hover {
+  background: var(--gray-600, #4b5563);
+}
+
 @media (max-width: 768px) {
   .error-boundary-content {
     padding: 40px 24px;

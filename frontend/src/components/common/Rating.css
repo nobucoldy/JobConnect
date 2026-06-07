@@ -39,3 +39,8 @@
 .rating-lg .star {
   font-size: 28px;
 }
+
+/* Dark mode */
+[data-theme="dark"] .star {
+  color: var(--gray-600, #4b5563);
+}

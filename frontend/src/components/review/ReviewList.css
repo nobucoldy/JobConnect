@@ -16,14 +16,14 @@
 .spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #007bff;
+  border: 4px solid var(--gray-200);
+  border-top: 4px solid var(--primary-blue);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
+  0%   { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
@@ -34,9 +34,9 @@
   justify-content: center;
   padding: 60px 20px;
   text-align: center;
-  background: #f9f9f9;
+  background: var(--gray-50);
   border-radius: 12px;
-  border: 2px dashed #ddd;
+  border: 2px dashed var(--gray-300);
 }
 
 .empty-icon {
@@ -47,12 +47,12 @@
 .review-list-empty h3 {
   font-size: 20px;
   font-weight: 600;
-  color: #333;
+  color: var(--gray-900);
   margin: 0 0 8px 0;
 }
 
 .review-list-empty p {
   font-size: 14px;
-  color: #666;
+  color: var(--gray-500);
   margin: 0;
 }
