@@ -6,6 +6,24 @@ const Job = require('../models/Job');
 const Application = require('../models/Application');
 const Review = require('../models/Review');
 
+function createRelativeDate(daysFromNow, hour = 9, minute = 0) {
+  const date = new Date();
+  date.setDate(date.getDate() + daysFromNow);
+  date.setHours(hour, minute, 0, 0);
+  return date;
+}
+
+function getJobSchedule(index) {
+  const startOffset = 3 + (index % 10);
+  const durationDays = index % 4;
+
+  return {
+    applicationDeadline: createRelativeDate(startOffset - 1, 23, 59),
+    startDate: createRelativeDate(startOffset, 8, 0),
+    endDate: createRelativeDate(startOffset + durationDays, 17, 0)
+  };
+}
+
 // Kết nối database
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/jobco')
   .then(() => console.log('✅ Kết nối database thành công'))
@@ -60,7 +78,8 @@ const users = [
   }
 ];
 
-// Dữ liệu công việc mẫu thực tế
+// Dữ liệu công việc mẫu thực tế.
+// applicationDeadline/startDate/endDate được tạo động khi seed để luôn khớp business rules.
 const jobsData = [
   {
     title: 'Giao hàng nhanh khu vực Quận 1',
@@ -251,10 +270,11 @@ async function seedDatabase() {
     // Tạo jobs (phân phối random cho các user, trừ admin)
     console.log('💼 Đang tạo jobs...');
     const regularUsers = createdUsers.filter(u => u.role !== 'admin');
-    for (const jobData of jobsData) {
+    for (const [index, jobData] of jobsData.entries()) {
       const randomPoster = regularUsers[Math.floor(Math.random() * regularUsers.length)];
       const job = await Job.create({
         ...jobData,
+        ...getJobSchedule(index),
         poster: randomPoster._id
       });
       console.log(`   ✓ Tạo job: ${job.title}`);

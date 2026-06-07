@@ -40,7 +40,7 @@ const Home = () => {
 
   const fetchRecentJobs = async () => {
     try {
-      const response = await jobService.getAllJobs({ limit: 3, status: 'OPEN' });
+      const response = await jobService.getAllJobs({ limit: 3, status: 'OPEN', activeOnly: 'true' });
       setRecentJobs(response.data.data);
     } catch (err) {
       console.error('Failed to fetch jobs:', err);
@@ -210,7 +210,7 @@ const Home = () => {
         <div className="section-container">
           <div className="section-header">
             <div className="section-meta">DANH MỤC</div>
-            <h2>dịch vụ phổ biến</h2>
+            <h2>Dịch vụ phổ biến</h2>
           </div>
           <div className="service-grid">
             {categories.map((category, index) => {
@@ -242,7 +242,7 @@ const Home = () => {
           <div className="section-header-row">
             <div>
               <div className="section-meta">CẬP NHẬT HÔM NAY</div>
-              <h2>việc làm mới nhất</h2>
+              <h2>Việc làm mới nhất</h2>
             </div>
             <Link to="/jobs" className="view-all-link">
               Xem tất cả →

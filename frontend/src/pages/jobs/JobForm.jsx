@@ -5,6 +5,14 @@ import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import './JobForm.css';
 
+const toDateTimeLocalValue = (dateString) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  if (Number.isNaN(date.getTime())) return '';
+  const offsetMs = date.getTimezoneOffset() * 60000;
+  return new Date(date.getTime() - offsetMs).toISOString().slice(0, 16);
+};
+
 const JobForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -43,7 +51,7 @@ const JobForm = () => {
         salary: job.salary,
         salaryUnit: job.salaryUnit || 'ngày',
         slots: job.slots || 1,
-        applicationDeadline: job.applicationDeadline ? job.applicationDeadline.split('T')[0] : '',
+        applicationDeadline: toDateTimeLocalValue(job.applicationDeadline),
         startDate: job.startDate ? job.startDate.split('T')[0] : '',
         endDate: job.endDate ? job.endDate.split('T')[0] : ''
       });
@@ -111,15 +119,19 @@ const JobForm = () => {
     }
 
     if (formData.startDate && formData.endDate) {
-      if (new Date(formData.startDate) >= new Date(formData.endDate)) {
-        newErrors.endDate = 'Ngày kết thúc phải sau ngày bắt đầu';
+      if (new Date(formData.endDate) < new Date(formData.startDate)) {
+        newErrors.endDate = 'Ngày kết thúc phải bằng hoặc sau ngày bắt đầu';
       }
     }
 
     if (formData.applicationDeadline && formData.startDate) {
-      if (new Date(formData.applicationDeadline) > new Date(formData.startDate)) {
-        newErrors.applicationDeadline = 'Hạn ứng tuyển phải trước ngày bắt đầu';
+      if (new Date(formData.startDate) <= new Date(formData.applicationDeadline)) {
+        newErrors.startDate = 'Ngày bắt đầu phải sau hạn ứng tuyển';
       }
+    }
+
+    if (formData.applicationDeadline && new Date(formData.applicationDeadline) < new Date()) {
+      newErrors.applicationDeadline = 'Hạn ứng tuyển không được nhỏ hơn ngày hiện tại';
     }
 
     setErrors(newErrors);
@@ -317,7 +329,7 @@ const JobForm = () => {
 
           <Input
             label="Hạn chót ứng tuyển"
-            type="date"
+            type="datetime-local"
             name="applicationDeadline"
             value={formData.applicationDeadline}
             onChange={handleChange}

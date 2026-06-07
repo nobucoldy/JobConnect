@@ -67,7 +67,8 @@ const JobListPage = () => {
       const params = {
         page: pagination.page,
         limit: pagination.limit,
-        ...filters
+        ...filters,
+        activeOnly: filters.status === 'OPEN' ? 'true' : ''
       };
 
       Object.keys(params).forEach(key => {
@@ -134,7 +135,7 @@ const JobListPage = () => {
               name="search"
               value={filters.search}
               onChange={handleFilterChange}
-              placeholder="Tìm kiếm theo địa chỉ..."
+              placeholder="Tìm kiếm công việc..."
               className="filter-input"
             />
           </div>

@@ -18,11 +18,13 @@ exports.applyJob = async (req, res, next) => {
       });
     }
 
-    // Check if job is OPEN
-    if (job.status !== 'OPEN') {
+    // Check if job is still accepting applications
+    if (!job.canReceiveApplications()) {
       return res.status(400).json({
         success: false,
-        message: 'This job is not accepting applications'
+        message: job.isApplicationDeadlineExpired()
+          ? 'Application deadline has passed'
+          : 'This job is not accepting applications'
       });
     }
 

@@ -51,9 +51,11 @@ const jobSchema = new mongoose.Schema({
     type: Date,
     validate: {
       validator: function(value) {
-        return !value || value > new Date();
+        if (!value) return true;
+        if (!this.isNew && !this.isModified('applicationDeadline')) return true;
+        return value >= new Date();
       },
-      message: 'Application deadline must be in the future'
+      message: 'Application deadline must be on or after current date'
     }
   },
   images: [{
@@ -91,16 +93,24 @@ const jobSchema = new mongoose.Schema({
   toObject: { virtuals: true }
 });
 
+jobSchema.methods.isApplicationDeadlineExpired = function() {
+  return Boolean(this.applicationDeadline && this.applicationDeadline <= new Date());
+};
+
+jobSchema.methods.canReceiveApplications = function() {
+  return this.status === 'OPEN' && !this.isApplicationDeadlineExpired();
+};
+
 // Validation for dates
 jobSchema.pre('save', function() {
-  if (this.startDate && this.endDate && this.startDate >= this.endDate) {
-    throw new Error('End date must be after start date');
+  if (this.startDate && this.endDate && this.endDate < this.startDate) {
+    throw new Error('End date must be on or after start date');
   }
-  if (this.startDate && this.startDate < new Date()) {
+  if ((this.isNew || this.isModified('startDate')) && this.startDate && this.startDate < new Date()) {
     throw new Error('Start date cannot be in the past');
   }
-  if (this.applicationDeadline && this.startDate && this.applicationDeadline > this.startDate) {
-    throw new Error('Application deadline must be before start date');
+  if (this.applicationDeadline && this.startDate && this.startDate <= this.applicationDeadline) {
+    throw new Error('Start date must be after application deadline');
   }
 });
 
@@ -113,9 +123,7 @@ jobSchema.virtual('applications', {
 
 // Virtual: check if still accepting applications
 jobSchema.virtual('isAcceptingApplications').get(function() {
-  if (this.status !== 'OPEN') return false;
-  if (this.applicationDeadline && this.applicationDeadline < new Date()) return false;
-  return true;
+  return this.canReceiveApplications();
 });
 
 // Indexes
