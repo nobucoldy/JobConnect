@@ -252,17 +252,7 @@ const JobDetail = () => {
             </div>
 
             <h1 className="job-title">{job.title}</h1>
-            <div className="job-bookmark-row">
-  <button
-    className={`bookmark-btn ${isBookmarked ? 'bookmark-btn--active' : ''}`}
-    onClick={handleToggleBookmark}
-    disabled={bookmarkLoading}
-    title={isBookmarked ? 'Bỏ lưu' : 'Lưu việc làm'}
-  >
-    <FiBookmark size={18} />
-    <span>{isBookmarked ? 'Đã lưu' : 'Lưu việc làm'}</span>
-  </button>
-</div>
+    
 
             <div className="job-bookmark-row">
               <button

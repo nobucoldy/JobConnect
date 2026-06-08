@@ -69,7 +69,33 @@
   padding: var(--space-8);
   overflow-y: auto;
 }
+/* Dark mode */
+[data-theme="dark"] .admin-sidebar {
+  background: var(--gray-800);
+  border-color: var(--gray-700);
+}
 
+[data-theme="dark"] .admin-sidebar-header {
+  border-color: var(--gray-700);
+}
+
+[data-theme="dark"] .admin-sidebar-header h2 {
+  color: var(--gray-100);
+}
+
+[data-theme="dark"] .admin-nav-link {
+  color: var(--gray-400);
+}
+
+[data-theme="dark"] .admin-nav-link:hover {
+  background-color: var(--gray-700);
+  color: var(--gray-100);
+}
+
+[data-theme="dark"] .admin-nav-link.active {
+  background-color: var(--primary-blue-light);
+  color: #93c5fd;
+}
 @media (max-width: 768px) {
   .admin-layout {
     flex-direction: column;

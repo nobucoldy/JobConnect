@@ -27,7 +27,7 @@
 }
 
 .job-form {
-  background: white;
+  background: var(--white);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
   padding: var(--space-8);
@@ -78,7 +78,7 @@
   border: 2px solid var(--gray-300);
   border-radius: var(--radius-md);
   transition: border-color 0.2s ease;
-  background-color: white;
+  background-color: var(--white);
   cursor: pointer;
 }
 

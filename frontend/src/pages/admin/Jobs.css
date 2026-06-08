@@ -29,7 +29,8 @@
   border-radius: var(--radius-md);
   font-size: 14px;
   font-weight: 500;
-  background: white;
+  background: var(--white);
+  color: var(--gray-700);
   cursor: pointer;
   transition: border-color 0.2s ease;
 }
