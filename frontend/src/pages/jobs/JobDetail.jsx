@@ -4,6 +4,7 @@ import { jobService } from '../../services/jobService';
 import { applicationService } from '../../services/applicationService';
 import { reviewService } from '../../services/reviewService';
 import { adminService } from '../../services/adminService';
+import { bookmarkService } from '../../services/bookmarkService';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import Button from '../../components/common/Button';
@@ -14,7 +15,7 @@ import ApplicationModal from '../../components/application/ApplicationModal';
 import ApplicationList from '../../components/application/ApplicationList';
 import ReviewForm from '../../components/review/ReviewForm';
 import ReviewList from '../../components/review/ReviewList';
-import { FiPackage, FiBook, FiMonitor, FiMoreHorizontal, FiDollarSign, FiMapPin, FiCalendar, FiStar, FiUsers, FiEdit2, FiTrash2, FiCheckCircle, FiEye, FiClock, FiList } from 'react-icons/fi';
+import { FiPackage, FiBook, FiMonitor, FiMoreHorizontal, FiDollarSign, FiMapPin, FiCalendar, FiStar, FiUsers, FiEdit2, FiTrash2, FiCheckCircle, FiEye, FiClock, FiList, FiBookmark } from 'react-icons/fi';
 import { PiBroom } from 'react-icons/pi';
 import './JobDetail.css';
 
@@ -37,6 +38,8 @@ const JobDetail = () => {
   const [reviewLoading, setReviewLoading] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [bookmarkLoading, setBookmarkLoading] = useState(false);
 
   const fetchJobDetail = useCallback(async () => {
     setLoading(true);
@@ -74,6 +77,25 @@ const JobDetail = () => {
     }
   }, [id]);
 
+  const fetchBookmarkStatus = useCallback(async () => {
+    if (!isAuthenticated) {
+      setIsBookmarked(false);
+      return;
+    }
+
+    try {
+      const response = await bookmarkService.getSaved();
+      const savedJobs = response.data.data || [];
+      const saved = savedJobs.some(savedJob => {
+        const savedJobId = savedJob?._id || savedJob?.id || savedJob;
+        return savedJobId?.toString() === id;
+      });
+      setIsBookmarked(saved);
+    } catch (err) {
+      console.error('Failed to check bookmark status:', err);
+    }
+  }, [id, isAuthenticated]);
+
   const checkIfReviewed = useCallback(() => {
     const userReview = reviews.find(review => review.reviewer?._id === user?._id);
     setHasReviewed(!!userReview);
@@ -91,6 +113,12 @@ const JobDetail = () => {
   }, [isAuthenticated, job, user, checkIfApplied]);
 
   useEffect(() => {
+    if (job) {
+      fetchBookmarkStatus();
+    }
+  }, [job, fetchBookmarkStatus]);
+
+  useEffect(() => {
     if (isAuthenticated && job && reviews.length > 0) {
       checkIfReviewed();
     }
@@ -101,6 +129,24 @@ const JobDetail = () => {
   const handleApplySuccess = () => {
     setHasApplied(true);
     fetchJobDetail();
+  };
+
+  const handleToggleBookmark = async () => {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+
+    setBookmarkLoading(true);
+    try {
+      const response = await bookmarkService.toggle(id);
+      setIsBookmarked(response.data.saved);
+      toast.success(response.data.message || (response.data.saved ? 'ÄÃ£ lÆ°u cÃ´ng viá»‡c' : 'ÄÃ£ bá» lÆ°u cÃ´ng viá»‡c'));
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'KhÃ´ng thá»ƒ cáº­p nháº­t lÆ°u cÃ´ng viá»‡c');
+    } finally {
+      setBookmarkLoading(false);
+    }
   };
 
   const handleReviewSubmit = async (reviewData) => {
