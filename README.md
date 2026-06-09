@@ -18,9 +18,9 @@
 | 2 | Hoàng Tuấn Kiệt | 23010517 | 30% |
 | 3 | Tạ Thành Phú | 22011392 | 30% |
 
-# JobCo / JobConnect
+# JobConnect
 
-JobCo là nền tảng web kết nối người đăng việc với người tìm việc ngắn hạn. Hệ thống hỗ trợ các quy trình chính như đăng việc, tìm kiếm việc, ứng tuyển, xét duyệt ứng viên, hoàn thành công việc, đánh giá hai chiều và quản trị dữ liệu hệ thống.
+JobConnect là nền tảng web kết nối người đăng việc với người tìm việc ngắn hạn. Hệ thống hỗ trợ các quy trình chính như đăng việc, tìm kiếm việc, ứng tuyển, xét duyệt ứng viên, hoàn thành công việc, đánh giá hai chiều và quản trị dữ liệu hệ thống.
 
 Dự án được xây dựng theo mô hình client-server, gồm frontend React và backend REST API sử dụng Node.js, Express và MongoDB.
 
@@ -70,9 +70,6 @@ Dự án được xây dựng theo mô hình client-server, gồm frontend React
 - Người dùng không được ứng tuyển vào công việc do chính mình đăng.
 - Một người dùng không được ứng tuyển trùng một công việc.
 - Công việc chỉ nhận đơn khi trạng thái là `OPEN` và chưa hết hạn ứng tuyển.
-- `applicationDeadline >= currentDate`.
-- `startDate > applicationDeadline`.
-- `endDate >= startDate`.
 - Khi một ứng viên được chấp nhận, công việc chuyển sang trạng thái `ASSIGNED`.
 - Chỉ được đánh giá sau khi công việc đã hoàn thành.
 - Mỗi bên chỉ được đánh giá một lần cho cùng một công việc.
@@ -129,13 +126,6 @@ JobCo/
 │   │   ├── services/
 │   │   └── styles/
 │   └── package.json
-├── docs/
-│   ├── ADMIN_GUIDE.md
-│   ├── database-schema.md
-│   ├── design-specification.md
-│   ├── feature_work.md
-│   └── project-report-overview.md
-├── TEST_LOGIN.md
 └── README.md
 ```
 
@@ -247,13 +237,6 @@ cd frontend
 npm run build
 ```
 
-## Tài liệu dự án
-
-- `docs/project-report-overview.md`: tổng quan nội dung phục vụ báo cáo.
-- `docs/database-schema.md`: thiết kế cơ sở dữ liệu.
-- `docs/design-specification.md`: đặc tả thiết kế giao diện.
-- `docs/feature_work.md`: mô tả chi tiết các chức năng.
-- `docs/ADMIN_GUIDE.md`: hướng dẫn chức năng quản trị.
 
 ## Hướng phát triển
 
@@ -266,4 +249,4 @@ npm run build
 
 ## Kết luận
 
-JobCo/JobConnect là ứng dụng web phục vụ bài toán kết nối việc làm ngắn hạn. Dự án đáp ứng các chức năng cốt lõi của một nền tảng việc làm ở mức MVP, bao gồm xác thực người dùng, quản lý công việc, quản lý ứng tuyển, đánh giá hai chiều, hồ sơ cá nhân và dashboard quản trị.
+JobConnect là ứng dụng web phục vụ bài toán kết nối việc làm ngắn hạn. Dự án đáp ứng các chức năng cốt lõi của một nền tảng việc làm ở mức MVP, bao gồm xác thực người dùng, quản lý công việc, quản lý ứng tuyển, đánh giá hai chiều, hồ sơ cá nhân và dashboard quản trị.
