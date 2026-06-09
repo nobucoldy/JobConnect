@@ -204,8 +204,8 @@
 }
 /* Dark mode */
 [data-theme="dark"] .job-card {
-  background: var(--gray-800);
-  border-color: var(--gray-700);
+  background: var(--white);
+  border-color: var(--gray-200);
 }
 
 [data-theme="dark"] .job-card:hover {
@@ -225,7 +225,7 @@
 }
 
 [data-theme="dark"] .job-card-footer {
-  border-color: var(--gray-700);
+  border-color: var(--gray-200);
 }
 
 [data-theme="dark"] .deadline-badge {

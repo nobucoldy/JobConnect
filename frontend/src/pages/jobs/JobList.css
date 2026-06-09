@@ -129,8 +129,8 @@
 }
 
 [data-theme="dark"] .page-header {
-  background: var(--gray-800, #1f2937);
-  border-color: var(--gray-700, #374151);
+  background: var(--white, #18202D);
+  border-color: var(--gray-200, #263244);
 }
 
 [data-theme="dark"] .page-header h1 {
@@ -142,7 +142,7 @@
 }
 
 [data-theme="dark"] .jobs-toolbar {
-  background: var(--gray-800, #1f2937);
+  background: var(--white, #18202D);
 }
 
 [data-theme="dark"] .jobs-count {
@@ -151,9 +151,9 @@
 
 [data-theme="dark"] .filter-select,
 [data-theme="dark"] .filter-input {
-  background: var(--gray-700, #374151);
+  background: var(--gray-200, #263244);
   color: var(--gray-100, #f3f4f6);
-  border-color: var(--gray-600, #4b5563);
+  border-color: var(--gray-300, #354257);
 }
 
 [data-theme="dark"] .filter-group label {

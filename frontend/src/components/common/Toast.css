@@ -111,9 +111,29 @@
 
 /* Dark mode */
 [data-theme="dark"] .toast {
-  background: var(--gray-800, #1f2937);
-  color: var(--gray-100, #f3f4f6);
+  background: var(--white, #18202D);
+  color: var(--gray-900, #F8FAFC);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .toast-success .toast-icon {
+  background-color: rgba(52, 211, 153, 0.16);
+  color: #6EE7B7;
+}
+
+[data-theme="dark"] .toast-error .toast-icon {
+  background-color: rgba(248, 113, 113, 0.16);
+  color: #FCA5A5;
+}
+
+[data-theme="dark"] .toast-warning .toast-icon {
+  background-color: rgba(251, 191, 36, 0.16);
+  color: #FCD34D;
+}
+
+[data-theme="dark"] .toast-info .toast-icon {
+  background-color: rgba(96, 165, 250, 0.16);
+  color: #93C5FD;
 }
 
 @media (max-width: 768px) {

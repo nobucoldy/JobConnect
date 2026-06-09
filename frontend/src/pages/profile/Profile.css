@@ -266,8 +266,8 @@
 }
 
 [data-theme="dark"] .profile-stats {
-  background: var(--gray-800, #1f2937);
-  border-color: var(--gray-700, #374151);
+  background: var(--white, #18202D);
+  border-color: var(--gray-200, #263244);
 }
 
 .profile-stats-inner {
@@ -291,11 +291,11 @@
 }
 
 [data-theme="dark"] .profile-stat-item {
-  border-color: var(--gray-700, #374151);
+  border-color: var(--gray-200, #263244);
 }
 
 [data-theme="dark"] .profile-stat-item:hover {
-  background: var(--gray-700, #374151);
+  background: var(--gray-200, #263244);
 }
 
 .profile-stat-number {
@@ -328,8 +328,8 @@
 }
 
 .profile-panel {
-  background: var(--gray-800, #1f2937);
-  border: 1px solid var(--gray-700, #374151);
+  background: var(--white, #18202D);
+  border: 1px solid var(--gray-200, #263244);
   border-radius: 14px;
   padding: 20px;
 }
@@ -357,6 +357,10 @@
   color: var(--gray-100, #f3f4f6);
 }
 
+[data-theme="dark"] .panel-title {
+  color: var(--gray-900, #F8FAFC);
+}
+
 [data-theme="light"] .panel-title,
 :root:not([data-theme="dark"]) .panel-title {
   color: var(--gray-900, #111827);
@@ -378,7 +382,7 @@
 }
 
 .panel-action:hover {
-  background: var(--gray-700, #374151);
+  background: var(--gray-200, #263244);
   color: #fff;
 }
 
@@ -464,7 +468,7 @@
 
 .match-score-track {
   height: 8px;
-  background: var(--gray-700, #374151);
+  background: var(--gray-200, #263244);
   border-radius: 99px;
   overflow: hidden;
 }
@@ -550,8 +554,8 @@
 }
 
 [data-theme="dark"] .profile-tabs {
-  background: var(--gray-800, #1f2937);
-  border-color: var(--gray-700, #374151);
+  background: var(--white, #18202D);
+  border-color: var(--gray-200, #263244);
 }
 
 .profile-tab {
@@ -577,7 +581,7 @@
 }
 
 [data-theme="dark"] .profile-tab:hover {
-  background: var(--gray-700, #374151);
+  background: var(--gray-200, #263244);
 }
 
 .profile-tab.active {
@@ -589,7 +593,7 @@
 
 [data-theme="dark"] .profile-tab.active,
 [data-theme="dark"] .profile-tab:hover {
-  background: var(--gray-700, #374151);
+  background: var(--gray-200, #263244);
   color: var(--primary-blue, #378ADD);
 }
 
@@ -616,8 +620,8 @@
 }
 
 [data-theme="dark"] .profile-jobs {
-  background: var(--gray-800, #1f2937);
-  border-color: var(--gray-700, #374151);
+  background: var(--white, #18202D);
+  border-color: var(--gray-200, #263244);
 }
 
 .profile-jobs-header {
@@ -692,12 +696,12 @@
 }
 
 [data-theme="dark"] .profile-job-card {
-  background: var(--gray-700, #374151);
-  border-color: var(--gray-600, #4b5563);
+  background: var(--gray-100, #18202D);
+  border-color: var(--gray-200, #263244);
 }
 
 [data-theme="dark"] .profile-job-card:hover {
-  background: var(--gray-600, #4b5563);
+  background: var(--gray-200, #263244);
   border-color: var(--primary-blue, #185FA5);
 }
 
@@ -734,7 +738,7 @@
   text-overflow: ellipsis;
 }
 
-[data-theme="dark"] .job-card-title { color: var(--gray-100, #f3f4f6); }
+[data-theme="dark"] .job-card-title { color: var(--gray-900, #F8FAFC); }
 
 .job-card-meta {
   display: flex;
@@ -745,7 +749,16 @@
   flex-wrap: wrap;
 }
 
-[data-theme="dark"] .job-card-meta { color: var(--gray-400, #9ca3af); }
+[data-theme="dark"] .job-card-meta { color: var(--gray-600, #C6D0E1); }
+
+[data-theme="dark"] .job-card-date {
+  color: var(--gray-500, #A8B3C7);
+}
+
+[data-theme="dark"] .job-card-salary,
+[data-theme="dark"] .job-card-applicants {
+  color: var(--primary-blue, #5EA0FF);
+}
 
 .job-card-footer { margin-top: 6px; }
 

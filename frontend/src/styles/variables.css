@@ -118,23 +118,30 @@ table {
 
 /* ===================== DARK MODE ===================== */
 [data-theme="dark"] {
-  --white: #1F2937;
-  --gray-50: #111827;
-  --gray-100: #1F2937;
-  --gray-200: #374151;
-  --gray-300: #4B5563;
-  --gray-400: #6B7280;
-  --gray-500: #9CA3AF;
-  --gray-600: #D1D5DB;
-  --gray-700: #E5E7EB;
-  --gray-800: #F3F4F6;
-  --gray-900: #F9FAFB;
+  --white: #18202D;
+  --gray-50: #0F1724;
+  --gray-100: #18202D;
+  --gray-200: #263244;
+  --gray-300: #354257;
+  --gray-400: #8EA0B8;
+  --gray-500: #A8B3C7;
+  --gray-600: #C6D0E1;
+  --gray-700: #E0E7F2;
+  --gray-800: #F0F4FA;
+  --gray-900: #F8FAFC;
 
-  --primary-blue-light: #1E3A5F;
-  --success-light: #064E3B;
-  --warning-light: #78350F;
-  --danger-light: #7F1D1D;
-  --info-light: #1E3A5F;
+  --primary-blue: #5EA0FF;
+  --primary-blue-dark: #9CC4FF;
+  --primary-blue-hover: #7DB3FF;
+  --primary-blue-light: #1B3558;
+  --success: #34D399;
+  --success-light: #103A2D;
+  --warning: #FBBF24;
+  --warning-light: #49330D;
+  --danger: #F87171;
+  --danger-light: #4A1D24;
+  --info: #60A5FA;
+  --info-light: #183654;
 
   --shadow-sm: 0 1px 3px 0 rgba(0,0,0,0.4), 0 1px 2px 0 rgba(0,0,0,0.3);
   --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.4), 0 2px 4px -1px rgba(0,0,0,0.3);

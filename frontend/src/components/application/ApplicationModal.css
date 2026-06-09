@@ -154,7 +154,7 @@
 }
 /* Dark mode */
 [data-theme="dark"] .modal-content {
-  background: var(--gray-800);
+  background: var(--white);
 }
 
 [data-theme="dark"] .modal-header {
@@ -162,7 +162,7 @@
 }
 
 [data-theme="dark"] .modal-header h2 {
-  color: var(--gray-100);
+  color: var(--gray-900);
 }
 
 [data-theme="dark"] .modal-close {
@@ -170,42 +170,48 @@
 }
 
 [data-theme="dark"] .modal-close:hover {
-  background: var(--gray-700);
-  color: var(--gray-100);
+  background: var(--gray-200);
+  color: var(--gray-900);
 }
 
 [data-theme="dark"] .job-info-summary {
-  background: var(--gray-700);
+  background: var(--gray-200);
 }
 
 [data-theme="dark"] .job-info-summary h3 {
-  color: var(--gray-100);
+  color: var(--gray-900);
 }
 
 [data-theme="dark"] .job-info-summary .job-meta {
-  color: var(--gray-400);
+  color: var(--gray-600);
 }
 
 [data-theme="dark"] .job-info-summary .job-date-range {
-  color: var(--gray-300);
+  color: var(--gray-700);
 }
 
 [data-theme="dark"] .form-group label {
-  color: var(--gray-200);
+  color: var(--gray-800);
 }
 
 [data-theme="dark"] .form-textarea {
-  background: var(--gray-700);
-  color: var(--gray-100);
-  border-color: var(--gray-600);
+  background: var(--gray-200);
+  color: var(--gray-900);
+  border-color: var(--gray-300);
 }
 
 [data-theme="dark"] .form-textarea:disabled {
-  background: var(--gray-800);
+  background: var(--gray-100);
 }
 
 [data-theme="dark"] .char-count {
-  color: var(--gray-400);
+  color: var(--gray-600);
+}
+
+[data-theme="dark"] .error-message {
+  background: rgba(248, 113, 113, 0.14);
+  border-color: #F87171;
+  color: #FCA5A5;
 }
 
 @media (max-width: 768px) {

@@ -32,6 +32,17 @@
   color: white;
 }
 
+[data-theme="dark"] .error-alert {
+  background: rgba(248, 113, 113, 0.14);
+  border-color: #F87171;
+  color: #FCA5A5;
+}
+
+[data-theme="dark"] .error-alert button {
+  border-color: #F87171;
+  color: #FCA5A5;
+}
+
 .filter-tabs {
   display: flex;
   gap: var(--space-2);
