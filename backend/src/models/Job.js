@@ -3,20 +3,20 @@ const mongoose = require('mongoose');
 const jobSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: [true, 'Title is required'],
+    required: [true, 'Tiêu đề là bắt buộc'],
     trim: true,
-    minlength: [5, 'Title must be at least 5 characters'],
-    maxlength: [100, 'Title cannot exceed 100 characters']
+    minlength: [5, 'Tiêu đề phải có ít nhất 5 ký tự'],
+    maxlength: [100, 'Tiêu đề không được vượt quá 100 ký tự']
   },
   description: {
     type: String,
-    required: [true, 'Description is required'],
-    minlength: [20, 'Description must be at least 20 characters'],
-    maxlength: [1000, 'Description cannot exceed 1000 characters']
+    required: [true, 'Mô tả là bắt buộc'],
+    minlength: [20, 'Mô tả phải có ít nhất 20 ký tự'],
+    maxlength: [1000, 'Mô tả không được vượt quá 1000 ký tự']
   },
   requirements: {
     type: String,
-    maxlength: [500, 'Requirements cannot exceed 500 characters'],
+    maxlength: [500, 'Yêu cầu không được vượt quá 500 ký tự'],
     default: ''
   },
   category: {
@@ -26,15 +26,15 @@ const jobSchema = new mongoose.Schema({
   },
   location: {
     type: String,
-    required: [true, 'Location is required'],
+    required: [true, 'Cần có thông tin về địa điểm.'],
     trim: true,
-    minlength: [5, 'Location must be at least 5 characters'],
-    maxlength: [200, 'Location cannot exceed 200 characters']
+    minlength: [5, 'Địa điểm phải có ít nhất 5 ký tự.'],
+    maxlength: [200, 'Địa điểm không được vượt quá 200 ký tự.']
   },
   salary: {
     type: Number,
-    required: [true, 'Salary is required'],
-    min: [10000, 'Salary must be at least 10,000 VND']
+    required: [true, 'Mức lương được yêu cầu điền'],
+    min: [10000, 'Mức lương phải ít nhất 10,000 VND']
   },
   salaryUnit: {
     type: String,
@@ -44,8 +44,8 @@ const jobSchema = new mongoose.Schema({
   slots: {
     type: Number,
     default: 1,
-    min: [1, 'Slots must be at least 1'],
-    max: [100, 'Slots cannot exceed 100']
+    min: [1, 'Số lượng vị trí phải tối thiểu là 1.'],
+    max: [100, 'Số lượng vị trí không được vượt quá 100.']
   },
   applicationDeadline: {
     type: Date,
@@ -55,7 +55,7 @@ const jobSchema = new mongoose.Schema({
         if (!this.isNew && !this.isModified('applicationDeadline')) return true;
         return value >= new Date();
       },
-      message: 'Application deadline must be on or after current date'
+      message: 'Hạn nộp đơn phải là ngày hiện tại hoặc sau ngày hiện tại'
     }
   },
   images: [{
