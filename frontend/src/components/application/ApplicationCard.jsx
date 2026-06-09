@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { applicationService } from '../../services/applicationService';
 import { useToast } from '../../context/ToastContext';
 import Button from '../common/Button';
@@ -79,9 +80,19 @@ const ApplicationCard = ({ application, onUpdate, isPoster = false }) => {
     <div className="application-card">
       <div className="application-header">
         <div className="applicant-info">
-          <div className="applicant-avatar">
-            {application.worker?.name?.charAt(0).toUpperCase()}
-          </div>
+          {application.worker?._id ? (
+            <Link
+              to={`/profile/${application.worker._id}`}
+              className="applicant-avatar applicant-avatar-link"
+              title="Xem hồ sơ ứng viên"
+            >
+              {application.worker?.name?.charAt(0).toUpperCase()}
+            </Link>
+          ) : (
+            <div className="applicant-avatar">
+              {application.worker?.name?.charAt(0).toUpperCase()}
+            </div>
+          )}
           <div className="applicant-details">
             <div className="applicant-name">{application.worker?.name}</div>
             <div className="applicant-rating">

@@ -1,6 +1,23 @@
 const User = require('../models/User');
 const Job = require('../models/Job');
 const Review = require('../models/Review');
+const Application = require('../models/Application');
+
+const attachApplicationCounts = async (jobs) => {
+  const plainJobs = jobs.map(job => job.toObject ? job.toObject() : job);
+  const jobIds = plainJobs.map(job => job._id);
+
+  const counts = await Application.aggregate([
+    { $match: { job: { $in: jobIds } } },
+    { $group: { _id: '$job', count: { $sum: 1 } } }
+  ]);
+
+  const countMap = new Map(counts.map(item => [item._id.toString(), item.count]));
+  return plainJobs.map(job => ({
+    ...job,
+    applicationsCount: countMap.get(job._id.toString()) || 0
+  }));
+};
 
 /**
  * Get user profile with jobs and reviews
@@ -20,16 +37,17 @@ exports.getUserProfile = async (req, res) => {
 
     // Get jobs as poster
     const jobsAsPoster = await Job.find({ poster: user._id })
-      .select('title status createdAt')
+      .select('title status category location salary salaryUnit createdAt')
       .sort({ createdAt: -1 })
       .limit(10);
+    const jobsAsPosterWithCounts = await attachApplicationCounts(jobsAsPoster);
 
     // Get jobs as worker
     const jobsAsWorker = await Job.find({
       assignedWorker: user._id,
       status: 'COMPLETED'
     })
-      .select('title status createdAt')
+      .select('title status category location salary salaryUnit createdAt')
       .populate('poster', 'name')
       .sort({ createdAt: -1 })
       .limit(10);
@@ -45,7 +63,7 @@ exports.getUserProfile = async (req, res) => {
       success: true,
       data: {
         user,
-        jobsAsPoster,
+        jobsAsPoster: jobsAsPosterWithCounts,
         jobsAsWorker,
         reviews
       }

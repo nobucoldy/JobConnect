@@ -39,6 +39,21 @@
   flex-shrink: 0;
 }
 
+.applicant-avatar-link {
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.applicant-avatar-link:hover,
+.applicant-avatar-link:focus {
+  background: var(--primary-blue-dark);
+  color: white;
+  box-shadow: 0 0 0 3px rgba(24, 95, 165, 0.16);
+  transform: translateY(-1px);
+  outline: none;
+}
+
 .applicant-details {
   flex: 1;
   min-width: 0;

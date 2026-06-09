@@ -820,6 +820,33 @@
   .profile-completion-bar-wrap { margin: 16px auto 0; }
 }
 .profile-mid-section--single {
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   max-width: 1000px;
+}
+
+.profile-panel--wide {
+  grid-column: 1 / -1;
+}
+
+.job-card-applicants {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--primary-blue, #185FA5);
+  font-weight: 600;
+}
+
+.job-card-applicants svg {
+  width: 13px;
+  height: 13px;
+}
+
+.profile-public-section + .profile-public-section {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--gray-200, #e5e7eb);
+}
+
+[data-theme="dark"] .profile-public-section + .profile-public-section {
+  border-top-color: var(--gray-700, #374151);
 }

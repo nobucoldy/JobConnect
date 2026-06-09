@@ -1,4 +1,21 @@
 const Job = require('../models/Job');
+const Application = require('../models/Application');
+
+const attachApplicationCounts = async (jobs) => {
+  const plainJobs = jobs.map(job => job.toObject ? job.toObject() : job);
+  const jobIds = plainJobs.map(job => job._id);
+
+  const counts = await Application.aggregate([
+    { $match: { job: { $in: jobIds } } },
+    { $group: { _id: '$job', count: { $sum: 1 } } }
+  ]);
+
+  const countMap = new Map(counts.map(item => [item._id.toString(), item.count]));
+  return plainJobs.map(job => ({
+    ...job,
+    applicationsCount: countMap.get(job._id.toString()) || 0
+  }));
+};
 
 exports.createJob = async (req, res, next) => {
   try {
@@ -215,12 +232,13 @@ exports.getMyJobs = async (req, res, next) => {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
+    const jobsWithApplicationCounts = await attachApplicationCounts(jobs);
 
     const total = await Job.countDocuments(query);
 
     res.status(200).json({
       success: true,
-      data: jobs,
+      data: jobsWithApplicationCounts,
       pagination: {
         page,
         limit,
