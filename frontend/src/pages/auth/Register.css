@@ -64,3 +64,7 @@
     padding: var(--space-6);
   }
 }
+
+.dark .input-label {
+  color: var(--gray-200);
+}
