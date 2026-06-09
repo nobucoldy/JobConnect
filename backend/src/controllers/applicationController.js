@@ -186,8 +186,10 @@ exports.acceptApplication = async (req, res, next) => {
       });
     }
 
-    // Check if job is still OPEN
-    if (job.status !== 'OPEN') {
+    // Completed/cancelled jobs cannot accept more applications. OPEN jobs can
+    // accept normally; ASSIGNED jobs are allowed here for legacy multi-slot
+    // jobs that may already have one accepted worker but are not full yet.
+    if (!['OPEN', 'ASSIGNED'].includes(job.status)) {
       return res.status(400).json({
         success: false,
         message: 'Job is not accepting applications'
@@ -202,24 +204,50 @@ exports.acceptApplication = async (req, res, next) => {
       });
     }
 
+    const slots = job.slots || 1;
+    const acceptedCount = await Application.countDocuments({
+      job: job._id,
+      status: 'ACCEPTED'
+    });
+
+    if (acceptedCount >= slots) {
+      return res.status(400).json({
+        success: false,
+        message: 'Job has already accepted enough applicants'
+      });
+    }
+
     // Update application to ACCEPTED
     application.status = 'ACCEPTED';
     await application.save();
 
-    // Update job status and assign worker
-    job.status = 'ASSIGNED';
-    job.assignedWorker = application.worker;
+    // Keep the legacy single assignedWorker field populated for existing
+    // detail/review flows, but do not close multi-slot jobs before they are full.
+    if (!job.assignedWorker) {
+      job.assignedWorker = application.worker;
+    }
+    const alreadyAssigned = (job.assignedWorkers || []).some(workerId =>
+      workerId.toString() === application.worker.toString()
+    );
+    if (!alreadyAssigned) {
+      job.assignedWorkers.push(application.worker);
+    }
+
+    const acceptedCountAfterUpdate = acceptedCount + 1;
+    job.status = acceptedCountAfterUpdate >= slots ? 'ASSIGNED' : 'OPEN';
     await job.save();
 
-    // Reject all other PENDING applications for this job
-    await Application.updateMany(
-      {
-        job: job._id,
-        _id: { $ne: application._id },
-        status: 'PENDING'
-      },
-      { status: 'REJECTED' }
-    );
+    // Only reject remaining pending applications after all slots are filled.
+    if (acceptedCountAfterUpdate >= slots) {
+      await Application.updateMany(
+        {
+          job: job._id,
+          _id: { $ne: application._id },
+          status: 'PENDING'
+        },
+        { status: 'REJECTED' }
+      );
+    }
 
     await application.populate('worker', 'name phone');
 

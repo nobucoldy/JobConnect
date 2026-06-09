@@ -44,7 +44,10 @@ exports.getUserProfile = async (req, res) => {
 
     // Get jobs as worker
     const jobsAsWorker = await Job.find({
-      assignedWorker: user._id,
+      $or: [
+        { assignedWorker: user._id },
+        { assignedWorkers: user._id }
+      ],
       status: 'COMPLETED'
     })
       .select('title status category location salary salaryUnit createdAt')

@@ -248,7 +248,10 @@ const JobDetail = () => {
   }
 
   const isOwner = isAuthenticated && user?._id === job.poster?._id;
-  const isAssignedWorker = isAuthenticated && user?._id === job.assignedWorker?._id;
+  const isAssignedWorker = isAuthenticated && (
+    user?._id === job.assignedWorker?._id ||
+    job.assignedWorkers?.some(worker => worker?._id === user?._id || worker === user?._id)
+  );
   const canEdit = isOwner && job.status === 'OPEN';
   const canDelete = (isOwner && job.status === 'OPEN') || isAdmin;
   const canMarkComplete = isOwner && job.status === 'ASSIGNED';

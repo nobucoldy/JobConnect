@@ -76,6 +76,11 @@ const jobSchema = new mongoose.Schema({
     ref: 'User',
     default: null
   },
+  assignedWorkers: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    default: []
+  }],
   status: {
     type: String,
     enum: ['OPEN', 'ASSIGNED', 'COMPLETED', 'CANCELLED'],
@@ -129,6 +134,7 @@ jobSchema.virtual('isAcceptingApplications').get(function() {
 // Indexes
 jobSchema.index({ poster: 1 });
 jobSchema.index({ assignedWorker: 1 });
+jobSchema.index({ assignedWorkers: 1 });
 jobSchema.index({ status: 1 });
 jobSchema.index({ category: 1 });
 jobSchema.index({ status: 1, createdAt: -1 });

@@ -1,5 +1,6 @@
-.application-list-modal {
-  max-width: 900px;
+.modal-content.application-list-modal {
+  max-width: 650px;
+  width: min(650px, calc(100vw - 48px));
   max-height: 90vh;
 }
 
@@ -112,6 +113,7 @@
 
 @media (max-width: 768px) {
   .application-list-modal {
+    width: 95vw;
     max-height: 95vh;
   }
 

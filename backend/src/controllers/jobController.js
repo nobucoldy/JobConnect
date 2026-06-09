@@ -119,7 +119,8 @@ exports.getJobById = async (req, res, next) => {
   try {
     const job = await Job.findById(req.params.id)
       .populate('poster', 'name email phone averageRating totalReviews')
-      .populate('assignedWorker', 'name phone averageRating');
+      .populate('assignedWorker', 'name phone averageRating')
+      .populate('assignedWorkers', 'name phone averageRating totalReviews');
 
     if (!job) {
       return res.status(404).json({
@@ -229,6 +230,7 @@ exports.getMyJobs = async (req, res, next) => {
 
     const jobs = await Job.find(query)
       .populate('assignedWorker', 'name phone')
+      .populate('assignedWorkers', 'name phone')
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);

@@ -33,6 +33,15 @@ const ApplicationCard = ({ application, onUpdate, isPoster = false }) => {
     return variants[status] || 'default';
   };
 
+  const getStatusLabel = (status) => {
+    const labels = {
+      PENDING: 'Chờ duyệt',
+      ACCEPTED: 'Đã chấp nhận',
+      REJECTED: 'Đã từ chối'
+    };
+    return labels[status] || status;
+  };
+
   const handleAccept = async () => {
     setLoading(true);
     try {
@@ -110,7 +119,7 @@ const ApplicationCard = ({ application, onUpdate, isPoster = false }) => {
           </div>
         </div>
         <Badge variant={getStatusBadgeVariant(application.status)}>
-          {application.status}
+          {getStatusLabel(application.status)}
         </Badge>
       </div>
 
