@@ -233,6 +233,8 @@ const Profile = () => {
         )}
       </div>
 
+     
+      {/* Main Content */}
       {/* ── Stats ── */}
       <div className="profile-stats">
         <div className="profile-stats-inner">
