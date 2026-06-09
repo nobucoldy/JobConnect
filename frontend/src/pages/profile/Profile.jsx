@@ -94,6 +94,7 @@ const Profile = () => {
   const [appliedJobs, setAppliedJobs] = useState([]);
   const [savedJobs, setSavedJobs] = useState([]);
   const [activeTab, setActiveTab] = useState('posted');
+  const [shareCopied, setShareCopied] = useState(false);
 
   /* skills – stored locally (can be extended to backend later) */
   const [skills] = useState(['React', 'Node.js', 'UI/UX']);
@@ -146,6 +147,22 @@ const Profile = () => {
   if (!profile) return null;
 
   const { user } = profile;
+  const handleShare = async () => {
+  const url = window.location.href;
+  try {
+    await navigator.clipboard.writeText(url);
+  } catch {
+    const ta = document.createElement('textarea');
+    ta.value = url;
+    ta.style.cssText = 'position:absolute;opacity:0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  }
+  setShareCopied(true);
+  setTimeout(() => setShareCopied(false), 2500);
+};
   const completion = calcCompletion(user, skills);
   const notifications = buildNotifications(appliedJobs);
 
@@ -206,9 +223,10 @@ const Profile = () => {
             <Link to="/profile/edit" className="btn-edit-profile">
               <FiEdit2 />Chỉnh sửa hồ sơ
             </Link>
-            <button className="btn-share-profile">
-              <FiShare2 />Chia sẻ hồ sơ
-            </button>
+            <button className="btn-share-profile" onClick={handleShare}>
+  {shareCopied ? <FiCheck /> : <FiShare2 />}
+  {shareCopied ? 'Đã sao chép!' : 'Chia sẻ hồ sơ'}
+</button>
           </div>
         </div>
 
@@ -252,35 +270,14 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* ── Middle panels: skills + notifications ── */}
+      
+      {/* ── Main container: tabs + content ── */}
+      
+
+      {/* ── Middle + Jobs section ── */}
       <div className="profile-mid-section">
 
-        {/* Skills */}
-        <div className="profile-panel">
-          <div className="panel-header">
-            <span className="panel-title">Kỹ năng</span>
-            <button className="panel-action"><FiPlus /> Thêm</button>
-          </div>
-          <div className="skills-list">
-            {skills.map(s => (
-              <span key={s} className="skill-tag">{s}</span>
-            ))}
-            <button className="skill-tag skill-tag--add"><FiPlus /> Thêm kỹ năng</button>
-          </div>
-          <div className="match-score-wrap">
-            <div className="match-score-label">
-              <FiTrendingUp />Mức độ phù hợp việc làm
-            </div>
-            <div className="match-score-track">
-              <div className="match-score-fill" style={{ width: `${Math.min(skills.length * 20, 100)}%` }} />
-            </div>
-            <p className="match-score-hint">
-              {Math.min(skills.length * 20, 100)}% — Thêm kỹ năng để tăng
-            </p>
-          </div>
-        </div>
-
-        {/* Notifications */}
+        {/* Thông báo */}
         <div className="profile-panel">
           <div className="panel-header">
             <span className="panel-title"><FiBell /> Thông báo gần đây</span>
@@ -301,152 +298,91 @@ const Profile = () => {
             </ul>
           )}
         </div>
-      </div>
 
-      {/* ── Main container: tabs + content ── */}
-      <div className="profile-container">
-
-        {/* Tabs */}
-        <div className="profile-tabs">
-          {tabs.map(t => (
-            <button
-              key={t.key}
-              className={`profile-tab ${activeTab === t.key ? 'active' : ''}`}
-              onClick={() => setActiveTab(t.key)}
-            >
-              {t.icon}{t.label}
-            </button>
-          ))}
-
-          <div className="profile-tabs-action">
-            <Link to="/jobs/create" className="btn-primary">
-              <FiPlus /> Đăng việc mới
-            </Link>
+        {/* Việc của tôi */}
+        <div className="profile-panel" style={{ padding: 0, overflow: 'hidden' }}>
+          <div style={{ padding: '16px 20px 0' }}>
+            <div className="panel-header">
+              <span className="panel-title"><FiBriefcase /> Việc của tôi</span>
+              <Link to="/jobs/create" className="btn-primary" style={{ fontSize: '12px', padding: '5px 12px' }}>
+                <FiPlus /> Đăng việc
+              </Link>
+            </div>
+            <div className="profile-tabs" style={{ borderRadius: 0, border: 'none', background: 'transparent', padding: 0 }}>
+              {tabs.map(t => (
+                <button
+                  key={t.key}
+                  className={`profile-tab ${activeTab === t.key ? 'active' : ''}`}
+                  onClick={() => setActiveTab(t.key)}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div style={{ padding: '0 20px 16px' }}>
+            {activeTab === 'posted' && (
+              postedJobs.length === 0
+                ? <p className="panel-empty">Bạn chưa đăng công việc nào</p>
+                : <div className="profile-jobs-list" style={{ marginTop: '12px' }}>
+                    {postedJobs.map(job => (
+                      <Link key={job._id} to={`/jobs/${job._id}`} className="profile-job-card">
+                        <div className="job-card-icon"><FiBriefcase /></div>
+                        <div className="job-card-body">
+                          <div className="job-card-header">
+                            <h3 className="job-card-title">{job.title}</h3>
+                            <span className={`job-card-status ${getStatusClass(job.status)}`}>{job.status}</span>
+                          </div>
+                          <div className="job-card-meta"><span>{job.category}</span><span>·</span><span>{job.location}</span></div>
+                        </div>
+                        <div className="job-card-salary">{new Intl.NumberFormat('vi-VN').format(job.salary)} / {job.salaryUnit || 'ngày'}</div>
+                      </Link>
+                    ))}
+                  </div>
+            )}
+            {activeTab === 'applied' && (
+              appliedJobs.length === 0
+                ? <p className="panel-empty">Bạn chưa ứng tuyển công việc nào</p>
+                : <div className="profile-jobs-list" style={{ marginTop: '12px' }}>
+                    {appliedJobs.map(application => (
+                      <Link key={application._id} to={`/jobs/${application.job._id}`} className="profile-job-card">
+                        <div className="job-card-icon"><FiFileText /></div>
+                        <div className="job-card-body">
+                          <div className="job-card-header">
+                            <h3 className="job-card-title">{application.job.title}</h3>
+                            <span className={`job-card-status ${getStatusClass(application.status)}`}>{getStatusLabel(application.status)}</span>
+                          </div>
+                          <div className="job-card-meta"><span>{application.job.category}</span><span>·</span><span>{application.job.location}</span></div>
+                          <div className="job-card-footer">
+                            <span className="job-card-date">Ứng tuyển: {new Date(application.createdAt).toLocaleDateString('vi-VN')}</span>
+                          </div>
+                        </div>
+                        <div className="job-card-salary">{new Intl.NumberFormat('vi-VN').format(application.job.salary)} / {application.job.salaryUnit || 'ngày'}</div>
+                      </Link>
+                    ))}
+                  </div>
+            )}
+            {activeTab === 'saved' && (
+              savedJobs.length === 0
+                ? <p className="panel-empty">Bạn chưa lưu công việc nào</p>
+                : <div className="profile-jobs-list" style={{ marginTop: '12px' }}>
+                    {savedJobs.map(job => (
+                      <Link key={job._id} to={`/jobs/${job._id}`} className="profile-job-card">
+                        <div className="job-card-icon"><FiBookmark /></div>
+                        <div className="job-card-body">
+                          <div className="job-card-header">
+                            <h3 className="job-card-title">{job.title}</h3>
+                            <span className={`job-card-status ${getStatusClass(job.status)}`}>{job.status}</span>
+                          </div>
+                          <div className="job-card-meta"><span>{job.category}</span><span>·</span><span>{job.location}</span></div>
+                        </div>
+                        <div className="job-card-salary">{new Intl.NumberFormat('vi-VN').format(job.salary)} / {job.salaryUnit || 'ngày'}</div>
+                      </Link>
+                    ))}
+                  </div>
+            )}
           </div>
         </div>
-
-        {/* Posted Jobs */}
-        {activeTab === 'posted' && (
-          <div className="profile-jobs">
-            <div className="profile-jobs-header">
-              <h2 className="profile-jobs-title">Việc đã đăng</h2>
-            </div>
-            {postedJobs.length === 0 ? (
-              <div className="profile-jobs-empty">
-                <p>Bạn chưa đăng công việc nào</p>
-                <Link to="/jobs/create" className="btn-primary">Đăng việc mới</Link>
-              </div>
-            ) : (
-              <div className="profile-jobs-list">
-                {postedJobs.map(job => (
-                  <Link key={job._id} to={`/jobs/${job._id}`} className="profile-job-card">
-                    <div className="job-card-icon"><FiBriefcase /></div>
-                    <div className="job-card-body">
-                      <div className="job-card-header">
-                        <h3 className="job-card-title">{job.title}</h3>
-                        <span className={`job-card-status ${getStatusClass(job.status)}`}>
-                          {job.status}
-                        </span>
-                      </div>
-                      <div className="job-card-meta">
-                        <span>{job.category}</span><span>·</span>
-                        <span>{job.location}</span>
-                      </div>
-                    </div>
-                    <div className="job-card-salary">
-                      {new Intl.NumberFormat('vi-VN').format(job.salary)} / {job.salaryUnit || 'ngày'}
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Applied Jobs */}
-        {activeTab === 'applied' && (
-          <div className="profile-jobs">
-            <div className="profile-jobs-header">
-              <h2 className="profile-jobs-title">Việc đã ứng tuyển</h2>
-            </div>
-            {appliedJobs.length === 0 ? (
-              <div className="profile-jobs-empty">
-                <p>Bạn chưa ứng tuyển công việc nào</p>
-                <Link to="/jobs" className="btn-primary">Tìm việc</Link>
-              </div>
-            ) : (
-              <div className="profile-jobs-list">
-                {appliedJobs.map(application => (
-                  <Link
-                    key={application._id}
-                    to={`/jobs/${application.job._id}`}
-                    className="profile-job-card"
-                  >
-                    <div className="job-card-icon"><FiFileText /></div>
-                    <div className="job-card-body">
-                      <div className="job-card-header">
-                        <h3 className="job-card-title">{application.job.title}</h3>
-                        <span className={`job-card-status ${getStatusClass(application.status)}`}>
-                          {getStatusLabel(application.status)}
-                        </span>
-                      </div>
-                      <div className="job-card-meta">
-                        <span>{application.job.category}</span><span>·</span>
-                        <span>{application.job.location}</span>
-                      </div>
-                      <div className="job-card-footer">
-                        <span className="job-card-date">
-                          Ứng tuyển: {new Date(application.createdAt).toLocaleDateString('vi-VN')}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="job-card-salary">
-                      {new Intl.NumberFormat('vi-VN').format(application.job.salary)} / {application.job.salaryUnit || 'ngày'}
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Saved Jobs */}
-        {activeTab === 'saved' && (
-          <div className="profile-jobs">
-            <div className="profile-jobs-header">
-              <h2 className="profile-jobs-title">Việc đã lưu</h2>
-            </div>
-            {savedJobs.length === 0 ? (
-              <div className="profile-jobs-empty">
-                <p>Bạn chưa lưu công việc nào</p>
-                <Link to="/jobs" className="btn-primary">Tìm việc</Link>
-              </div>
-            ) : (
-              <div className="profile-jobs-list">
-                {savedJobs.map(job => (
-                  <Link key={job._id} to={`/jobs/${job._id}`} className="profile-job-card">
-                    <div className="job-card-icon"><FiBookmark /></div>
-                    <div className="job-card-body">
-                      <div className="job-card-header">
-                        <h3 className="job-card-title">{job.title}</h3>
-                        <span className={`job-card-status ${getStatusClass(job.status)}`}>
-                          {job.status}
-                        </span>
-                      </div>
-                      <div className="job-card-meta">
-                        <span>{job.category}</span><span>·</span>
-                        <span>{job.location}</span>
-                      </div>
-                    </div>
-                    <div className="job-card-salary">
-                      {new Intl.NumberFormat('vi-VN').format(job.salary)} / {job.salaryUnit || 'ngày'}
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
 
       </div>
     </div>

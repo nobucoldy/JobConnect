@@ -819,3 +819,7 @@
 
   .profile-completion-bar-wrap { margin: 16px auto 0; }
 }
+.profile-mid-section--single {
+  grid-template-columns: 1fr 1fr;
+  max-width: 1000px;
+}
