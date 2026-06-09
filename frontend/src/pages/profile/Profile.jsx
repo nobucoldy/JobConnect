@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link ,useParams} from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { userService } from '../../services/userService';
 import { jobService } from '../../services/jobService';
@@ -86,6 +86,8 @@ const timeAgo = (dateStr) => {
 const Profile = () => {
   const { user: currentUser } = useAuth();
   const navigate = useNavigate();
+  const { id } = useParams();
+const isOwnProfile = !id || id === currentUser?._id;
 
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -99,36 +101,38 @@ const Profile = () => {
   /* skills – stored locally (can be extended to backend later) */
   const [skills] = useState(['React', 'Node.js', 'UI/UX']);
 
-  useEffect(() => {
-    if (!currentUser) { navigate('/login'); return; }
-    (async () => {
-      try {
-        setLoading(true);
-        const res = await userService.getUserProfile(currentUser._id);
-        setProfile(res.data.data);
-      } catch (err) {
-        setError(err.response?.data?.message || 'Không thể tải thông tin người dùng');
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [currentUser, navigate]);
+ useEffect(() => {
+  if (!id && !currentUser) { navigate('/login'); return; }
+  const targetId = id || currentUser?._id;
+  if (!targetId) return;
+  (async () => {
+    try {
+      setLoading(true);
+      const res = await userService.getUserProfile(targetId);
+      setProfile(res.data.data);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Không thể tải thông tin người dùng');
+    } finally {
+      setLoading(false);
+    }
+  })();
+}, [currentUser, navigate, id]);
 
-  useEffect(() => {
-    if (!currentUser) return;
+useEffect(() => {
+  if (!currentUser || !isOwnProfile) return;
 
-    jobService.getMyJobs()
-      .then(r => setPostedJobs(r.data.data))
-      .catch(() => {});
+  jobService.getMyJobs()
+    .then(r => setPostedJobs(r.data.data))
+    .catch(() => {});
 
-    applicationService.getMyApplications()
-      .then(r => setAppliedJobs(r.data.data))
-      .catch(() => {});
+  applicationService.getMyApplications()
+    .then(r => setAppliedJobs(r.data.data))
+    .catch(() => {});
 
-    bookmarkService.getSaved()
-      .then(r => setSavedJobs(r.data.data || []))
-      .catch(() => {});
-  }, [currentUser]);
+  bookmarkService.getSaved()
+    .then(r => setSavedJobs(r.data.data || []))
+    .catch(() => {});
+}, [currentUser, isOwnProfile]);
 
   /* ── render guards ── */
   if (loading) return (

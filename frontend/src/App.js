@@ -82,6 +82,7 @@ const AppContent = () => {
             </ProtectedRoute>
           }
         />
+        <Route path="/profile/:id" element={<Profile />} />
         <Route
           path="/admin"
           element={

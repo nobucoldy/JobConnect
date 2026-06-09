@@ -463,10 +463,14 @@ const JobDetail = () => {
                 {job.poster?.averageRating?.toFixed(1) || '0.0'} ({job.poster?.totalReviews || 0} đánh giá)
               </div>
               <div className="poster-action">
-                <Button variant="outline" size="sm">
-                  Xem hồ sơ công ty
-                </Button>
-              </div>
+  <Button
+    variant="outline"
+    size="sm"
+    onClick={() => navigate(`/profile/${job.poster?._id}`)}
+  >
+    Xem hồ sơ công ty
+  </Button>
+</div>
             </div>
           </div>
         </div>
