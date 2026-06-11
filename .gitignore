@@ -4,5 +4,7 @@ docs/
 # Sample frontend images
 sample_frontend/
 
-# Claude Code configuration
 .claude/
+
+
+
